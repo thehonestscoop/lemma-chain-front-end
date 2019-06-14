@@ -2,11 +2,11 @@ import * as React from  'react';
 import styled from 'styled-components';
 
 const CheckBoxCon =  styled('div')<{checked: boolean}>`
-  height: 60px;
-  width: 60px;
-  background-color: cyan;
+  height: 35px;
+  width: 35px;
+  background-color: #0da9db;
   position: relative;
-  border-radius: 5%;
+  border-radius: 20%;
 
     & .after{
     display: ${props => !!props.checked? 'block': 'none'};
@@ -18,6 +18,7 @@ const CheckBoxCon =  styled('div')<{checked: boolean}>`
     width: 10%;
     background-color: white;
     position: absolute;
+    border-radius: 10px 10px 0 10px;
     }
     & .before {
     display: ${props => !!props.checked? 'block': 'none'};
@@ -29,6 +30,7 @@ const CheckBoxCon =  styled('div')<{checked: boolean}>`
     width: 10%;
     background-color: white;
     position: absolute;
+    border-radius: 10px 10px 0 10px;
     }
 `;
 

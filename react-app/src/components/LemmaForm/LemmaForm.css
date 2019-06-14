@@ -1,0 +1,20 @@
+.owner.formgroup {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1rem;
+}
+
+form {
+    padding: 5vw;
+}
+
+.form-container {
+    margin: 2rem 5vw;
+    background-color: #c3d0c7;
+}
+.formgroup {
+    margin-bottom: 1rem;
+    border: 2px grey solid;
+    padding: 1rem;
+}
