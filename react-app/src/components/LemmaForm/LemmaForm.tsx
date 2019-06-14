@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import CheckBox from '../StyledComponents/CheckBox';
+import './Lemmaform.css';
 
 const LemmaForm = () => {
     const [owner, setOwner] = useState({exists: false, name: ''});
@@ -10,14 +12,17 @@ const LemmaForm = () => {
     const CreateRef = () => {
         console.log({owner, title, authors, parentsRefs, search})
     }
+    const handleOwner = () => {
+        setOwner({exists: true, name: 'testUser'})
+    }
     return <div className="form-container">
         <form onSubmit={CreateRef}>
             <div className="owner formgroup">
-                <div className="text-toggle">
                     <span className="text">Owner</span>
-                    <div className="toggle-con">
+                    <div className="check-owner" onClick={handleOwner}>
+                        <CheckBox checked={owner.exists}/>
                     </div>
-                </div>
+                    <span>{owner.name}</span>
             </div>
             <div className="title-formgroup">
                 <label htmlFor="title">Title</label>
@@ -34,7 +39,7 @@ const LemmaForm = () => {
                 <input type="text" placeholder="Type Here and Hit Enter" id="authors"
                 name="authors" />
             </div>
-            <div className="parentsf ormgroup">
+            <div className="parents-refs formgroup">
                 <div className="parents">
                     <div className="parent">
                         <label htmlFor="parent">Title</label>
