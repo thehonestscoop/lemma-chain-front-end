@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import CheckBox from '../StyledComponents/CheckBox';
-import './Lemmaform.css';
+import './LemmaForm.css';
 
 const LemmaForm = () => {
+    // States
     const [owner, setOwner] = useState({exists: false, name: ''});
     const [title, setTitle] = useState('');
     const [authors, setAuthors] = useState([]);
     const [parentsRefs, setParentsRefs] = useState([{ref: '', optional: false}]);
     const [search, setSearch] = useState({searchable: false, title: '', synopsis: ''})
+    // End States
 
     const CreateRef = () => {
         console.log({owner, title, authors, parentsRefs, search})
@@ -18,13 +20,13 @@ const LemmaForm = () => {
     return <div className="form-container">
         <form onSubmit={CreateRef}>
             <div className="owner formgroup">
-                    <span className="text">Owner</span>
-                    <div className="check-owner" onClick={handleOwner}>
-                        <CheckBox checked={owner.exists}/>
-                    </div>
-                    <span>{owner.name}</span>
+                <span className="text">Owner</span>
+                <div className="check-owner" onClick={handleOwner}>
+                    <CheckBox checked={owner.exists}/>
+                </div>
+                <span>{owner.name}</span>
             </div>
-            <div className="title-formgroup">
+            <div className="title formgroup">
                 <label htmlFor="title">Title</label>
                 <input type="text" name="title" id="title"/>
             </div>
