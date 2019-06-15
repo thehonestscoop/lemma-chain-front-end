@@ -6,6 +6,7 @@ const CheckBoxCon =  styled('div')<{checked: boolean}>`
   width: 35px;
   background-color: #0da9db;
   position: relative;
+  cursor: pointer;
   border-radius: 20%;
 
     & .after{

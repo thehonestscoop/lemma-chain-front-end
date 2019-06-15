@@ -18,3 +18,8 @@ form {
     border: 2px grey solid;
     padding: 1rem;
 }
+.formgroup.authors {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
