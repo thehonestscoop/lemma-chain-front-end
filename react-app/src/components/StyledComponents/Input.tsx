@@ -7,6 +7,7 @@ interface IInputProps {
     name: string, 
     placeholder: string,
     value: string,
+    type?: string,
     changeHandle: Function
 }
 const InputWrapper = styled('div')<{width?: string, displayLabel?: boolean}>`
@@ -36,7 +37,7 @@ const InputWrapper = styled('div')<{width?: string, displayLabel?: boolean}>`
 export function Input (props: IInputProps) {
     return (
       <InputWrapper width={props.width} displayLabel={props.displayLabel}>
-            <input type="text" name={props.name}
+            <input type={props.type || 'text'} name={props.name}
             data-id={props.dataId}
             id={props.name} 
             placeholder={props.placeholder} 
