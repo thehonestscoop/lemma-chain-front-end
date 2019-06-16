@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components'
 interface IInputProps {
     width?: string,
+    dataId?: number,
     displayLabel?: boolean,
     name: string, 
     placeholder: string,
@@ -36,10 +37,11 @@ export function Input (props: IInputProps) {
     return (
       <InputWrapper width={props.width} displayLabel={props.displayLabel}>
             <input type="text" name={props.name}
+            data-id={props.dataId}
             id={props.name} 
             placeholder={props.placeholder} 
             value={props.value}
-            onChange={(e) => props.changeHandle(e.target.value)}
+            onChange={(e) => props.changeHandle(e.target)}
             />
             <label htmlFor={props.name}>
                 {props.placeholder}

@@ -2,8 +2,8 @@ import * as React from  'react';
 import styled from 'styled-components';
 
 const CheckBoxCon =  styled('div')<{checked: boolean}>`
-  height: 35px;
-  width: 35px;
+  height: 2rem;
+  width: 2rem;
   background-color: #0da9db;
   position: relative;
   cursor: pointer;
@@ -35,8 +35,8 @@ const CheckBoxCon =  styled('div')<{checked: boolean}>`
     }
 `;
 
-const CheckBox = (props: {checked: boolean}) => {
-    return <CheckBoxCon checked={props.checked} >
+const CheckBox = (props: {checked: boolean, checkToggle: Function}) => {
+    return <CheckBoxCon checked={props.checked} onClick={() => props.checkToggle()} >
         <div className="before"></div>
         <div className="after"></div>
     </CheckBoxCon>;
