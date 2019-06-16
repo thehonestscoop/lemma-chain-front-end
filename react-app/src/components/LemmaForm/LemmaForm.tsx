@@ -72,15 +72,20 @@ const LemmaForm = () => {
         setParentsRefs({list: newParents, currentId: parentsRefs.currentId})
     }
 
-    const parentCheck = () => {};
+    const parentCheck = (id: number) => {
+        let oldParents = parentsRefs.list;
+        let target = parentsRefs.list.filter(parent => parent.id === id)[0];
+        let targetIndex = parentsRefs.list.findIndex(parent => parent.id === id);
+        target.required = !target.required;
+        oldParents[targetIndex] = target;
+        setParentsRefs({list: oldParents, currentId: parentsRefs.currentId})
+    }
 
     return <div className="form-container">
         <form>
             <div className="owner formgroup">
                 <span className="text">Owner</span>
-                {/* <div className="check-owner" onClick={handleOwner}> */}
                 <CheckBox checked={owner.exists} checkToggle={handleOwner}/>
-                {/* </div> */}
                 {!!owner.exists &&
                 <span>TestUser123</span>
                 }
@@ -113,7 +118,7 @@ const LemmaForm = () => {
                                 dataId={parent.id}
                             />
                             <span className="optional">Optional</span>
-                            <CheckBox checked={!parent.required} checkToggle={parentCheck}/>
+                            <CheckBox checked={!parent.required} checkToggle={() => parentCheck(parent.id)}/>
                             <button type="button"
                             onClick={() => deleteParent(parent.id)}
                             className="delete-parent"
