@@ -1,8 +1,10 @@
 .owner.formgroup {
     display: flex;
-    justify-content: space-evenly;
     align-items: center;
     padding: 1rem;
+}
+.owner > span {
+    margin: 0 1rem;
 }
 
 form {
@@ -56,4 +58,13 @@ button.add {
     color: white;
     font-weight: 500;
     border-radius: 8px;
+}
+
+.search .text-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.search .text-toggle span.text {
+    margin-right: 1rem;
 }

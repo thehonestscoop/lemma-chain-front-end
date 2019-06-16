@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import styled from 'styled-components';
+
 import CheckBox from '../StyledComponents/CheckBox';
 import './LemmaForm.css';
 import { Input } from '../StyledComponents/Input';
@@ -12,6 +14,10 @@ interface IParents {
     list: {id: number, ref: string, required: boolean}[]
     currentId: number 
 }
+const SearchInput = styled('div')<{searchable: boolean}>`
+    display: ${props => props.searchable ? 'block': 'none'};
+    padding-left: 3rem;
+`;
 const LemmaForm = () => {
     // States
     const [owner, setOwner] = useState({exists: false, name: ''});
@@ -36,6 +42,10 @@ const LemmaForm = () => {
     const changeSearchTitle = (sT: EventTarget & HTMLInputElement) => setSearch({...search, title: sT.value});
 
     const changeSearchSynopsis = (sS: EventTarget & HTMLInputElement) => setSearch({...search, synopsis: sS.value});
+
+    const checkSearchable = () => {
+        setSearch({...search, searchable: !search.searchable})
+    }
 
     const changeAuthor = (input: EventTarget & HTMLInputElement) => {
         if(input.value.slice(-1) === ',') {
@@ -131,17 +141,18 @@ const LemmaForm = () => {
             <div className="search formgroup">
                 <div className="text-toggle">
                     <span className="text">Searchable</span>
-                    <div className="toggle-con">
-                    </div>
+                    <CheckBox checked={search.searchable} checkToggle={checkSearchable}/>
                 </div>
-                <Input 
-                name="search-title" changeHandle={changeSearchTitle}
-                placeholder="Search Title"
-                value={search.title}/>
-                <Input 
-                name="search-synopsis" changeHandle={changeSearchSynopsis}
-                placeholder="Search Synopsis"
-                value={search.synopsis}/>
+                <SearchInput searchable={search.searchable}>
+                    <Input 
+                    name="search-title" changeHandle={changeSearchTitle}
+                    placeholder="Search Title"
+                    value={search.title}/>
+                    <Input 
+                    name="search-synopsis" changeHandle={changeSearchSynopsis}
+                    placeholder="Search Synopsis"
+                    value={search.synopsis}/>
+                </SearchInput>
             </div>
             <div className="recaptcha"></div>
             <input type="submit" value="Create Ref"/>
