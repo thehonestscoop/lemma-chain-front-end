@@ -50,7 +50,6 @@ const SignUpLink = styled('p')`
     padding: 0 0.5rem;
     &:hover {
         color: white;
-        background-color: grey;
         cursor: pointer;
     }
 `;
