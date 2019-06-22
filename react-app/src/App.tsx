@@ -5,6 +5,7 @@ import "./App.css";
 import Login from "./components/Login/Login";
 import LemmaForm from "./components/LemmaForm/LemmaForm";
 import NavBar from "./components/NavBar";
+import Register from "./components/Register";
 
 const App: FC = () => {
   return (
@@ -13,7 +14,7 @@ const App: FC = () => {
       <Redirect path="/" to="/login" />
       <Route path="/login" component={Login} />
       <Route path="/create-ref" component={LemmaForm} />
-      <Route path="/create-account" component={LemmaForm} />
+      <Route path="/create-account" component={Register} />
     </div>
   );
 };

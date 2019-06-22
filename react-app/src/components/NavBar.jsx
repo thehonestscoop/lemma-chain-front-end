@@ -1,25 +1,25 @@
 import React from "react";
-import { Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Nav, NavItem, NavLink } from "reactstrap";
+import { NavLink as RRNavLink } from "react-router-dom";
 
 const NavBar = () => {
   return (
-    <Nav fill variant="tabs" defaultActiveKey="1">
-      <Nav.Item>
-        <Nav.Link as={NavLink} to="/create-account" eventKey="3">
+    <Nav fill tabs>
+      <NavItem>
+        <NavLink to="/create-account" tag={RRNavLink}>
           Create Account
-        </Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link as={NavLink} to="/create-ref" eventKey="2">
-          Create Ref
-        </Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link as={NavLink} to="/login" eventKey="3">
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink to="/login" tag={RRNavLink}>
           Login
-        </Nav.Link>
-      </Nav.Item>
+        </NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink to="/create-ref" tag={RRNavLink}>
+          Create Ref
+        </NavLink>
+      </NavItem>
     </Nav>
   );
 };
