@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, FormGroup, Label, Input, Button } from "reactstrap";
 
 interface RegState {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
   disabled: boolean;
 }
 
@@ -13,38 +14,62 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     disabled: false
   });
 
-  const emailChange = (input: EventTarget & HTMLInputElement) =>
-    setUser({ ...user, email: input.value });
+  const inputChange = (input: EventTarget & HTMLInputElement) =>
+    setUser({ ...user, [input.id]: input.value });
 
-  const passwordChange = (input: EventTarget & HTMLInputElement) =>
-    setUser({ ...user, password: input.value });
-
-  const submitForm = (e: Event) => {
+  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUser({ ...user, disabled: true });
     console.log(user);
   };
 
   return (
-    <Form>
-      <Form.Group controlId="formBasicEmail">
-        <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" />
-        <Form.Text className="text-muted">
-          We'll never share your email with anyone else.
-        </Form.Text>
-      </Form.Group>
-
-      <Form.Group controlId="formBasicPassword">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" />
-      </Form.Group>
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
+    <Form onSubmit={e => submitForm(e)}>
+      <FormGroup>
+        <Label for="name">Name</Label>
+        <Input
+          type="text"
+          id="name"
+          placeholder="with a placeholder"
+          value={user.name}
+          onChange={e => inputChange(e.target)}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Label for="email">Email</Label>
+        <Input
+          type="email"
+          id="email"
+          placeholder="with a placeholder"
+          value={user.email}
+          onChange={e => inputChange(e.target)}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Label for="password">Password</Label>
+        <Input
+          type="password"
+          id="password"
+          placeholder="Enter password"
+          value={user.password}
+          onChange={e => inputChange(e.target)}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Label for="confirmPassword">Confrim Password</Label>
+        <Input
+          type="password"
+          id="confirmPassword"
+          placeholder="Enter password again"
+          value={user.confirmPassword}
+          onChange={e => inputChange(e.target)}
+        />
+      </FormGroup>
+      <Button onClick={submitForm}>Submit</Button>
     </Form>
   );
 };
