@@ -62,12 +62,8 @@ const LemmaForm = () => {
 
     const changeParent = (ref: EventTarget & HTMLInputElement) => {
         const id = parseInt(ref.dataset.id || '0');
-        let oldParents = parentsRefs.list;
-        let target = parentsRefs.list.filter(parent => parent.id === id)[0];
-        let targetIndex = parentsRefs.list.findIndex(parent => parent.id === id);
-        target.ref = ref.value;
-        oldParents[targetIndex] = target;
-        setParentsRefs({list: oldParents, currentId: parentsRefs.currentId})
+        const newParents = parentsRefs.list.map(p => p.id === id? {...p, ref: ref.value}: p)
+        setParentsRefs({...parentsRefs, list: newParents})
     }
 
     const addParent = () => {
@@ -83,12 +79,8 @@ const LemmaForm = () => {
     }
 
     const parentCheck = (id: number) => {
-        let oldParents = parentsRefs.list;
-        let target = parentsRefs.list.filter(parent => parent.id === id)[0];
-        let targetIndex = parentsRefs.list.findIndex(parent => parent.id === id);
-        target.required = !target.required;
-        oldParents[targetIndex] = target;
-        setParentsRefs({list: oldParents, currentId: parentsRefs.currentId})
+        const newParents = parentsRefs.list.map(p => p.id === id ? {...p, required: !p.required}: p)
+        setParentsRefs({...parentsRefs, list: newParents})
     }
 
     return <div className="form-container">
