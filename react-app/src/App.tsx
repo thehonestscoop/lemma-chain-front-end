@@ -1,23 +1,21 @@
-import React, { FC, useState } from 'react';
-import './App.css';
-import Modal from './components/Modal/Modal';
-import Login from './components/Login/Login';
-import LemmaForm from './components/LemmaForm/LemmaForm';
-import { Button } from 'react-bootstrap';
+import React, { FC } from "react";
+import { Route, Redirect } from "react-router-dom";
+import "./App.css";
+// import Modal from "./components/Modal/Modal";
+import Login from "./components/Login/Login";
+import LemmaForm from "./components/LemmaForm/LemmaForm";
+import NavBar from "./components/NavBar";
 
 const App: FC = () => {
-  const [modal, setModal] = useState(true)
-
-  const toggleModal = () => setModal(!modal);
-
-  const LoginModal = Modal(Login);
   return (
     <div className="App">
-      <Button>My Button</Button>
-      <LoginModal toggleModal={toggleModal} active={modal}/>
-      <LemmaForm />
+      <NavBar />
+      <Redirect path="/" to="/login" />
+      <Route path="/login" component={Login} />
+      <Route path="/create-ref" component={LemmaForm} />
+      <Route path="/create-account" component={LemmaForm} />
     </div>
   );
-}
+};
 
 export default App;
