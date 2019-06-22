@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { CustomInput, FormGroup, Label, Row, Col, Input, Button } from 'reactstrap';
 
 import CheckBox from '../StyledComponents/CheckBox';
 import './LemmaForm.css';
-import { Input } from '../StyledComponents/Input';
+// import { Input } from '../StyledComponents/Input';
 import Chip from '../StyledComponents/Chip';
 
 interface IAuthors {
@@ -24,7 +25,7 @@ const LemmaForm = () => {
     const [title, setTitle] = useState('');
     const [authors, setAuthors] = useState<IAuthors>({list: [], input: ''});
     const [parentsRefs, setParentsRefs] = useState<IParents>({
-        list: [{ref: 'Kings', required: false, id: 0}],
+        list: [{ref: '', required: false, id: 0}],
         currentId: 0
     });
     const [search, setSearch] = useState({searchable: false, title: '', synopsis: ''})
@@ -61,7 +62,7 @@ const LemmaForm = () => {
     }
 
     const changeParent = (ref: EventTarget & HTMLInputElement) => {
-        const id = parseInt(ref.dataset.id || '0');
+        const id = parseInt(ref.id || '0');
         const newParents = parentsRefs.list.map(p => p.id === id? {...p, ref: ref.value}: p)
         setParentsRefs({...parentsRefs, list: newParents})
     }
@@ -69,7 +70,7 @@ const LemmaForm = () => {
     const addParent = () => {
         setParentsRefs({
             list: [...parentsRefs.list, {id: ++parentsRefs.currentId, ref: '', required: false}], 
-            currentId: ++parentsRefs.currentId
+            currentId: parentsRefs.currentId++
         })
     }
 
@@ -78,16 +79,20 @@ const LemmaForm = () => {
         setParentsRefs({list: newParents, currentId: parentsRefs.currentId})
     }
 
-    const parentCheck = (id: number) => {
-        const newParents = parentsRefs.list.map(p => p.id === id ? {...p, required: !p.required}: p)
+    const parentCheck = (eventId: string) => {
+        const id = parseInt(eventId.replace(/[a-zA-Z]+/,'') || '0');
+        const newParents = parentsRefs.list.map(p => p.id === id ? {...p, required: !p.required} : p)
         setParentsRefs({...parentsRefs, list: newParents})
     }
 
     return <div className="form-container">
         <form>
             <div className="owner formgroup">
-                <span className="text">Owner</span>
-                <CheckBox checked={owner.exists} checkToggle={handleOwner}/>
+                <CustomInput 
+                 type="switch" id="exampleCustomSwitch"
+                 onChange={handleOwner}
+                 checked={owner.exists} name="customSwitch"
+                 label="Owner" />
                 {!!owner.exists &&
                 <span>TestUser123</span>
                 }
@@ -102,48 +107,54 @@ const LemmaForm = () => {
                 {authors.list.map(author => 
                     <Chip data={author} key={author} deleteChip={deleteAuthor}/>
                 )}
-                <Input 
+                {/* <Input 
                     name="author" changeHandle={changeAuthor}
                     placeholder="Author(s) - Separate with commas"
                     value={authors.input}
                     displayLabel={false}
-                />
+                /> */}
             </div>
             <div className="parents-refs formgroup">
                 <div className="parents">
-                    {parentsRefs.list.map(parent => 
-                        <div className="parent" key={parent.id}>
-                            <Input 
-                                name="author" changeHandle={changeParent}
+                    {parentsRefs.list.map(parent =>
+                        <Row key={parent.id} form="true">
+                            <Col md={6}>
+                                <Input type="text" id={`${parent.id}`}
                                 placeholder="Parent Ref"
                                 value={parent.ref}
-                                dataId={parent.id}
-                            />
-                            <span className="optional">Optional</span>
-                            <CheckBox checked={!parent.required} checkToggle={() => parentCheck(parent.id)}/>
-                            <button type="button"
-                            onClick={() => deleteParent(parent.id)}
-                            className="delete-parent"
-                            >Delete</button>
-                        </div>
+                                onChange={e => changeParent(e.target)} />
+                            </Col>
+                            <Col md={6} className='parent-button'>
+                                    <CustomInput 
+                                    type="switch" id={`check${parent.id}`}
+                                    onChange={e => parentCheck(e.target.id)}
+                                    checked={!parent.required}
+                                    label="Optional" />
+                                    <button type="button"
+                                    onClick={() => deleteParent(parent.id)}
+                                    className="delete-parent"
+                                    >Delete</button>
+                            </Col>
+                        </Row>
                     )}
-                    <button className="add" type="button" onClick={addParent}>New Parent Ref</button>
                 </div>
+                <Button color="primary" onClick={addParent} className="mt-3">New Parent Ref</Button>
             </div>
             <div className="search formgroup">
-                <div className="text-toggle">
-                    <span className="text">Searchable</span>
-                    <CheckBox checked={search.searchable} checkToggle={checkSearchable}/>
-                </div>
+                <CustomInput 
+                 type="switch" id="search-toggle"
+                 onChange={checkSearchable}
+                 checked={search.searchable} name="customSwitch"
+                 label="Searchable" />
                 <SearchInput searchable={search.searchable}>
-                    <Input 
+                    {/* <Input 
                     name="search-title" changeHandle={changeSearchTitle}
                     placeholder="Search Title"
                     value={search.title}/>
                     <Input 
                     name="search-synopsis" changeHandle={changeSearchSynopsis}
                     placeholder="Search Synopsis"
-                    value={search.synopsis}/>
+                    value={search.synopsis}/> */}
                 </SearchInput>
             </div>
             <div className="recaptcha"></div>

@@ -1,70 +1,82 @@
 .owner.formgroup {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
 }
 .owner > span {
-    margin: 0 1rem;
+  margin: 0 1rem;
 }
 
 form {
-    padding: 5vw;
+  padding: 5vw;
 }
 
 .form-container {
-    margin: 2rem 5vw;
-    background-color: #c3d0c7;
+  margin: 2rem 5vw;
+  background-color: #c3d0c7;
 }
 .formgroup {
-    margin-bottom: 1rem;
-    border: 2px grey solid;
-    padding: 1rem;
+  margin-bottom: 1rem;
+  border: 2px grey solid;
+  padding: 1rem;
 }
 .formgroup.authors {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .parent {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 span.optional {
-    flex: 1;
+  flex: 1;
 }
 .check-owner {
-    flex: 1;
-    flex-grow: 0;
+  flex: 1;
+  flex-grow: 0;
 }
 button.delete-parent {
-    flex: 1;
-    flex-grow: 0;
-    margin-left: 1rem;
-    padding: 0.3rem;
-    border: none;
-    background-color: #ff3737;
-    border-radius: 5px;
-    color: white;
+  flex: 1;
+  flex-grow: 0;
+  margin-left: 1rem;
+  padding: 0.3rem;
+  border: none;
+  background-color: #ff3737;
+  border-radius: 5px;
+  color: white;
 }
 
 button.add {
-    border: none;
-    padding: 0.5rem;
-    margin-top: 10px;
-    background-color: #0da9db;
-    color: white;
-    font-weight: 500;
-    border-radius: 8px;
+  border: none;
+  padding: 0.5rem;
+  margin-top: 10px;
+  background-color: #0da9db;
+  color: white;
+  font-weight: 500;
+  border-radius: 8px;
 }
 
 .search .text-toggle {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .search .text-toggle span.text {
-    margin-right: 1rem;
+  margin-right: 1rem;
+}
+/* new */
+.parent-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.parents {
+  max-height: 200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
