@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {
   CustomInput,
   FormGroup,
-  Label,
+  FormFeedback,
   Badge,
   Row,
   Col,
@@ -12,13 +12,14 @@ import {
   Button
 } from "reactstrap";
 import "./LemmaForm.css";
+import { isNotRef } from "../../helpers/input-validation";
 
 interface IAuthors {
   list: string[];
   input: string;
 }
 interface IParents {
-  list: { id: number; ref: string; required: boolean }[];
+  list: { id: number; ref: string; required: boolean, invalid: boolean }[];
   currentId: number;
 }
 const SearchInput = styled("div")<{ searchable: boolean }>`
@@ -55,7 +56,7 @@ const LemmaForm = () => {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState<IAuthors>({ list: [], input: "" });
   const [parentsRefs, setParentsRefs] = useState<IParents>({
-    list: [{ ref: "", required: false, id: 0 }],
+    list: [{ ref: "", required: false, id: 0, invalid: false}],
     currentId: 0
   });
   const [search, setSearch] = useState({
@@ -101,7 +102,11 @@ const LemmaForm = () => {
   const changeParent = (ref: EventTarget & HTMLInputElement) => {
     const id = parseInt(ref.id || "0");
     const newParents = parentsRefs.list.map(p =>
-      p.id === id ? { ...p, ref: ref.value } : p
+      p.id === id
+       ? isNotRef.test(ref.value) 
+          ? { ...p, ref: ref.value, invalid: true } 
+          : { ...p, ref: ref.value, invalid: false  } 
+       : p
     );
     setParentsRefs({ ...parentsRefs, list: newParents });
   };
@@ -110,7 +115,7 @@ const LemmaForm = () => {
     setParentsRefs({
       list: [
         ...parentsRefs.list,
-        { id: ++parentsRefs.currentId, ref: "", required: false }
+        { id: ++parentsRefs.currentId, ref: "", required: false, invalid: false }
       ],
       currentId: parentsRefs.currentId++
     });
@@ -141,7 +146,7 @@ const LemmaForm = () => {
             name="customSwitch"
             label="Owner"
           />
-          {!!owner.exists && <span>TestUser123</span>}
+          {!!owner.exists && <span className="ml-3">TestUser123</span>}
         </div>
         <div className="formgroup">
           <Input
@@ -185,13 +190,17 @@ const LemmaForm = () => {
             {parentsRefs.list.map(parent => (
               <Row key={parent.id} className="mb-1">
                 <Col md={6}>
-                  <Input
-                    type="text"
-                    id={`${parent.id}`}
-                    placeholder="Parent Ref"
-                    value={parent.ref}
-                    onChange={e => changeParent(e.target)}
-                  />
+                  <FormGroup>
+                    <Input
+                      invalid={parent.invalid}
+                      type="text"
+                      id={`${parent.id}`}
+                      placeholder="Parent Ref"
+                      value={parent.ref}
+                      onChange={e => changeParent(e.target)}
+                    />
+                    <FormFeedback invalid="">Should contain only alphanumerals</FormFeedback>
+                  </FormGroup>
                 </Col>
                 <Col md={6} className="parent-button">
                   <CustomInput
@@ -204,7 +213,7 @@ const LemmaForm = () => {
                   <button
                     type="button"
                     onClick={() => deleteParent(parent.id)}
-                    className="delete-parent"
+                    className="delete-parent mt-2"
                   >
                     Delete
                   </button>

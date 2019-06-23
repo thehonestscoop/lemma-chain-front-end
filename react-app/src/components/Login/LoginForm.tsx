@@ -2,10 +2,11 @@ import * as React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-import { Input, Button } from "reactstrap";
+import { Input, Button, FormGroup, FormFeedback } from "reactstrap";
 
 interface LoginProps {
   email: string;
+  invalidemail: boolean;
   password: string;
   disabled: boolean;
   emailChange: Function;
@@ -54,9 +55,6 @@ const SignUpLink = styled("p")`
 const FormContainer = styled("div")`
   display: flex;
   flex-direction: column;
-  input {
-    font-weight: 500;
-  }
 `;
 
 const LoginForm = (props: LoginProps) => {
@@ -64,16 +62,21 @@ const LoginForm = (props: LoginProps) => {
     <FormContainer>
       <User />
       <form>
-        <Input
-          type="text"
-          placeholder="Email"
-          value={props.email}
-          onChange={e => props.emailChange(e.target)}
-          className="mt-2"
-        />
+        <FormGroup>
+          <Input
+            invalid={props.invalidemail}
+            id="email"
+            type="text"
+            placeholder="Email"
+            value={props.email}
+            onChange={e => props.emailChange(e.target)}
+            className="mt-2"
+          />
+          <FormFeedback invalid="">Invalid Email Address</FormFeedback>
+        </FormGroup>
         <Input
           type="password"
-          name="Password"
+          id="Password"
           placeholder="Password"
           value={props.password}
           onChange={e => props.passwordChange(e.target)}
