@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import { Form, FormGroup, Label, Input, Button } from "reactstrap";
+import styled from 'styled-components';
 
 interface RegState {
   name: string;
@@ -8,6 +10,20 @@ interface RegState {
   confirmPassword: string;
   disabled: boolean;
 }
+
+const LoginLink = styled('p')`
+    margin-top: 1rem;
+    font-size: 14px;
+    font-weight: 500;
+    color: #2a2a2a;
+    font-style: italic;
+    border-left: 1px solid grey;
+    padding: 0 0.5rem;
+    &:hover {
+        color: white;
+        cursor: pointer;
+    }
+`;
 
 const Register = () => {
   const [user, setUser] = useState<RegState>({
@@ -28,48 +44,47 @@ const Register = () => {
   };
 
   return (
-    <Form onSubmit={e => submitForm(e)}>
+    <Form>
       <FormGroup>
-        <Label for="name">Name</Label>
         <Input
           type="text"
           id="name"
-          placeholder="with a placeholder"
+          placeholder="Name"
           value={user.name}
           onChange={e => inputChange(e.target)}
         />
       </FormGroup>
       <FormGroup>
-        <Label for="email">Email</Label>
         <Input
           type="email"
           id="email"
-          placeholder="with a placeholder"
+          placeholder="Email"
           value={user.email}
           onChange={e => inputChange(e.target)}
         />
       </FormGroup>
       <FormGroup>
-        <Label for="password">Password</Label>
         <Input
           type="password"
           id="password"
-          placeholder="Enter password"
+          placeholder="Password"
           value={user.password}
           onChange={e => inputChange(e.target)}
         />
       </FormGroup>
       <FormGroup>
-        <Label for="confirmPassword">Confrim Password</Label>
         <Input
           type="password"
           id="confirmPassword"
-          placeholder="Enter password again"
+          placeholder="Confirm Password"
           value={user.confirmPassword}
           onChange={e => inputChange(e.target)}
         />
       </FormGroup>
-      <Button onClick={submitForm}>Submit</Button>
+      <Button onClick={submitForm} color="primary">
+        Register
+      </Button>
+      <LoginLink><Link to="/login">Already Signed Up - Log in</Link></LoginLink>
     </Form>
   );
 };

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import { Input } from '../StyledComponents/Input';
 
@@ -99,7 +100,7 @@ const LoginForm = (props: LoginProps) => {
                     className={props.disabled ? 'disabled': ''}
                     value="Login" disabled={props.disabled}/>
             </form>
-            <SignUpLink>Or Sign Up</SignUpLink> 
+            <SignUpLink><Link to="/create-account">Or Sign Up</Link></SignUpLink> 
         </FormContainer>
     )
 }
