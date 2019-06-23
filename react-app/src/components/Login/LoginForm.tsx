@@ -1,108 +1,98 @@
-import * as React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import * as React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-import { Input } from '../StyledComponents/Input';
+import { Input, Button } from "reactstrap";
 
 interface LoginProps {
-    email: string,
-    password: string,
-    disabled: boolean,
-    emailChange: Function,
-    passwordChange: Function
-    submitForm: Function
+  email: string;
+  password: string;
+  disabled: boolean;
+  emailChange: Function;
+  passwordChange: Function;
+  submitForm: Function;
 }
-const User = styled('div')`
-    height: 100px;
-    width: 100px;
-    background-color: white;
-    position: relative;
-    overflow: hidden;
+const User = styled("div")`
+  height: 60px;
+  width: 60px;
+  align-self: center;
+  background-color: white;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  border: 1px var(--secondary) solid;
+  &::before {
+    height: 35%;
+    width: 35%;
+    content: "";
+    border: 1px solid var(--secondary);
+    position: absolute;
+    top: 6%;
+    left: 32.5%;
     border-radius: 50%;
-    border: 2px white solid;
-    &::before {
-        height: 35%;
-        width: 35%;
-        content: '';
-        background-color: #c3d0c7;
-        position: absolute;
-        top: 6%;
-        left: 32.5%;
-        border-radius: 50%;
-    }
-    &::after {
-        height: 80%;
-        width: 80%;
-        content: '';
-        background-color: #c3d0c7;
-        position: absolute;
-        top: 46%;
-        left: 10%;
-        border-radius: 50%;
-    }
+  }
+  &::after {
+    height: 80%;
+    width: 80%;
+    content: "";
+    border: 1px solid var(--secondary);
+    position: absolute;
+    top: 46%;
+    left: 10%;
+    border-radius: 50%;
+  }
 `;
-const SignUpLink = styled('p')`
-    margin-top: 1rem;
-    font-size: 14px;
+const SignUpLink = styled("p")`
+  margin-top: 1rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2a2a2a;
+  font-style: italic;
+  border-left: 1px solid grey;
+  padding: 0 0.5rem;
+`;
+const FormContainer = styled("div")`
+  display: flex;
+  flex-direction: column;
+  input {
     font-weight: 500;
-    color: #2a2a2a;
-    font-style: italic;
-    border-left: 1px solid grey;
-    padding: 0 0.5rem;
-    &:hover {
-        color: white;
-        cursor: pointer;
-    }
-`;
-const FormContainer = styled('div')`
-    padding: 3rem 6vw;
-    background-color: #c3d0c7;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    input {
-        font-weight: 500;
-    }
-    input[type="submit"] {
-        margin-top: 0.7rem;
-        padding: 8px 2rem;
-        border-radius: 10px;
-        border: none;
-        background-color: #0ddb46;
-        color: white;
-        &.disabled {
-            background-color: lightgrey;
-        }
-    }
+  }
 `;
 
 const LoginForm = (props: LoginProps) => {
-    return (
-        <FormContainer>
-            <User />
-            <form onSubmit={(e) => props.submitForm(e)}>
-                <Input
-                    type="email"
-                    name="Email"
-                    placeholder="Email"
-                    value={props.email}
-                    changeHandle={props.emailChange}
-                />
-                <Input
-                    type="password"
-                    name="Password"
-                    placeholder="Password"
-                    value={props.password}
-                    changeHandle={props.passwordChange}
-                />
-                <input type="submit" 
-                    className={props.disabled ? 'disabled': ''}
-                    value="Login" disabled={props.disabled}/>
-            </form>
-            <SignUpLink><Link to="/create-account">Or Sign Up</Link></SignUpLink> 
-        </FormContainer>
-    )
-}
+  return (
+    <FormContainer>
+      <User />
+      <form>
+        <Input
+          type="text"
+          placeholder="Email"
+          value={props.email}
+          onChange={e => props.emailChange(e.target)}
+          className="mt-2"
+        />
+        <Input
+          type="password"
+          name="Password"
+          placeholder="Password"
+          value={props.password}
+          onChange={e => props.passwordChange(e.target)}
+          className="mt-2"
+        />
+        <Button
+          color="success"
+          className="mt-3"
+          onClick={e => props.submitForm(e)}
+          disabled={props.disabled}
+        >
+          Login
+        </Button>
+      </form>
+      <SignUpLink>
+        <Link to="/create-account">Or Sign Up</Link>
+      </SignUpLink>
+    </FormContainer>
+  );
+};
 
 export default LoginForm;
