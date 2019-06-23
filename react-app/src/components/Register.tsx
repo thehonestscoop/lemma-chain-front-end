@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 import { Form, FormGroup, FormFeedback, Input, Button } from "reactstrap";
 import styled from "styled-components";
 import { isNotOwner, isEmail } from "../helpers/input-validation";
+import ReCAPTCHA from "react-google-recaptcha";
+import { RECAPTCHA_CLIENT_KEY } from "../helpers/Globals";
 
 interface RegState {
   name: string;
   invalidname: boolean;
   email: string;
   invalidemail: boolean;
-  password: string;
-  confirmPassword: string;
+  password_1: string;
+  invalidpassword_2: boolean;
+  password_2: string;
   disabled: boolean;
 }
 
@@ -34,11 +37,17 @@ const Register = () => {
     invalidname: false,
     email: "",
     invalidemail: false,
-    password: "",
-    confirmPassword: "",
+    password_1: "",
+    invalidpassword_2: false,
+    password_2: "",
     disabled: false
   });
 
+  const checkPassword = (value: string) => {
+    const matches = !(value === user.password_1);
+    return matches;
+  };
+  const handleRecaptcha = (val: string | null) => setRecaptcha(val);
   const inputChange = (input: EventTarget & HTMLInputElement) => {
     const inValidUser = {
       ...user,
@@ -49,6 +58,8 @@ const Register = () => {
       setUser(inValidUser);
     } else if (!isEmail.test(input.value) && input.id === "email") {
       setUser(inValidUser);
+    } else if (checkPassword(input.value) && input.id === "password_2") {
+      setUser(inValidUser);
     } else {
       setUser({
         ...user,
@@ -58,10 +69,14 @@ const Register = () => {
     }
   };
 
+  const [recaptcha, setRecaptcha] = useState<string | null>("");
+
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setUser({ ...user, disabled: true });
-    console.log(user);
+    const { name, email, password_1, password_2 } = user;
+    const recaptcha_code = recaptcha;
+    console.log({ name, email, password_1, password_2, recaptcha_code });
   };
 
   return (
@@ -93,22 +108,30 @@ const Register = () => {
       <FormGroup>
         <Input
           type="password"
-          id="password"
+          id="password_1"
           placeholder="Password"
-          value={user.password}
+          value={user.password_1}
           onChange={e => inputChange(e.target)}
         />
       </FormGroup>
       <FormGroup>
         <Input
+          invalid={user.invalidpassword_2}
           type="password"
-          id="confirmPassword"
+          id="password_2"
           placeholder="Confirm Password"
-          value={user.confirmPassword}
+          value={user.password_2}
           onChange={e => inputChange(e.target)}
         />
+        <FormFeedback invalid="">Passwords doesn't match</FormFeedback>
       </FormGroup>
-      <Button onClick={submitForm} color="success">
+      <div className="recaptcha">
+        <ReCAPTCHA
+          sitekey={RECAPTCHA_CLIENT_KEY}
+          onChange={val => handleRecaptcha(val)}
+        />
+      </div>
+      <Button onClick={submitForm} color="success" className="mt-3">
         Register
       </Button>
       <LoginLink>

@@ -9,7 +9,7 @@ interface LoginState {
   disabled: boolean;
 }
 
-const Login = () => {
+const Login = (props: any) => {
   const [loginUser, setLoginUser] = useState<LoginState>({
     email: "",
     password: "",
@@ -30,7 +30,12 @@ const Login = () => {
   const submitForm = (e: Event) => {
     e.preventDefault();
     setLoginUser({ ...loginUser, disabled: true });
-    console.log(loginUser);
+    const req = {
+      "X-AUTH-ACCOUNT": loginUser.email,
+      "X-AUTH-PASSWORD": loginUser.password
+    };
+    localStorage.setItem("auths", JSON.stringify(req));
+    props.history.push("/create-ref");
   };
 
   return (

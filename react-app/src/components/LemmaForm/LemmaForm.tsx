@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import ReCAPTCHA from "react-google-recaptcha";
 import {
   CustomInput,
   FormGroup,
@@ -13,6 +14,7 @@ import {
 } from "reactstrap";
 import "./LemmaForm.css";
 import { isNotRef } from "../../helpers/input-validation";
+import { RECAPTCHA_CLIENT_KEY } from "../../helpers/Globals";
 
 interface IAuthors {
   list: string[];
@@ -50,7 +52,7 @@ const AuthorFG = styled("div")`
 const BadgeCon = styled("span")`
   font-size: 1.2rem;
 `;
-const LemmaForm = () => {
+const LemmaForm = (props: any) => {
   // States
   const [owner, setOwner] = useState({ exists: false, name: "" });
   const [title, setTitle] = useState("");
@@ -63,14 +65,26 @@ const LemmaForm = () => {
     searchable: false,
     synopsis: ""
   });
+  const [recaptcha, setRecaptcha] = useState<string | null>('');
 
   // Submit form
   const createRef = () => {
-    console.log({ owner, title, authors, parentsRefs, search });
+    const owner = '';
+    const ownerLink = !!owner ? owner+'/' : '';
+    const parents = parentsRefs.list.map(p => p.required
+      ? `required:${ownerLink}${p.ref}`
+      : `recommended:${ownerLink}${p.ref}`);
+    const data = {title, authors: authors.list};
+    const searchable = search.searchable;
+    const search_title = `${title} ${authors.list.join(' ')}`
+    const search_synopsis = search.synopsis;
+    const recaptcha_code = recaptcha;
+    console.log({ owner, parents, data, searchable, search_title, search_synopsis, recaptcha_code });
   };
 
   // Input Change Handlers
   const handleOwner = () => setOwner({ ...owner, exists: !owner.exists });
+  const handleRecaptcha = (val: string | null) => setRecaptcha(val);
 
   const changeTitle = (t: EventTarget & HTMLInputElement) => setTitle(t.value);
 
@@ -247,7 +261,12 @@ const LemmaForm = () => {
             />
           </SearchInput>
         </div>
-        <div className="recaptcha" />
+        <div className="recaptcha">
+        <ReCAPTCHA
+          sitekey={RECAPTCHA_CLIENT_KEY}
+          onChange={val => handleRecaptcha(val)}
+        />
+        </div>
         <Button onClick={createRef} color="success" className="mt-3">
           Create Ref
         </Button>
