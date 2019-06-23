@@ -76,7 +76,24 @@ const Register = () => {
     setUser({ ...user, disabled: true });
     const { name, email, password_1, password_2 } = user;
     const recaptcha_code = recaptcha;
-    console.log({ name, email, password_1, password_2, recaptcha_code });
+    const req = { name, email, password_1, password_2, recaptcha_code }
+    if(Object.values(req).some(field => field === '')) {
+      alert('Please fill all the form fields')
+    } else {
+      if(!isEmail.test(email)){
+        alert('Invalid Email Address')
+      } else if(name.length > 100) {
+        alert('Name cannot be greater than 100 characters')
+      } else if(isNotOwner.test(name)){
+        alert("Invalid Name(No whitespaces, @ or /)")
+      } else if(password_1 !== password_2) {
+        alert("Passwords doesn't match")
+      } else if(recaptcha_code === ''){
+        alert("Verify Captcha please")
+      } else {
+        console.log(req)
+      }
+    }
   };
 
   return (

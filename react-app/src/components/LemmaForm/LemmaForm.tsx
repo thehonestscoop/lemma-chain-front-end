@@ -71,15 +71,29 @@ const LemmaForm = (props: any) => {
   const createRef = () => {
     const owner = '';
     const ownerLink = !!owner ? owner+'/' : '';
-    const parents = parentsRefs.list.map(p => p.required
+    const filteredParents = parentsRefs.list.filter(p => !!p.ref);
+    const parents = filteredParents.map(p => p.required
       ? `required:${ownerLink}${p.ref}`
       : `recommended:${ownerLink}${p.ref}`);
     const data = {title, authors: authors.list};
     const searchable = search.searchable;
-    const search_title = `${title} ${authors.list.join(' ')}`
+    const search_title = !!searchable ? `${title} ${authors.list.join(' ')}`: '';
     const search_synopsis = search.synopsis;
     const recaptcha_code = recaptcha;
-    console.log({ owner, parents, data, searchable, search_title, search_synopsis, recaptcha_code });
+    if(recaptcha_code === '') {
+      alert('Please Verify Recaptcha')
+    } else if(searchable && search_synopsis === '') {
+      alert('Search synopsis must not be empty for searchable refs')
+    } else if(data.title === '') {
+      alert('Title must not be empty')
+    } else if(data.authors.length === 0) {
+      alert('Must have at least one Author')
+    } else if(filteredParents.some(p => isNotRef.test(p.ref))) {
+      alert('Some parents refs are invalid')
+    } else {
+      const req = { owner, parents, data, searchable, search_title, search_synopsis, recaptcha_code }
+      console.log(req)
+    }
   };
 
   // Input Change Handlers

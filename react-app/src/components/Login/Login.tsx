@@ -27,15 +27,24 @@ const Login = (props: any) => {
 
   const passwordChange = (input: EventTarget & HTMLInputElement) =>
     setLoginUser({ ...loginUser, password: input.value });
+
   const submitForm = (e: Event) => {
     e.preventDefault();
-    setLoginUser({ ...loginUser, disabled: true });
-    const req = {
-      "X-AUTH-ACCOUNT": loginUser.email,
-      "X-AUTH-PASSWORD": loginUser.password
-    };
-    localStorage.setItem("auths", JSON.stringify(req));
-    props.history.push("/create-ref");
+    // setLoginUser({ ...loginUser, disabled: true });
+    const { email, password } = loginUser;
+    if (email === "" || password === "") {
+      alert("The fields must be filled");
+    } else if (!isEmail.test(email)) {
+      alert("Invalid Email Address");
+    } else {
+      const req = {
+        "X-AUTH-ACCOUNT": email,
+        "X-AUTH-PASSWORD": password
+      };
+      console.log(req);
+      // localStorage.setItem("auths", JSON.stringify(req));
+      // props.history.push("/create-ref");
+    }
   };
 
   return (
