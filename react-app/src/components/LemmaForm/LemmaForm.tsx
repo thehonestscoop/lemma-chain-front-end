@@ -103,7 +103,7 @@ const LemmaForm = (props: any) => {
         alert('Ref Successflly Created')
       })
       .catch(err => {
-        alert(err.response.data.error)
+        alert(JSON.stringify(err.response))
       })
       // "owner requires login"
     }

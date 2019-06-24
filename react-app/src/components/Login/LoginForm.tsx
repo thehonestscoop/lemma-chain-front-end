@@ -6,7 +6,6 @@ import { Input, Button, FormGroup, FormFeedback } from "reactstrap";
 
 interface LoginProps {
   email: string;
-  invalidemail: boolean;
   password: string;
   disabled: boolean;
   emailChange: Function;
@@ -64,15 +63,13 @@ const LoginForm = (props: LoginProps) => {
       <form>
         <FormGroup>
           <Input
-            invalid={props.invalidemail}
             id="email"
             type="text"
-            placeholder="Email"
+            placeholder="Email or Name"
             value={props.email}
             onChange={e => props.emailChange(e.target)}
             className="mt-2"
           />
-          <FormFeedback invalid="">Invalid Email Address</FormFeedback>
         </FormGroup>
         <Input
           type="password"

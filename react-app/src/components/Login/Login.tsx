@@ -5,7 +5,6 @@ import { AUTH_VERIFY } from "../../helpers/functions";
 
 interface LoginState {
   email: string;
-  invalidemail: boolean;
   password: string;
   disabled: boolean;
 }
@@ -14,16 +13,11 @@ const Login = (props: any) => {
   const [loginUser, setLoginUser] = useState<LoginState>({
     email: "",
     password: "",
-    invalidemail: false,
     disabled: false
   });
 
   const emailChange = (input: EventTarget & HTMLInputElement) => {
-    if (!isEmail.test(input.value)) {
-      setLoginUser({ ...loginUser, email: input.value, invalidemail: true });
-    } else {
-      setLoginUser({ ...loginUser, email: input.value, invalidemail: false });
-    }
+      setLoginUser({ ...loginUser, email: input.value});
   };
 
   const passwordChange = (input: EventTarget & HTMLInputElement) =>
@@ -35,8 +29,6 @@ const Login = (props: any) => {
     const { email, password } = loginUser;
     if (email === "" || password === "") {
       alert("The fields must be filled");
-    } else if (!isEmail.test(email)) {
-      alert("Invalid Email Address");
     } else if (!AUTH_VERIFY(email, password)) {
       alert("Incorrect Password or Email");
     } else {
@@ -52,7 +44,6 @@ const Login = (props: any) => {
       emailChange={emailChange}
       passwordChange={passwordChange}
       submitForm={submitForm}
-      invalidemail={loginUser.invalidemail}
     />
   );
 };

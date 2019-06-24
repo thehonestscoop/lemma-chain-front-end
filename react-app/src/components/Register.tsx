@@ -95,7 +95,7 @@ const Register = (props: any) => {
       } else {
         Axios.post(`${BASE_URL}/accounts`, req)
           .then(res => {
-            AUTH_SYNC(email, password_1)
+            AUTH_SYNC(name, email, password_1)
             props.history.push('/login')
           })
           .catch(err => {
