@@ -7,7 +7,8 @@ export const AUTH_SYNC = (email: string, password: string): void => {
 };
 
 export const AUTH_VERIFY = (em: string, pa: string): boolean => {
-  const auth: any = JSON.parse(localStorage.getItem("auth") || "");
+  const first = localStorage.getItem("auth") || "";
+  const auth = !!first ? JSON.parse(first) : "";
   const user = auth === "" ? "" : auth["X-AUTH-ACCOUNT"];
   const password = auth === "" ? "" : auth["X-AUTH-PASSWORD"];
   return user === em && user !== "" && password !== "" && password === pa
@@ -16,10 +17,12 @@ export const AUTH_VERIFY = (em: string, pa: string): boolean => {
 };
 
 export const AUTH_USER = (): string => {
-  const auth: any = JSON.parse(localStorage.getItem("auth") || "");
+  const first = localStorage.getItem("auth") || "";
+  const auth = !!first ? JSON.parse(first) : "";
   return auth === "" ? "unknown" : auth["X-AUTH-ACCOUNT"];
 };
 export const AUTH_PASSWORD = (): string => {
-  const auth: any = JSON.parse(localStorage.getItem("auth") || "");
+  const first = localStorage.getItem("auth") || "";
+  const auth = !!first ? JSON.parse(first) : "";
   return auth === "" ? "unknown" : auth["X-AUTH-PASSWORD"];
 };

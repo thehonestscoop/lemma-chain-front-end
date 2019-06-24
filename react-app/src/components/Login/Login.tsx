@@ -37,9 +37,8 @@ const Login = (props: any) => {
       alert("The fields must be filled");
     } else if (!isEmail.test(email)) {
       alert("Invalid Email Address");
-    } else if(!AUTH_VERIFY(email, password)){
-      // alert('Incorrect Password or Email')
-      alert(AUTH_VERIFY(email, password))
+    } else if (!AUTH_VERIFY(email, password)) {
+      alert("Incorrect Password or Email");
     } else {
       props.history.push("/create-ref");
     }
