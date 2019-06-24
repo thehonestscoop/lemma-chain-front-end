@@ -13,13 +13,16 @@ const App: FC = () => {
     <div className="App">
       <NavBar />
       <Container className="mt-5" style={{ maxWidth: "650px" }}>
-        <Redirect path="/" to="/login" />
+        <Redirect path="/" exact to="/create-ref" />
         <Route path="/login" render={rProps => <Login {...rProps} />} />
         <Route
           path="/create-ref"
           render={rProps => <LemmaForm {...rProps} />}
         />
-        <Route path="/create-account" render={rProps => <Register {...rProps}/>} />
+        <Route
+          path="/create-account"
+          render={rProps => <Register {...rProps} />}
+        />
       </Container>
     </div>
   );
