@@ -19,7 +19,7 @@ const App: FC = () => {
           path="/create-ref"
           render={rProps => <LemmaForm {...rProps} />}
         />
-        <Route path="/create-account" component={Register} />
+        <Route path="/create-account" render={rProps => <Register {...rProps}/>} />
       </Container>
     </div>
   );

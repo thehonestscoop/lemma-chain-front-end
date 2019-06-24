@@ -1,2 +1,3 @@
 // export const RECAPTCHA_CLIENT_KEY = '6LcQQKoUAAAAAG1aESUAwFem7nCa_PsVmLgGJ4Fe';
 export const RECAPTCHA_CLIENT_KEY = "6LfcQKoUAAAAADROP6YPglwHCeyD3fn4lzHEQm4A";
+export const BASE_URL =  'http://68.183.123.0:1323';

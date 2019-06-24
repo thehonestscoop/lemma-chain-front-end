@@ -2,6 +2,7 @@
   "name": "react-app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://68.183.123.0:1323",
   "dependencies": {
     "@types/react-google-recaptcha": "^1.0.0",
     "axios": "^0.19.0",
