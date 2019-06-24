@@ -99,7 +99,7 @@ const Register = (props: any) => {
             props.history.push('/login')
           })
           .catch(err => {
-            console.log(err)
+            alert(err.response.data.error)
           });
       }
     }

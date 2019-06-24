@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import LoginForm from "./LoginForm";
 import { isEmail } from "../../helpers/input-validation";
+import { AUTH_VERIFY } from "../../helpers/functions";
 
 interface LoginState {
   email: string;
@@ -36,14 +37,11 @@ const Login = (props: any) => {
       alert("The fields must be filled");
     } else if (!isEmail.test(email)) {
       alert("Invalid Email Address");
+    } else if(!AUTH_VERIFY(email, password)){
+      // alert('Incorrect Password or Email')
+      alert(AUTH_VERIFY(email, password))
     } else {
-      const req = {
-        "X-AUTH-ACCOUNT": email,
-        "X-AUTH-PASSWORD": password
-      };
-      console.log(req);
-      // localStorage.setItem("auths", JSON.stringify(req));
-      // props.history.push("/create-ref");
+      props.history.push("/create-ref");
     }
   };
 

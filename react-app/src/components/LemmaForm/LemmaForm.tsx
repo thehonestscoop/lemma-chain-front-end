@@ -14,7 +14,9 @@ import {
 } from "reactstrap";
 import "./LemmaForm.css";
 import { isNotRef } from "../../helpers/input-validation";
-import { RECAPTCHA_CLIENT_KEY } from "../../helpers/Globals";
+import { RECAPTCHA_CLIENT_KEY, BASE_URL } from "../../helpers/Globals";
+import { AUTH_USER, AUTH_PASSWORD } from "../../helpers/functions";
+import Axios from "axios";
 
 interface IAuthors {
   list: string[];
@@ -69,35 +71,55 @@ const LemmaForm = (props: any) => {
 
   // Submit form
   const createRef = () => {
-    const owner = '';
-    const ownerLink = !!owner ? owner+'/' : '';
+    const ownerLink = !!owner.exists ? owner+'/' : '';
     const filteredParents = parentsRefs.list.filter(p => !!p.ref);
     const parents = filteredParents.map(p => p.required
       ? `required:${ownerLink}${p.ref}`
       : `recommended:${ownerLink}${p.ref}`);
-    const data = {title, authors: authors.list};
+    const data = JSON.stringify({title, authors: authors.list});
     const searchable = search.searchable;
     const search_title = !!searchable ? `${title} ${authors.list.join(' ')}`: '';
     const search_synopsis = search.synopsis;
     const recaptcha_code = recaptcha;
+    const password = AUTH_PASSWORD();
     if(recaptcha_code === '') {
       alert('Please Verify Recaptcha')
     } else if(searchable && search_synopsis === '') {
       alert('Search synopsis must not be empty for searchable refs')
-    } else if(data.title === '') {
+    } else if(title === '') {
       alert('Title must not be empty')
-    } else if(data.authors.length === 0) {
+    } else if(authors.list.length === 0) {
       alert('Must have at least one Author')
     } else if(filteredParents.some(p => isNotRef.test(p.ref))) {
       alert('Some parents refs are invalid')
     } else {
-      const req = { owner, parents, data, searchable, search_title, search_synopsis, recaptcha_code }
-      console.log(req)
+      const req = { owner: owner.name, parents, data, searchable, search_title, search_synopsis, recaptcha_code }
+      const headers = !!owner.exists 
+        ? {"X-AUTH-ACCOUNT": owner.name, "X-AUTH-PASSWORD": password}
+        : {}
+      Axios.post(`${BASE_URL}/ref`, req, {headers})
+      .then(res => {
+        alert('Ref Successflly Created')
+      })
+      .catch(err => {
+        alert(err.response.data.error)
+      })
+      // "owner requires login"
     }
   };
 
   // Input Change Handlers
-  const handleOwner = () => setOwner({ ...owner, exists: !owner.exists });
+  const handleOwner = () => {
+    if(!owner.exists) {
+      if(AUTH_USER() === 'unknown') {
+        props.history.push('/login');
+      } else {
+        setOwner({ name: AUTH_USER(), exists: true})
+      }
+    } else {
+      setOwner({ ...owner, exists: false})
+    }
+  };
   const handleRecaptcha = (val: string | null) => setRecaptcha(val);
 
   const changeTitle = (t: EventTarget & HTMLInputElement) => setTitle(t.value);
@@ -174,7 +196,7 @@ const LemmaForm = (props: any) => {
             name="customSwitch"
             label="Owner"
           />
-          {!!owner.exists && <span className="ml-3">TestUser123</span>}
+          {!!owner.exists && <span className="ml-3">{owner.name}</span>}
         </div>
         <div className="formgroup">
           <Input
