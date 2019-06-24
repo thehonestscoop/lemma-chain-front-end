@@ -93,11 +93,12 @@ const LemmaForm = (props: any) => {
     } else if(filteredParents.some(p => isNotRef.test(p.ref))) {
       alert('Some parents refs are invalid')
     } else {
-      const req = { owner: owner.name, parents, data, searchable, search_title, search_synopsis, recaptcha_code }
+      const req = { parents, data, searchable, search_title, search_synopsis, recaptcha_code }
+      const processed = !!owner.name ? {...req,  owner: owner.name } : req
       const headers = !!owner.exists 
         ? {"X-AUTH-ACCOUNT": owner.name, "X-AUTH-PASSWORD": password}
         : {}
-      Axios.post(`${BASE_URL}/ref`, req, {headers})
+      Axios.post(`${BASE_URL}/ref`, processed, {headers})
       .then(res => {
         alert('Ref Successflly Created')
       })
