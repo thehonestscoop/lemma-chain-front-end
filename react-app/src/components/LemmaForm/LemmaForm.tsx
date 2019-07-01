@@ -12,11 +12,11 @@ import {
   UncontrolledTooltip,
   Button
 } from "reactstrap";
+import { IoMdTrash } from 'react-icons/io'
 import "./LemmaForm.css";
-import { isNotRef } from "../../helpers/input-validation";
+import { isNotRef, isNotOwner } from "../../helpers/input-validation";
 import { RECAPTCHA_CLIENT_KEY, BASE_URL } from "../../helpers/Globals";
-import { AUTH_USER, AUTH_PASSWORD } from "../../helpers/functions";
-import Axios from "axios";
+// import Axios from "axios";
 
 interface IAuthors {
   list: string[];
@@ -56,7 +56,7 @@ const BadgeCon = styled("span")`
 `;
 const LemmaForm = (props: any) => {
   // States
-  const [owner, setOwner] = useState({ exists: false, name: "" });
+  const [owner, setOwner] = useState({ name: '', password: '', invalid: false });
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState<IAuthors>({ list: [], input: "" });
   const [parentsRefs, setParentsRefs] = useState<IParents>({
@@ -71,7 +71,7 @@ const LemmaForm = (props: any) => {
 
   // Submit form
   const createRef = () => {
-    const ownerLink = !!owner.exists ? owner+'/' : '';
+    const ownerLink = !!owner.name ? '@'+owner.name+'/' : '';
     const filteredParents = parentsRefs.list.filter(p => !!p.ref);
     const parents = filteredParents.map(p => p.required
       ? `required:${ownerLink}${p.ref}`
@@ -81,7 +81,6 @@ const LemmaForm = (props: any) => {
     const search_title = !!searchable ? `${title} ${authors.list.join(' ')}`: '';
     const search_synopsis = search.synopsis;
     const recaptcha_code = recaptcha;
-    const password = AUTH_PASSWORD();
     if(recaptcha_code === '') {
       alert('Please Verify Recaptcha')
     } else if(searchable && search_synopsis === '') {
@@ -93,33 +92,28 @@ const LemmaForm = (props: any) => {
     } else if(filteredParents.some(p => isNotRef.test(p.ref))) {
       alert('Some parents refs are invalid')
     } else {
-      const req = { parents, data, searchable, search_title, search_synopsis, recaptcha_code }
-      const processed = !!owner.name ? {...req,  owner: owner.name } : req
-      const headers = !!owner.exists 
-        ? {"X-AUTH-ACCOUNT": owner.name, "X-AUTH-PASSWORD": password}
+      const req = { owner: owner.name, parents, data, searchable, search_title, search_synopsis, recaptcha_code }
+      const headers = !!owner.name 
+        ? {"X-AUTH-ACCOUNT": owner.name, "X-AUTH-PASSWORD": owner.password}
         : {}
-      Axios.post(`${BASE_URL}/ref`, processed, {headers})
-      .then(res => {
-        alert('Ref Successflly Created')
-      })
-      .catch(err => {
-        alert(JSON.stringify(err.response))
-      })
+        console.log(req, headers)
+      // Axios.post(`${BASE_URL}/ref`, req, {headers})
+      // .then(res => {
+      //   alert('Ref Successflly Created')
+      // })
+      // .catch(err => {
+      //   alert(JSON.stringify(err.response))
+      // })
       // "owner requires login"
     }
   };
 
   // Input Change Handlers
-  const handleOwner = () => {
-    if(!owner.exists) {
-      if(AUTH_USER() === 'unknown') {
-        props.history.push('/login');
-      } else {
-        setOwner({ name: AUTH_USER(), exists: true})
-      }
-    } else {
-      setOwner({ ...owner, exists: false})
+  const handleOwner = (input: EventTarget & HTMLInputElement) => {
+    if(isNotOwner.test(input.value) && input.id === 'name'){
+      setOwner({...owner, [input.id]: input.value, invalid: true})
     }
+    else { setOwner({...owner, [input.id]: input.value, invalid: false}) }
   };
   const handleRecaptcha = (val: string | null) => setRecaptcha(val);
 
@@ -188,17 +182,28 @@ const LemmaForm = (props: any) => {
   return (
     <div className="form-container">
       <form>
-        <div className="owner formgroup">
-          <CustomInput
-            type="switch"
-            id="exampleCustomSwitch"
-            onChange={handleOwner}
-            checked={owner.exists}
-            name="customSwitch"
-            label="Owner"
-          />
-          {!!owner.exists && <span className="ml-3">{owner.name}</span>}
-        </div>
+      <Row>
+          <Col md={6}>
+            <FormGroup>
+              <Input type="text"
+               invalid={owner.invalid}
+               id="name" placeholder="Username"
+               value={owner.name}
+               onChange={e => handleOwner(e.target)} />
+              <FormFeedback invalid="">
+                Username must not contain (@, /, or whitespace)
+              </FormFeedback>
+            </FormGroup>
+          </Col>
+          <Col md={6}>
+            <FormGroup style={{display: !!owner.name? 'block': 'none'}}>
+              <Input type="password" id="password"
+               onChange={e => handleOwner(e.target)}
+               value={owner.password} 
+               placeholder="Password" />
+            </FormGroup>
+          </Col>
+        </Row>
         <div className="formgroup">
           <Input
             name="title"
@@ -261,13 +266,11 @@ const LemmaForm = (props: any) => {
                     checked={!parent.required}
                     label="Optional"
                   />
-                  <button
-                    type="button"
+                  <IoMdTrash 
+                    color="#f74949"
+                    size="1.5em"
                     onClick={() => deleteParent(parent.id)}
-                    className="delete-parent mt-2"
-                  >
-                    Delete
-                  </button>
+                  />
                 </Col>
               </Row>
             ))}
