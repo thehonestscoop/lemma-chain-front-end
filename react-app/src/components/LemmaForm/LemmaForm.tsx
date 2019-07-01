@@ -71,20 +71,24 @@ const LemmaForm = (props: any) => {
 
   // Submit form
   const createRef = () => {
+
     const ownerLink = !!owner.name ? '@'+owner.name+'/' : '';
     const filteredParents = parentsRefs.list.filter(p => !!p.ref);
     const parents = filteredParents.map(p => p.required
       ? `required:${ownerLink}${p.ref}`
       : `recommended:${ownerLink}${p.ref}`);
-    const data = JSON.stringify({title, authors: authors.list});
-    const searchable = search.searchable;
-    const search_title = !!searchable ? `${title} ${authors.list.join(' ')}`: '';
-    const search_synopsis = search.synopsis;
+
+    const data = JSON.stringify({title, authors: JSON.stringify(authors.list)});
+    const search_title = !!search.searchable ? `${title} ${authors.list.join(' ')}`: '';
+    const search_synopsis = !!search.searchable ? search.synopsis: '';
     const recaptcha_code = recaptcha;
+
     if(recaptcha_code === '') {
       alert('Please Verify Recaptcha')
-    } else if(searchable && search_synopsis === '') {
+    } else if(search.searchable && search_synopsis === '') {
       alert('Search synopsis must not be empty for searchable refs')
+    } else if(owner.name && !owner.password) {
+      alert('Password must be filled when Username is set')
     } else if(title === '') {
       alert('Title must not be empty')
     } else if(authors.list.length === 0) {
@@ -92,9 +96,9 @@ const LemmaForm = (props: any) => {
     } else if(filteredParents.some(p => isNotRef.test(p.ref))) {
       alert('Some parents refs are invalid')
     } else {
-      const req = { owner: owner.name, parents, data, searchable, search_title, search_synopsis, recaptcha_code }
+      const req = { owner: owner.name, parents, data, searchable: search.searchable, search_title, search_synopsis, recaptcha_code }
       const headers = !!owner.name 
-        ? {"X-AUTH-ACCOUNT": owner.name, "X-AUTH-PASSWORD": owner.password}
+        ? {"X-AUTH-ACCOUNT": '@'+owner.name, "X-AUTH-PASSWORD": owner.password}
         : {}
         console.log(req, headers)
       // Axios.post(`${BASE_URL}/ref`, req, {headers})

@@ -55,7 +55,7 @@ button.add {
 .parent-button {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .parents {
