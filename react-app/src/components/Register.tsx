@@ -80,7 +80,7 @@ const Register = (props: any) => {
         Axios.post(`${BASE_URL}/accounts`, req)
           .then(res => {
             AUTH_SYNC(name, email, password_1);
-            props.history.push('/login');
+            props.history.push('/create-ref');
           })
           .catch(err => {
             alert(err.message);
