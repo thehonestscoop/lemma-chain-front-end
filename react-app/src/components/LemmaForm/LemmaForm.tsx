@@ -85,7 +85,7 @@ const LemmaForm = (props: any) => {
 
     if(recaptcha_code === '') {
       alert('Please Verify Recaptcha')
-    } else if(!!search.searchable && search_synopsis === '') {
+    } else if(search.searchable && !search_synopsis) {
       alert('Search synopsis must not be empty for searchable refs')
     } else if(owner.name && !owner.password) {
       alert('Password must be filled when Username is set')
@@ -96,18 +96,22 @@ const LemmaForm = (props: any) => {
     } else if(filteredParents.some(p => isNotRef.test(p.ref))) {
       alert('Some parents refs are invalid')
     } else {
-      const req = { owner: nOwner, parents, data, searchable: search.searchable, search_title, search_synopsis, recaptcha_code }
+      const req = { parents, data, searchable: search.searchable, recaptcha_code }
+      const withOwner = !!nOwner ? { ...req, owner: nOwner }: req
+      const withSearch = search.searchable ? { ...withOwner, search_title, search_synopsis }: withOwner
       const headers = !!owner.name && !!owner.password
         ? {"X-AUTH-ACCOUNT": '@'+owner.name, "X-AUTH-PASSWORD": owner.password}
         : {}
-        console.log(req, headers)
-      Axios.post(`${BASE_URL}/ref`, req, {headers})
-      .then(res => {
-        alert('Ref Successflly Created')
-      })
-      .catch(err => {
-        alert(JSON.stringify(err.response))
-      })
+        console.log(withSearch, headers)
+      // Axios.post(`${BASE_URL}/ref`, withSearch, {headers})ˀ
+      // .then(res => {
+      //   debugger
+      //   alert('Ref Successflly Created')
+      // })
+      // .catch(err => {
+      //   debugger
+      //   alert(JSON.stringify(err.response))
+      // })
     }
   };
 
@@ -183,8 +187,8 @@ const LemmaForm = (props: any) => {
   };
 
   return (
-    <div className="form-container">
-      <form>
+    <div className="form-container" style={{width: '100%'}}>
+      <form style={{width: '100%', padding: '0 3rem'}}>
       <Row>
           <Col md={6}>
             <FormGroup>
@@ -265,9 +269,10 @@ const LemmaForm = (props: any) => {
                   <CustomInput
                     type="switch"
                     id={`check${parent.id}`}
+                    color="success"
                     onChange={e => parentCheck(e.target.id)}
                     checked={!parent.required}
-                    label="Optional"
+                    label="optional"
                   />
                   <IoMdTrash 
                     color="#f74949"

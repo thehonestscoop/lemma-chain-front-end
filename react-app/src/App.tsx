@@ -16,7 +16,7 @@ const App: FC = () => {
       <NavBar />
       <Content>
         <Redirect path="/" exact to="/create-ref" />
-        <Route path="/login" render={rProps => <Login {...rProps} />} />
+        {/* <Route path="/login" render={rProps => <Login {...rProps} />} /> */}
         <Route
           path="/create-ref"
           render={rProps => <LemmaForm {...rProps} />}

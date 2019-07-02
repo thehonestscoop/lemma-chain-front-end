@@ -106,7 +106,7 @@ const Register = (props: any) => {
   };
 
   return (
-    <Form>
+    <Form style={{width: '100%', padding: '0 3rem'}}>
       <FormGroup>
         <Input
           invalid={user.invalidname}

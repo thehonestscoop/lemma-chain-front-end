@@ -5,14 +5,11 @@ import styled from 'styled-components';
 const NavBar = () => {
   return (
     <Nav>
-        <NavLink to="/create-account">
-          Create Account
-        </NavLink>
-        <NavLink to="/login">
-          Login
-        </NavLink>
         <NavLink to="/create-ref">
-          Create Ref
+          <span>CR</span> Create Ref
+        </NavLink>
+        <NavLink to="/create-account">
+         <span>CA</span> Create Account
         </NavLink>
     </Nav>
   );
