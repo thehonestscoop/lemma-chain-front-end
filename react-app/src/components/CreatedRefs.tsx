@@ -7,7 +7,15 @@ const CreatedRefs = (props: { refs: string[] }) => {
   if (!!props.refs.length) {
     return (
       <>
-        <h3 style={{ textAlign: 'center' }}>Your References</h3>
+        <h3
+          style={{
+            textAlign: 'center',
+            marginBottom: '1.5rem',
+            color: '#333333'
+          }}
+        >
+          Your References
+        </h3>
         <List>
           {props.refs.map(ref => (
             <li key={ref}>

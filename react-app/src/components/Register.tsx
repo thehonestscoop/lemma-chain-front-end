@@ -83,7 +83,7 @@ const Register = (props: any) => {
             props.history.push('/login');
           })
           .catch(err => {
-            alert(err.response.data.error);
+            alert(err.message);
           });
       }
     }
@@ -91,7 +91,15 @@ const Register = (props: any) => {
 
   return (
     <Form style={{ width: '100%', padding: '0 3rem' }}>
-      <h3 style={{ textAlign: 'center' }}>Create Account</h3>
+      <h3
+        style={{
+          textAlign: 'center',
+          marginBottom: '1.5rem',
+          color: '#333333'
+        }}
+      >
+        Create Account
+      </h3>
       <FormGroup>
         <Input
           invalid={user.invalidname}

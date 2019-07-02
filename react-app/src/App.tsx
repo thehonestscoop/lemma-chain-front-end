@@ -49,6 +49,7 @@ const Main = styled.main`
   border-radius: 10px;
   overflow: hidden;
   min-height: 550px;
+  max-width: 900px;
   @media (max-width: 800px) {
     flex-direction: column;
   }

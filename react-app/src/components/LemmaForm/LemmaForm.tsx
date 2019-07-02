@@ -111,7 +111,7 @@ const LemmaForm = (props: any) => {
         searchable: search.searchable,
         recaptcha_code
       };
-      const withOwner = !!nOwner ? { ...req, owner: nOwner } : req;
+      const withOwner = !!nOwner ? { ...req, owner: owner.name } : req;
       const withSearch = search.searchable
         ? { ...withOwner, search_title, search_synopsis }
         : withOwner;
@@ -129,8 +129,7 @@ const LemmaForm = (props: any) => {
           alert('Ref Successflly Created');
         })
         .catch(err => {
-          debugger;
-          alert(JSON.stringify(err.response));
+          alert(err.message);
         });
     }
   };
