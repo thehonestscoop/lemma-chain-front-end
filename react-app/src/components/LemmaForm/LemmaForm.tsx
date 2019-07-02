@@ -125,7 +125,7 @@ const LemmaForm = (props: any) => {
       // console.log(withSearch, headers)
       Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
         .then(res => {
-          debugger;
+          props.addRef(res.data.link);
           alert('Ref Successflly Created');
         })
         .catch(err => {

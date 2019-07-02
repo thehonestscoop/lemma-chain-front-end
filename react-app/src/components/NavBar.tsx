@@ -1,15 +1,22 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { Badge } from 'reactstrap';
 
-const NavBar = () => {
+const NavBar = (props: { refs: string[] }) => {
   return (
     <Nav>
       <NavLink to="/create-ref">
-        <span>CR</span> Create Ref
+        <span className="menu">CR</span> Create Ref
       </NavLink>
       <NavLink to="/create-account">
-        <span>CA</span> Create Account
+        <span className="menu">CA</span> Create Account
+      </NavLink>
+      <NavLink to="/refs">
+        <span className="menu">YR</span> Your Refs{' '}
+        <Badge pill={true} color="success">
+          {props.refs.length}
+        </Badge>
       </NavLink>
     </Nav>
   );
@@ -34,7 +41,7 @@ const Nav = styled.nav`
     &:hover {
       text-decoration: none;
     }
-    span {
+    span.menu {
       border-radius: 50%;
       background-color: #cccccc;
       color: #3e4061;

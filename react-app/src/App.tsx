@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import './App.css';
@@ -7,22 +7,29 @@ import './App.css';
 import LemmaForm from './components/LemmaForm/LemmaForm';
 import NavBar from './components/NavBar';
 import Register from './components/Register';
+import CreatedRefs from './components/CreatedRefs';
 
 const App: FC = () => {
+  const [refs, setRefs] = useState<string[]>([]);
+  const addRef = (ref: string) => setRefs([...refs, ref]);
   return (
     <div className="App">
       <Main>
-        <NavBar />
+        <NavBar refs={refs} />
         <Content>
           <Redirect path="/" exact to="/create-ref" />
           {/* <Route path="/login" render={rProps => <Login {...rProps} />} /> */}
           <Route
             path="/create-ref"
-            render={rProps => <LemmaForm {...rProps} />}
+            render={rProps => <LemmaForm {...rProps} addRef={addRef} />}
           />
           <Route
             path="/create-account"
             render={rProps => <Register {...rProps} />}
+          />
+          <Route
+            path="/refs"
+            render={rProps => <CreatedRefs {...rProps} refs={refs} />}
           />
         </Content>
       </Main>
