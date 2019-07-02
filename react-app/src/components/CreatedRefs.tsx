@@ -1,21 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
 import { BASE_URL } from '../helpers/Globals';
+import { Link } from 'react-router-dom';
 
 const CreatedRefs = (props: { refs: string[] }) => {
+  if (!!props.refs.length) {
+    return (
+      <>
+        <h3 style={{ textAlign: 'center' }}>Your References</h3>
+        <List>
+          {props.refs.map(ref => (
+            <li key={ref}>
+              <a
+                href={`${BASE_URL}/${ref}?types=required,recommended`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {ref}
+              </a>
+            </li>
+          ))}
+        </List>
+      </>
+    );
+  }
   return (
-    <List>
-      {props.refs.map(ref => (
-        <li key={ref}>
-          <a
-            href={`${BASE_URL}/${ref}?types=required,recommended`}
-            target="_blank"
-          >
-            {ref}
-          </a>
-        </li>
-      ))}
-    </List>
+    <div style={{ textAlign: 'center' }}>
+      <h4>You haven't created any reference</h4>
+      <Link to="/create-ref">Create Some</Link>
+    </div>
   );
 };
 const List = styled.ul`

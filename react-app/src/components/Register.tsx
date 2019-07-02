@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Axios from 'axios';
 import { Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
-import styled from 'styled-components';
 import { isNotOwner, isEmail } from '../helpers/input-validation';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { RECAPTCHA_CLIENT_KEY, BASE_URL } from '../helpers/Globals';
@@ -93,6 +91,7 @@ const Register = (props: any) => {
 
   return (
     <Form style={{ width: '100%', padding: '0 3rem' }}>
+      <h3 style={{ textAlign: 'center' }}>Create Account</h3>
       <FormGroup>
         <Input
           invalid={user.invalidname}
