@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { Container } from "reactstrap";
+import styled from 'styled-components';
 import "./App.css";
 
 import Login from "./components/Login/Login";
@@ -11,8 +12,9 @@ import Register from "./components/Register";
 const App: FC = () => {
   return (
     <div className="App">
+      <Main>
       <NavBar />
-      <Container className="mt-5" style={{ maxWidth: "650px" }}>
+      <Content>
         <Redirect path="/" exact to="/create-ref" />
         <Route path="/login" render={rProps => <Login {...rProps} />} />
         <Route
@@ -23,9 +25,24 @@ const App: FC = () => {
           path="/create-account"
           render={rProps => <Register {...rProps} />}
         />
-      </Container>
+      </Content>
+      </Main>
     </div>
   );
 };
+const Content = styled.section`
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+    align-items: center;
+    width: 100%;
+`;
+const Main = styled.main`
+      display: flex;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 550px;
+`;
 
 export default App;

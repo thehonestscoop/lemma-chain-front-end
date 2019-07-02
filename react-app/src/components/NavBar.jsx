@@ -1,27 +1,35 @@
 import React from "react";
-import { Nav, NavItem, NavLink } from "reactstrap";
-import { NavLink as RRNavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import styled from 'styled-components';
 
 const NavBar = () => {
   return (
-    <Nav fill tabs>
-      <NavItem>
-        <NavLink to="/create-account" tag={RRNavLink}>
+    <Nav>
+        <NavLink to="/create-account">
           Create Account
         </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to="/login" tag={RRNavLink}>
+        <NavLink to="/login">
           Login
         </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to="/create-ref" tag={RRNavLink}>
+        <NavLink to="/create-ref">
           Create Ref
         </NavLink>
-      </NavItem>
     </Nav>
   );
 };
+const Nav = styled.nav`
+      background: #3e4061;
+      padding: 1.5rem 0;
+      display: flex;
+      flex-direction: column;
+
+      a {
+        padding: 1rem;
+    border-bottom: 1px solid #80808059;
+    min-width: 200px;
+    color: white;
+    font-weight: 600;
+      }
+`;
 
 export default NavBar;
