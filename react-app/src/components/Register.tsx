@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Axios from "axios";
-import { Form, FormGroup, FormFeedback, Input, Button } from "reactstrap";
-import styled from "styled-components";
-import { isNotOwner, isEmail } from "../helpers/input-validation";
-import ReCAPTCHA from "react-google-recaptcha";
-import { RECAPTCHA_CLIENT_KEY, BASE_URL } from "../helpers/Globals";
-import { AUTH_SYNC } from "../helpers/functions";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Axios from 'axios';
+import { Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
+import styled from 'styled-components';
+import { isNotOwner, isEmail } from '../helpers/input-validation';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { RECAPTCHA_CLIENT_KEY, BASE_URL } from '../helpers/Globals';
+import { AUTH_SYNC } from '../helpers/functions';
 
 interface RegState {
   name: string;
@@ -19,29 +19,15 @@ interface RegState {
   disabled: boolean;
 }
 
-const LoginLink = styled("p")`
-  margin-top: 1rem;
-  font-size: 14px;
-  font-weight: 500;
-  color: #2a2a2a;
-  font-style: italic;
-  border-left: 1px solid grey;
-  padding: 0 0.5rem;
-  &:hover {
-    color: white;
-    cursor: pointer;
-  }
-`;
-
 const Register = (props: any) => {
   const [user, setUser] = useState<RegState>({
-    name: "",
+    name: '',
     invalidname: false,
-    email: "",
+    email: '',
     invalidemail: false,
-    password_1: "",
+    password_1: '',
     invalidpassword_2: false,
-    password_2: "",
+    password_2: '',
     disabled: false
   });
 
@@ -56,11 +42,11 @@ const Register = (props: any) => {
       [`invalid${input.id}`]: true,
       [input.id]: input.value
     };
-    if (isNotOwner.test(input.value) && input.id === "name") {
+    if (isNotOwner.test(input.value) && input.id === 'name') {
       setUser(inValidUser);
-    } else if (!isEmail.test(input.value) && input.id === "email") {
+    } else if (!isEmail.test(input.value) && input.id === 'email') {
       setUser(inValidUser);
-    } else if (checkPassword(input.value) && input.id === "password_2") {
+    } else if (checkPassword(input.value) && input.id === 'password_2') {
       setUser(inValidUser);
     } else {
       setUser({
@@ -71,7 +57,7 @@ const Register = (props: any) => {
     }
   };
 
-  const [recaptcha, setRecaptcha] = useState<string | null>("");
+  const [recaptcha, setRecaptcha] = useState<string | null>('');
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,34 +65,34 @@ const Register = (props: any) => {
     const { name, email, password_1, password_2 } = user;
     const recaptcha_code = recaptcha;
     const req = { name, email, password_1, password_2, recaptcha_code };
-    if (Object.values(req).some(field => field === "")) {
-      alert("Please fill all the form fields");
+    if (Object.values(req).some(field => field === '')) {
+      alert('Please fill all the form fields');
     } else {
       if (!isEmail.test(email)) {
-        alert("Invalid Email Address");
+        alert('Invalid Email Address');
       } else if (name.length > 100) {
-        alert("Name cannot be greater than 100 characters");
+        alert('Name cannot be greater than 100 characters');
       } else if (isNotOwner.test(name)) {
-        alert("Invalid Name(No whitespaces, @ or /)");
+        alert('Invalid Name(No whitespaces, @ or /)');
       } else if (password_1 !== password_2) {
         alert("Passwords doesn't match");
-      } else if (recaptcha_code === "") {
-        alert("Verify Captcha please");
+      } else if (recaptcha_code === '') {
+        alert('Verify Captcha please');
       } else {
         Axios.post(`${BASE_URL}/accounts`, req)
           .then(res => {
-            AUTH_SYNC(name, email, password_1)
-            props.history.push('/login')
+            AUTH_SYNC(name, email, password_1);
+            props.history.push('/login');
           })
           .catch(err => {
-            alert(err.response.data.error)
+            alert(err.response.data.error);
           });
       }
     }
   };
 
   return (
-    <Form style={{width: '100%', padding: '0 3rem'}}>
+    <Form style={{ width: '100%', padding: '0 3rem' }}>
       <FormGroup>
         <Input
           invalid={user.invalidname}
@@ -160,9 +146,6 @@ const Register = (props: any) => {
       <Button onClick={submitForm} color="success" className="mt-3">
         Register
       </Button>
-      <LoginLink>
-        <Link to="/login">Already Signed Up - Log in</Link>
-      </LoginLink>
     </Form>
   );
 };

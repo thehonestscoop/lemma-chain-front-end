@@ -21,19 +21,22 @@ const Nav = styled.nav`
   flex-direction: column;
 
   a {
-    padding: 1rem;
+    padding: 1.5rem 1rem;
     border-bottom: 1px solid #80808059;
     min-width: 250px;
     font-weight: 600;
-    color: white;
+    color: #cccccc;
     display: flex;
     align-items: center;
+    &.active {
+      color: white;
+    }
     &:hover {
       text-decoration: none;
     }
     span {
       border-radius: 50%;
-      background-color: white;
+      background-color: #cccccc;
       color: #3e4061;
       font-size: 1.2rem;
       height: 3rem;
