@@ -243,6 +243,7 @@ const LemmaForm = (props: any) => {
                 type="password"
                 id="password"
                 onChange={e => handleOwner(e.target)}
+                autocomplete="new-password"
                 value={owner.password}
                 placeholder="Password"
               />

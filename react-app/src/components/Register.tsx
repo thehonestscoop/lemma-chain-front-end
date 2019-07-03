@@ -129,6 +129,7 @@ const Register = (props: any) => {
           type="password"
           id="password_1"
           placeholder="Password"
+          autocomplete="new-password"
           value={user.password_1}
           onChange={e => inputChange(e.target)}
         />
@@ -138,6 +139,7 @@ const Register = (props: any) => {
           invalid={user.invalidpassword_2}
           type="password"
           id="password_2"
+          autocomplete="new-password"
           placeholder="Confirm Password"
           value={user.password_2}
           onChange={e => inputChange(e.target)}
