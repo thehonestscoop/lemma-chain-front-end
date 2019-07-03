@@ -50,6 +50,7 @@ const Main = styled.main`
   overflow: hidden;
   min-height: 550px;
   max-width: 900px;
+  flex: 1;
   @media (max-width: 800px) {
     flex-direction: column;
   }

@@ -4,11 +4,13 @@
   "private": true,
   "proxy": "http://68.183.123.0:1323",
   "dependencies": {
+    "@types/react-copy-to-clipboard": "^4.2.6",
     "@types/react-google-recaptcha": "^1.0.0",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.9",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "^16.8.6",
     "react-google-recaptcha": "^1.0.5",
     "react-icons": "^3.7.0",
