@@ -102,8 +102,8 @@ const LemmaForm = (props: any) => {
       alert('Title must not be empty');
     } else if (authors.list.length === 0) {
       alert('Must have at least one Author');
-    } else if (filteredParents.some(p => isNotRef.test(p.ref))) {
-      alert('Some parents refs are invalid');
+      // } else if (filteredParents.some(p => isNotRef.test(p.ref))) {
+      //   alert('Some parents refs are invalid');
     } else {
       const req = {
         parents,
@@ -174,11 +174,7 @@ const LemmaForm = (props: any) => {
   const changeParent = (ref: EventTarget & HTMLInputElement) => {
     const id = parseInt(ref.id || '0');
     const newParents = parentsRefs.list.map(p =>
-      p.id === id
-        ? isNotRef.test(ref.value)
-          ? { ...p, ref: ref.value, invalid: true }
-          : { ...p, ref: ref.value, invalid: false }
-        : p
+      p.id === id ? { ...p, ref: ref.value } : p
     );
     setParentsRefs({ ...parentsRefs, list: newParents });
   };
