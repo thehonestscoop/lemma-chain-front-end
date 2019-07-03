@@ -17,6 +17,7 @@ import './LemmaForm.css';
 import { isNotRef, isNotOwner } from '../../helpers/input-validation';
 import { RECAPTCHA_CLIENT_KEY, BASE_URL } from '../../helpers/Globals';
 import Axios from 'axios';
+import Textarea from 'react-textarea-autosize';
 
 interface IAuthors {
   list: string[];
@@ -28,7 +29,6 @@ interface IParents {
 }
 const SearchInput = styled('div')<{ searchable: boolean }>`
   display: ${props => (props.searchable ? 'block' : 'none')};
-  padding-left: 3rem;
 `;
 const AddMore = styled('span')`
   font-size: 2rem;
@@ -148,7 +148,7 @@ const LemmaForm = (props: any) => {
 
   const changeTitle = (t: EventTarget & HTMLInputElement) => setTitle(t.value);
 
-  const changeSearchSynopsis = (sS: EventTarget & HTMLInputElement) =>
+  const changeSearchSynopsis = (sS: EventTarget & HTMLTextAreaElement) =>
     setSearch({ ...search, synopsis: sS.value });
 
   const checkSearchable = () => {
@@ -351,7 +351,7 @@ const LemmaForm = (props: any) => {
             label="Searchable"
           />
           <SearchInput searchable={search.searchable}>
-            <Input
+            <TextareaStyled
               type="text"
               placeholder="Search Synopsis"
               value={search.synopsis}
@@ -373,5 +373,18 @@ const LemmaForm = (props: any) => {
     </div>
   );
 };
-
+const TextareaStyled = styled(Textarea)`
+  height: 38px;
+  width: 100%;
+  min-height: 36px;
+  font-size: 1rem;
+  padding: 0.375rem 0.75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgb(73, 80, 87);
+  background-color: rgb(255, 255, 255);
+  background-clip: padding-box;
+  border: 1px solid rgb(206, 212, 218);
+  border-radius: 0.25rem;
+`;
 export default LemmaForm;

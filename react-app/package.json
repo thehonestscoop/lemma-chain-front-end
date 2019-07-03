@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/react-copy-to-clipboard": "^4.2.6",
     "@types/react-google-recaptcha": "^1.0.0",
+    "@types/react-textarea-autosize": "^4.3.4",
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "react": "^16.8.6",
@@ -17,6 +18,7 @@
     "react-router-bootstrap": "^0.25.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-textarea-autosize": "^7.1.0",
     "reactstrap": "^8.0.0",
     "styled-components": "^4.3.1",
     "sweetalert2": "^8.13.0",
