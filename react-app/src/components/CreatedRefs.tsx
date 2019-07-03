@@ -31,7 +31,7 @@ const CreatedRefs = (props: { refs: string[] }) => {
           Your References
         </h3>
         <List>
-          {props.refs.map(ref => (
+          {props.refs.reverse().map(ref => (
             <li key={ref}>
               {ref}
               <CopyToClipboard text={ref}>
@@ -41,7 +41,6 @@ const CreatedRefs = (props: { refs: string[] }) => {
                     className="ml-2"
                     onClick={alertCopy}
                   />
-
                   <UncontrolledTooltip placement="bottom" target={ref}>
                     Click to Copy Ref
                   </UncontrolledTooltip>
