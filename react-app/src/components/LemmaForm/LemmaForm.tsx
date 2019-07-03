@@ -61,6 +61,7 @@ const LemmaForm = (props: any) => {
     password: '',
     invalid: false
   });
+  const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
   const [authors, setAuthors] = useState<IAuthors>({ list: [], input: '' });
   const [parentsRefs, setParentsRefs] = useState<IParents>({
@@ -135,6 +136,7 @@ const LemmaForm = (props: any) => {
   };
 
   // Input Change Handlers
+  const handleUrl = (val: string) => setUrl(val);
   const handleOwner = (input: EventTarget & HTMLInputElement) => {
     if (isNotOwner.test(input.value) && input.id === 'name') {
       setOwner({ ...owner, [input.id]: input.value, invalid: true });
@@ -287,6 +289,14 @@ const LemmaForm = (props: any) => {
             value={authors.input}
           />
         </AuthorFG>
+        <div className="optional_url formgroup">
+          <Input
+            onChange={e => handleUrl(e.target.value)}
+            className="mt-3"
+            placeholder="Optional Url"
+            value={url}
+          />
+        </div>
         <div className="parents-refs formgroup">
           <div className="parents">
             {parentsRefs.list.map(parent => (
