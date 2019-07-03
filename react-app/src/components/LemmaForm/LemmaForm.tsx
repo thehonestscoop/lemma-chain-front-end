@@ -210,12 +210,7 @@ const LemmaForm = (props: any) => {
   return (
     <div className="form-container" style={{ width: '100%' }}>
       <form style={{ width: '100%', padding: '0 3rem' }}>
-        <h3
-          style={{ textAlign: 'center' }}
-          onClick={() => props.addRef(`${new Date()}`)}
-        >
-          Create References
-        </h3>
+        <h3 style={{ textAlign: 'center' }}>Create References</h3>
         <p
           style={{
             textAlign: 'center',

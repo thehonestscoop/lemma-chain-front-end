@@ -1,11 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BASE_URL } from '../helpers/Globals';
+// import { BASE_URL } from '../helpers/Globals';
 import { Link } from 'react-router-dom';
 import { MdContentCopy } from 'react-icons/md';
 import { UncontrolledTooltip } from 'reactstrap';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
+const mySwal = withReactContent(Swal);
+const alertCopy = () =>
+  Swal.fire({
+    position: 'top-end',
+    type: 'success',
+    title: 'Copied',
+    showConfirmButton: false,
+    timer: 1500
+  });
 const CreatedRefs = (props: { refs: string[] }) => {
   if (!!props.refs.length) {
     return (
@@ -22,19 +33,16 @@ const CreatedRefs = (props: { refs: string[] }) => {
         <List>
           {props.refs.map(ref => (
             <li key={ref}>
-              {ref.split('(')[0].replace(/[^a-z0-9]/gi, '')}
+              {ref}
               <CopyToClipboard text={ref}>
                 <div>
                   <MdContentCopy
-                    id={ref.split('(')[0].replace(/[^a-z0-9]/gi, '')}
+                    id={ref}
                     className="ml-2"
-                    onClick={() => alert('Copied')}
+                    onClick={alertCopy}
                   />
 
-                  <UncontrolledTooltip
-                    placement="bottom"
-                    target={ref.split('(')[0].replace(/[^a-z0-9]/gi, '')}
-                  >
+                  <UncontrolledTooltip placement="bottom" target={ref}>
                     Click to Copy Ref
                   </UncontrolledTooltip>
                 </div>

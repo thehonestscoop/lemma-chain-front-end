@@ -23,7 +23,6 @@ const NavBar = (props: { refs: string[] }) => {
 };
 const Nav = styled.nav`
   background: #3e4061;
-  padding: 1.5rem 0;
   display: flex;
   flex-direction: column;
 
