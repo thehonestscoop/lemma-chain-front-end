@@ -14,7 +14,12 @@ import {
 } from 'reactstrap';
 import { IoMdTrash } from 'react-icons/io';
 import './LemmaForm.css';
-import { isNotRef, isNotOwner, isUrl } from '../../helpers/input-validation';
+import {
+  isNotRef,
+  isNotOwner,
+  isUrl,
+  isEmail
+} from '../../helpers/input-validation';
 import {
   RECAPTCHA_CLIENT_KEY,
   BASE_URL,
@@ -158,7 +163,11 @@ const LemmaForm = (props: any) => {
       : setUrl({ link: val, invalid: true });
   };
   const handleOwner = (input: EventTarget & HTMLInputElement) => {
-    if (isNotOwner.test(input.value) && input.id === 'name') {
+    if (
+      ((isNotOwner.test(input.value) && !isEmail.test(input.value)) ||
+        (!isNotOwner.test(input.value) && isEmail.test(input.value))) &&
+      input.id === 'name'
+    ) {
       setOwner({ ...owner, [input.id]: input.value, invalid: true });
     } else {
       setOwner({ ...owner, [input.id]: input.value, invalid: false });
@@ -260,7 +269,7 @@ const LemmaForm = (props: any) => {
                 onChange={e => handleOwner(e.target)}
               />
               <FormFeedback invalid="">
-                Username must not contain (@, /, or whitespace)
+                Username must be an valid email or username
               </FormFeedback>
             </FormGroup>
           </Col>
