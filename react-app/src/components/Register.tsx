@@ -3,7 +3,13 @@ import Axios from 'axios';
 import { Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
 import { isNotOwner, isEmail } from '../helpers/input-validation';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { RECAPTCHA_CLIENT_KEY, BASE_URL } from '../helpers/Globals';
+import {
+  RECAPTCHA_CLIENT_KEY,
+  BASE_URL,
+  alertWarning,
+  alertSuccess,
+  alertError
+} from '../helpers/Globals';
 import { AUTH_SYNC } from '../helpers/functions';
 
 interface RegState {
@@ -69,29 +75,31 @@ const Register = (props: any) => {
     const { name, email, password_1, password_2 } = user;
     const recaptcha_code = recaptcha;
     const req = { name, email, password_1, password_2, recaptcha_code };
-    if (Object.values(req).some(field => field === '')) {
-      alert('Please fill all the form fields');
+
+    if (name.length > 100) {
+      alertWarning('Name cannot be greater than 100 characters');
+    } else if (!name) {
+      alertWarning('Name must not be empty');
+    } else if (isNotOwner.test(name)) {
+      alertWarning('Invalid Name(No whitespaces, @ or /)');
+    } else if (!isEmail.test(email)) {
+      alertWarning('Invalid Email Address');
+    } else if (!password_1) {
+      alertWarning('password cannot be empty');
+    } else if (password_1 !== password_2) {
+      alertWarning("Passwords doesn't match");
+    } else if (recaptcha_code === '') {
+      alertWarning('Verify Captcha please');
     } else {
-      if (!isEmail.test(email)) {
-        alert('Invalid Email Address');
-      } else if (name.length > 100) {
-        alert('Name cannot be greater than 100 characters');
-      } else if (isNotOwner.test(name)) {
-        alert('Invalid Name(No whitespaces, @ or /)');
-      } else if (password_1 !== password_2) {
-        alert("Passwords doesn't match");
-      } else if (recaptcha_code === '') {
-        alert('Verify Captcha please');
-      } else {
-        Axios.post(`${BASE_URL}/accounts`, req)
-          .then(res => {
-            AUTH_SYNC(name, email, password_1);
-            props.history.push('/create-ref');
-          })
-          .catch(err => {
-            alert(err.message);
-          });
-      }
+      Axios.post(`${BASE_URL}/accounts`, req)
+        .then(res => {
+          AUTH_SYNC(name, email, password_1);
+          alertSuccess('Account Created');
+          props.history.push('/create-ref');
+        })
+        .catch(err => {
+          alertError(err.message);
+        });
     }
   };
 
