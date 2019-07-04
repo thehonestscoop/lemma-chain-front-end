@@ -42,7 +42,7 @@ const CreatedRefs = (props: { refs: string[] }) => {
                     onClick={alertCopy}
                   />
                   <UncontrolledTooltip placement="bottom" target={ref}>
-                    Click to Copy Ref
+                    copy to clipboard
                   </UncontrolledTooltip>
                 </div>
               </CopyToClipboard>
