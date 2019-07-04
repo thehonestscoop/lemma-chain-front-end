@@ -5,18 +5,7 @@ import { Link } from 'react-router-dom';
 import { MdContentCopy } from 'react-icons/md';
 import { UncontrolledTooltip } from 'reactstrap';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-
-const mySwal = withReactContent(Swal);
-const alertCopy = () =>
-  Swal.fire({
-    position: 'top-end',
-    type: 'success',
-    title: 'Copied',
-    showConfirmButton: false,
-    timer: 1500
-  });
+import { alertSuccess } from '../helpers/Globals';
 const CreatedRefs = (props: { refs: string[] }) => {
   if (!!props.refs.length) {
     return (
@@ -39,7 +28,7 @@ const CreatedRefs = (props: { refs: string[] }) => {
                   <MdContentCopy
                     id={ref}
                     className="ml-2"
-                    onClick={alertCopy}
+                    onClick={() => alertSuccess('copied')}
                   />
                   <UncontrolledTooltip placement="bottom" target={ref}>
                     copy to clipboard

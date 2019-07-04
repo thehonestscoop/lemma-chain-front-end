@@ -15,7 +15,12 @@ import {
 import { IoMdTrash } from 'react-icons/io';
 import './LemmaForm.css';
 import { isNotRef, isNotOwner, isUrl } from '../../helpers/input-validation';
-import { RECAPTCHA_CLIENT_KEY, BASE_URL } from '../../helpers/Globals';
+import {
+  RECAPTCHA_CLIENT_KEY,
+  BASE_URL,
+  alertError,
+  alertWarning
+} from '../../helpers/Globals';
 import Axios from 'axios';
 import Textarea from 'react-textarea-autosize';
 
@@ -100,19 +105,17 @@ const LemmaForm = (props: any) => {
     const recaptcha_code = recaptcha;
 
     if (recaptcha_code === '') {
-      alert('Please Verify Recaptcha');
+      alertWarning('Please Verify Recaptcha');
     } else if (search.searchable && !search_synopsis) {
-      alert('Search synopsis must not be empty for searchable refs');
+      alertWarning('Search synopsis must not be empty for searchable refs');
     } else if (owner.name && !owner.password) {
-      alert('Password must be filled when Username is set');
+      alertWarning('Password must be filled when Username is set');
     } else if (title === '') {
-      alert('Title must not be empty');
+      alertWarning('Title must not be empty');
     } else if (!!url.link && !isUrl.test(url.link)) {
-      alert('Url is invalid');
+      alertWarning('Url is invalid');
     } else if (authors.list.length === 0) {
-      alert('Must have at least one Author');
-      // } else if (filteredParents.some(p => isNotRef.test(p.ref))) {
-      //   alert('Some parents refs are invalid');
+      alertWarning('Must have at least one Author');
     } else {
       const req = {
         parents,
@@ -224,7 +227,12 @@ const LemmaForm = (props: any) => {
   return (
     <div className="form-container" style={{ width: '100%' }}>
       <form style={{ width: '100%', padding: '0 3rem' }}>
-        <h3 style={{ textAlign: 'center' }}>Create References</h3>
+        <h3
+          style={{ textAlign: 'center' }}
+          onClick={() => props.addRef('refere')}
+        >
+          Create References
+        </h3>
         <p
           style={{
             textAlign: 'center',
