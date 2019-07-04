@@ -136,18 +136,18 @@ const LemmaForm = (props: any) => {
             }
           : {};
       console.log(withSearch, headers);
-      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-        .then(res => {
-          props.addRef(res.data.link);
-          alertSuccess('Ref Successflly Created');
-        })
-        .catch(err => {
-          if (err.response) {
-            alertError(err.response.data.error);
-          } else {
-            alertError(err.message);
-          }
-        });
+      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+      //   .then(res => {
+      //     props.addRef(res.data.link);
+      //     alertSuccess('Ref Successflly Created');
+      //   })
+      //   .catch(err => {
+      //     if (err.response) {
+      //       alertError(err.response.data.error);
+      //     } else {
+      //       alertError(err.message);
+      //     }
+      //   });
     }
   };
 
@@ -351,8 +351,8 @@ const LemmaForm = (props: any) => {
                     id={`check${parent.id}`}
                     color="success"
                     onChange={e => parentCheck(e.target.id)}
-                    checked={!parent.required}
-                    label="optional"
+                    checked={parent.required}
+                    label="required"
                   />
                   <IoMdTrash
                     color="#f74949"
