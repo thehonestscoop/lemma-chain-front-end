@@ -84,11 +84,17 @@ const LemmaForm = (props: any) => {
         ? `required:${ownerLink}${p.ref}`
         : `recommended:${ownerLink}${p.ref}`
     );
-
-    const data = JSON.stringify({
-      title,
-      authors: JSON.stringify(authors.list)
-    });
+    const Idata = !!url
+      ? {
+        title,
+        authors: JSON.stringify(authors.list),
+        optional_url: url
+      }
+      : {
+        title,
+        authors: JSON.stringify(authors.list)
+      };
+    const data = JSON.stringify(Idata);
     const search_title = `${title} ${authors.list.join(' ')}`;
     const search_synopsis = !!search.searchable ? search.synopsis : '';
     const recaptcha_code = recaptcha;
@@ -123,15 +129,15 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      // console.log(withSearch, headers)
-      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-        .then(res => {
-          props.addRef(res.data.link);
-          alert('Ref Successflly Created');
-        })
-        .catch(err => {
-          alert(err.message);
-        });
+      console.log(withSearch, headers)
+      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+      //   .then(res => {
+      //     props.addRef(res.data.link);
+      //     alert('Ref Successflly Created');
+      //   })
+      //   .catch(err => {
+      //     alert(err.message);
+      //   });
     }
   };
 
