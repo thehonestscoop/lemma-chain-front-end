@@ -14,12 +14,7 @@ import {
 } from 'reactstrap';
 import { IoMdTrash } from 'react-icons/io';
 import './LemmaForm.css';
-import {
-  isNotRef,
-  isNotOwner,
-  isUrl,
-  isEmail
-} from '../../helpers/input-validation';
+import { isNotOwner, isUrl, isEmail } from '../../helpers/input-validation';
 import {
   RECAPTCHA_CLIENT_KEY,
   BASE_URL,
@@ -140,19 +135,19 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      console.log(withSearch, headers);
-      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-      //   .then(res => {
-      //     props.addRef(res.data.link);
-      //     alertSuccess('Ref Successflly Created');
-      //   })
-      //   .catch(err => {
-      //     if (err.response) {
-      //       alertError(err.response.data.error);
-      //     } else {
-      //       alertError(err.message);
-      //     }
-      //   });
+      // console.log(withSearch, headers);
+      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+        .then(res => {
+          props.addRef(res.data.link);
+          alertSuccess('Ref Successflly Created');
+        })
+        .catch(err => {
+          if (err.response) {
+            alertError(err.response.data.error);
+          } else {
+            alertError(err.message);
+          }
+        });
     }
   };
 
