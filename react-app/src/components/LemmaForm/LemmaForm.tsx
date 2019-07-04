@@ -19,7 +19,8 @@ import {
   RECAPTCHA_CLIENT_KEY,
   BASE_URL,
   alertError,
-  alertWarning
+  alertWarning,
+  alertSuccess
 } from '../../helpers/Globals';
 import Axios from 'axios';
 import Textarea from 'react-textarea-autosize';
@@ -135,14 +136,18 @@ const LemmaForm = (props: any) => {
             }
           : {};
       console.log(withSearch, headers);
-      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-      //   .then(res => {
-      //     props.addRef(res.data.link);
-      //     alert('Ref Successflly Created');
-      //   })
-      //   .catch(err => {
-      //     alert(err.response.errors);
-      //   });
+      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+        .then(res => {
+          props.addRef(res.data.link);
+          alertSuccess('Ref Successflly Created');
+        })
+        .catch(err => {
+          if (err.response) {
+            alertError(err.response.data.error);
+          } else {
+            alertError(err.message);
+          }
+        });
     }
   };
 

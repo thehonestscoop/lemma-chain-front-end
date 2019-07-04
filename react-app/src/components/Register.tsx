@@ -98,7 +98,11 @@ const Register = (props: any) => {
           props.history.push('/create-ref');
         })
         .catch(err => {
-          alertError(err.message);
+          if (err.response) {
+            alertError(err.response.data.error);
+          } else {
+            alertError(err.message);
+          }
         });
     }
   };
