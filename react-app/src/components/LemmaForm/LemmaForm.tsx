@@ -138,7 +138,7 @@ const LemmaForm = (props: any) => {
       //     alert('Ref Successflly Created');
       //   })
       //   .catch(err => {
-      //     alert(err.message);
+      //     alert(err.response.errors);
       //   });
     }
   };
