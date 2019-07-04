@@ -14,7 +14,7 @@ import {
 } from 'reactstrap';
 import { IoMdTrash } from 'react-icons/io';
 import './LemmaForm.css';
-import { isNotRef, isNotOwner } from '../../helpers/input-validation';
+import { isNotRef, isNotOwner, isUrl } from '../../helpers/input-validation';
 import { RECAPTCHA_CLIENT_KEY, BASE_URL } from '../../helpers/Globals';
 import Axios from 'axios';
 import Textarea from 'react-textarea-autosize';
@@ -61,7 +61,7 @@ const LemmaForm = (props: any) => {
     password: '',
     invalid: false
   });
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState({ link: '', invalid: false });
   const [title, setTitle] = useState('');
   const [authors, setAuthors] = useState<IAuthors>({ list: [], input: '' });
   const [parentsRefs, setParentsRefs] = useState<IParents>({
@@ -86,14 +86,14 @@ const LemmaForm = (props: any) => {
     );
     const Idata = !!url
       ? {
-        title,
-        authors: JSON.stringify(authors.list),
-        optional_url: url
-      }
+          title,
+          authors: JSON.stringify(authors.list),
+          optional_url: url.link
+        }
       : {
-        title,
-        authors: JSON.stringify(authors.list)
-      };
+          title,
+          authors: JSON.stringify(authors.list)
+        };
     const data = JSON.stringify(Idata);
     const search_title = `${title} ${authors.list.join(' ')}`;
     const search_synopsis = !!search.searchable ? search.synopsis : '';
@@ -107,6 +107,8 @@ const LemmaForm = (props: any) => {
       alert('Password must be filled when Username is set');
     } else if (title === '') {
       alert('Title must not be empty');
+    } else if (!!url.link && !isUrl.test(url.link)) {
+      alert('Url is invalid');
     } else if (authors.list.length === 0) {
       alert('Must have at least one Author');
       // } else if (filteredParents.some(p => isNotRef.test(p.ref))) {
@@ -129,7 +131,7 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      console.log(withSearch, headers)
+      console.log(withSearch, headers);
       // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
       //   .then(res => {
       //     props.addRef(res.data.link);
@@ -142,7 +144,11 @@ const LemmaForm = (props: any) => {
   };
 
   // Input Change Handlers
-  const handleUrl = (val: string) => setUrl(val);
+  const handleUrl = (val: string) => {
+    isUrl.test(val) || !val
+      ? setUrl({ link: val, invalid: false })
+      : setUrl({ link: val, invalid: true });
+  };
   const handleOwner = (input: EventTarget & HTMLInputElement) => {
     if (isNotOwner.test(input.value) && input.id === 'name') {
       setOwner({ ...owner, [input.id]: input.value, invalid: true });
@@ -296,12 +302,16 @@ const LemmaForm = (props: any) => {
           />
         </AuthorFG>
         <div className="optional_url formgroup">
-          <Input
-            onChange={e => handleUrl(e.target.value)}
-            className="mt-3"
-            placeholder="Optional Url"
-            value={url}
-          />
+          <FormGroup>
+            <Input
+              onChange={e => handleUrl(e.target.value)}
+              invalid={url.invalid}
+              className="mt-3"
+              placeholder="Optional Url"
+              value={url.link}
+            />
+            <FormFeedback invalid="">URL is invalid</FormFeedback>
+          </FormGroup>
         </div>
         <div className="parents-refs formgroup">
           <div className="parents">

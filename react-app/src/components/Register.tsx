@@ -40,7 +40,13 @@ const Register = (props: any) => {
       [`invalid${input.id}`]: true,
       [input.id]: input.value
     };
-    if (isNotOwner.test(input.value) && input.id === 'name') {
+    if (!input.value) {
+      setUser({
+        ...user,
+        [`invalid${input.id}`]: false,
+        [input.id]: input.value
+      });
+    } else if (isNotOwner.test(input.value) && input.id === 'name') {
       setUser(inValidUser);
     } else if (!isEmail.test(input.value) && input.id === 'email') {
       setUser(inValidUser);
