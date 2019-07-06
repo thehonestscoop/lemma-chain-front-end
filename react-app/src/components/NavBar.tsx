@@ -2,6 +2,29 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { Badge } from 'reactstrap';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { BASE_URL } from '../helpers/Globals';
+
+const InputAlert = withReactContent(Swal);
+const alertIt = async () => {
+  const { value: owner } = await InputAlert.fire({
+    title: 'References',
+    input: 'text',
+    inputPlaceholder: 'Enter your Username',
+    showCancelButton: true,
+    inputValidator: (value): any => {
+      if (!value) {
+        return 'Username must not be empty!';
+      }
+    }
+  });
+
+  if (owner) {
+    // Swal.fire('Entered owner: ' + owner);
+    window.open(`${BASE_URL}/accounts/${owner}`, '_blank');
+  }
+};
 
 const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
   return (
@@ -18,6 +41,9 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
           {props.refs.length}
         </Badge>
       </NavLink>
+      <p onClick={alertIt}>
+        <span className="menu">AR</span> Account Refs
+      </p>
     </Nav>
   );
 };
@@ -26,12 +52,13 @@ const Nav = styled.nav`
   display: flex;
   flex-direction: column;
 
-  a {
+  & > * {
     padding: 1.5rem 1rem;
     border-bottom: 1px solid #80808059;
     min-width: 250px;
     font-weight: 600;
     color: #cccccc;
+    cursor: pointer;
     display: flex;
     align-items: center;
     @media (max-width: 500px) {
@@ -42,6 +69,7 @@ const Nav = styled.nav`
     }
     &:hover {
       text-decoration: none;
+      color: white;
     }
     span.menu {
       border-radius: 50%;
