@@ -90,7 +90,7 @@ const LemmaForm = (props: any) => {
         ? `required:${ownerLink}${p.ref}`
         : `recommended:${ownerLink}${p.ref}`
     );
-    const Idata = !!url
+    const Idata = !!url.link
       ? {
           title,
           authors: JSON.stringify(authors.list),
