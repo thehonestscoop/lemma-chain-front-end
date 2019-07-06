@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import { Badge } from 'reactstrap';
 
-const NavBar = (props: { refs: string[] }) => {
+const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
   return (
     <Nav>
       <NavLink to="/create-ref">

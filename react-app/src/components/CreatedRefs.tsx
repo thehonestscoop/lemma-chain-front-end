@@ -6,7 +6,8 @@ import { MdContentCopy } from 'react-icons/md';
 import { UncontrolledTooltip } from 'reactstrap';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { alertSuccess } from '../helpers/Globals';
-const CreatedRefs = (props: { refs: string[] }) => {
+const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
+  const refs = props.refs;
   if (!!props.refs.length) {
     return (
       <>
@@ -20,17 +21,20 @@ const CreatedRefs = (props: { refs: string[] }) => {
           Your References
         </h3>
         <List>
-          {props.refs.reverse().map(ref => (
-            <li key={ref}>
-              {ref}
-              <CopyToClipboard text={ref}>
+          {refs.reverse().map(ref => (
+            <li key={ref.ref}>
+              {ref.title} {ref.ref}
+              <CopyToClipboard text={ref.ref}>
                 <div>
                   <MdContentCopy
-                    id={ref}
+                    id={ref.ref.replace(/@|[/]/g, '')}
                     className="ml-2"
                     onClick={() => alertSuccess('copied')}
                   />
-                  <UncontrolledTooltip placement="bottom" target={ref}>
+                  <UncontrolledTooltip
+                    placement="bottom"
+                    target={ref.ref.replace(/@|[/]/g, '')}
+                  >
                     copy to clipboard
                   </UncontrolledTooltip>
                 </div>

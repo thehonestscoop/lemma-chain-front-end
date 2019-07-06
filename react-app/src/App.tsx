@@ -10,8 +10,9 @@ import Register from './components/Register';
 import CreatedRefs from './components/CreatedRefs';
 
 const App: FC = () => {
-  const [refs, setRefs] = useState<string[]>([]);
-  const addRef = (ref: string) => setRefs([...refs, ref]);
+  const [refs, setRefs] = useState<{ ref: string; title: string }[]>([]);
+  const addRef = (ref: string, title: string) =>
+    setRefs([...refs, { ref, title }]);
   return (
     <div className="App">
       <Main>
