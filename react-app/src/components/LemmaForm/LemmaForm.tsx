@@ -135,7 +135,7 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      console.log(withSearch, headers);
+      // console.log(withSearch, headers);
       Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
         .then(res => {
           props.addRef(res.data.link, title);
