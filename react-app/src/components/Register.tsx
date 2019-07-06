@@ -108,7 +108,7 @@ const Register = (props: any) => {
   };
 
   return (
-    <Form style={{ width: '100%', padding: '0 3rem' }}>
+    <Form style={{ width: '100%', padding: '0 5vw' }}>
       <h3
         style={{
           textAlign: 'center',

@@ -34,6 +34,9 @@ const Nav = styled.nav`
     color: #cccccc;
     display: flex;
     align-items: center;
+    @media (max-width: 500px) {
+      padding: 0.8rem 1rem;
+    }
     &.active {
       color: white;
     }
@@ -45,14 +48,17 @@ const Nav = styled.nav`
       background-color: #cccccc;
       color: #3e4061;
       font-size: 1.2rem;
-      height: 3rem;
+      height: calc(3vw + 1.5rem);
+      width: calc(3vw + 1.5rem);
       display: flex;
       font-weight: 400;
       justify-content: center;
       align-items: center;
-      width: 3rem;
       margin-right: 0.5rem;
       box-shadow: 1px 1px 15px #00000036;
+      @media (max-width: 500px) {
+        font-size: 1rem;
+      }
     }
     &.active span {
       background-color: #33cc33;

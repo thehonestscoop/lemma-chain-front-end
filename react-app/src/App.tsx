@@ -38,7 +38,7 @@ const App: FC = () => {
   );
 };
 const Content = styled.section`
-  padding: 2rem;
+  padding: 2rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
