@@ -94,7 +94,7 @@ const LemmaForm = (props: any) => {
       ? {
           title,
           authors: JSON.stringify(authors.list),
-          optional_url: url.link
+          url: url.link
         }
       : {
           title,
