@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+// import ReactMarkdown from 'react-markdown';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { BASE_URL } from '../helpers/Globals';
@@ -24,15 +24,24 @@ const AccountRefs = (props: any) => {
     });
 
     if (owner) {
-      // Swal.fire('Entered owner: ' + owner);
-      Axios.get(`${BASE_URL}/accounts/${owner}`)
-        .then(res => {
-          setResult(res.data);
-          console.log(res.data);
-        })
-        .catch(err => {
-          debugger;
-        });
+      const { value: password } = await InputAlert.fire({
+        title: 'References',
+        input: 'password',
+        inputPlaceholder: 'Enter your Password',
+        showCancelButton: true
+      });
+
+      if (password) {
+        Axios.get(`${BASE_URL}/accounts/${owner}`)
+          .then(res => {
+            setResult(res.data);
+          })
+          .catch(err => {
+            debugger;
+          });
+      } else {
+        window.open(`${BASE_URL}/accounts/${owner}`, '_blank');
+      }
     }
   };
   useEffect(() => {
