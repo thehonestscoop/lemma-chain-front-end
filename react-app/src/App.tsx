@@ -8,6 +8,7 @@ import LemmaForm from './components/LemmaForm/LemmaForm';
 import NavBar from './components/NavBar';
 import Register from './components/Register';
 import CreatedRefs from './components/CreatedRefs';
+import AccountRefs from './components/AccountRefs';
 
 const App: FC = () => {
   const [refs, setRefs] = useState<{ ref: string; title: string }[]>([]);
@@ -27,6 +28,10 @@ const App: FC = () => {
           <Route
             path="/create-account"
             render={rProps => <Register {...rProps} />}
+          />
+          <Route
+            path="/account-ref"
+            render={rProps => <AccountRefs {...rProps} />}
           />
           <Route
             path="/refs"

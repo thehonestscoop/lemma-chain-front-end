@@ -41,9 +41,12 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
           {props.refs.length}
         </Badge>
       </NavLink>
-      <p onClick={alertIt}>
+      <NavLink to="/account-ref">
         <span className="menu">AR</span> Account Refs
-      </p>
+      </NavLink>
+      {/* <p onClick={alertIt}>
+        <span className="menu">AR</span> Account Refs
+      </p> */}
     </Nav>
   );
 };
