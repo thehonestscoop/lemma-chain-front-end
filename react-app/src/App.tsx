@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import styled from 'styled-components';
 import './App.css';
 
@@ -19,8 +19,6 @@ const App: FC = () => {
       <Main>
         <NavBar refs={refs} />
         <Content>
-          <Redirect path="/" exact to="/create-ref" />
-          {/* <Route path="/login" render={rProps => <Login {...rProps} />} /> */}
           <Route
             path="/create-ref"
             render={rProps => <LemmaForm {...rProps} addRef={addRef} />}
