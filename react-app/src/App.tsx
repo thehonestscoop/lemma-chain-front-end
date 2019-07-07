@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 import './App.css';
 
@@ -9,6 +9,7 @@ import NavBar from './components/NavBar';
 import Register from './components/Register';
 import CreatedRefs from './components/CreatedRefs';
 import AccountRefs from './components/AccountRefs';
+import NotFound from './components/NotFound';
 
 const App: FC = () => {
   const [refs, setRefs] = useState<{ ref: string; title: string }[]>([]);
@@ -19,22 +20,25 @@ const App: FC = () => {
       <Main>
         <NavBar refs={refs} />
         <Content>
-          <Route
-            path="/create-ref"
-            render={rProps => <LemmaForm {...rProps} addRef={addRef} />}
-          />
-          <Route
-            path="/create-account"
-            render={rProps => <Register {...rProps} />}
-          />
-          <Route
-            path="/account-ref"
-            render={rProps => <AccountRefs {...rProps} />}
-          />
-          <Route
-            path="/refs"
-            render={rProps => <CreatedRefs {...rProps} refs={refs} />}
-          />
+          <Switch>
+            <Route
+              path="/create-ref"
+              render={rProps => <LemmaForm {...rProps} addRef={addRef} />}
+            />
+            <Route
+              path="/create-account"
+              render={rProps => <Register {...rProps} />}
+            />
+            <Route
+              path="/account-ref"
+              render={rProps => <AccountRefs {...rProps} />}
+            />
+            <Route
+              path="/refs"
+              render={rProps => <CreatedRefs {...rProps} refs={refs} />}
+            />
+            <Route component={NotFound} />
+          </Switch>
         </Content>
       </Main>
     </div>
