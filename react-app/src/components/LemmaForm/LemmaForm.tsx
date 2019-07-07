@@ -212,7 +212,7 @@ const LemmaForm = (props: any) => {
         {
           id: ++parentsRefs.currentId,
           ref: '',
-          required: false,
+          required: true,
           invalid: false
         }
       ],

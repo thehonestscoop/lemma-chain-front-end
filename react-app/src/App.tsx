@@ -22,7 +22,8 @@ const App: FC = () => {
         <Content>
           <Switch>
             <Route
-              path="/create-ref"
+              path="/"
+              exact
               render={rProps => <LemmaForm {...rProps} addRef={addRef} />}
             />
             <Route

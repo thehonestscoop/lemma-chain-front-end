@@ -12,7 +12,7 @@ const InputAlert = withReactContent(Swal);
 const AccountRefs = (props: any) => {
   const alertIt = async () => {
     const { value: owner } = await InputAlert.fire({
-      title: 'References',
+      title: 'Username',
       input: 'text',
       inputPlaceholder: 'Enter your Username',
       showCancelButton: true,
@@ -25,7 +25,7 @@ const AccountRefs = (props: any) => {
 
     if (owner) {
       const { value: password } = await InputAlert.fire({
-        title: 'References',
+        title: 'Password',
         input: 'password',
         inputPlaceholder: 'Enter Password - optional'
       });

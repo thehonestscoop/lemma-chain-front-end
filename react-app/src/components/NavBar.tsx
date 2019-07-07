@@ -29,7 +29,7 @@ const alertIt = async () => {
 const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
   return (
     <Nav>
-      <NavLink to="/create-ref">
+      <NavLink to="/" exact={true}>
         <span className="menu">CR</span> Create Ref
       </NavLink>
       <NavLink to="/create-account">
