@@ -27,19 +27,28 @@ const AccountRefs = (props: any) => {
       const { value: password } = await InputAlert.fire({
         title: 'References',
         input: 'password',
-        inputPlaceholder: 'Enter your Password',
-        showCancelButton: true
+        inputPlaceholder: 'Enter Password - optional'
       });
 
       if (password) {
-        Axios.get(`${BASE_URL}/accounts/${owner}`)
+        Axios.get(`${BASE_URL}/accounts/${owner}`, {
+          headers: {
+            'X-AUTH-ACCOUNT': '@' + owner,
+            'X-AUTH-PASSWORD': password
+          }
+        })
           .then(res => {
             setResult(res.data);
           })
           .catch(err => {
             debugger;
+            window.open(`${BASE_URL}/accounts/${owner}`, '_blank');
+            if (err.response) {
+              setLoading(`${err.response.statusText} - Opened in a new tab`);
+            }
           });
       } else {
+        setLoading(`Opened in a new tab`);
         window.open(`${BASE_URL}/accounts/${owner}`, '_blank');
       }
     }
@@ -48,6 +57,7 @@ const AccountRefs = (props: any) => {
     alertIt();
   }, []);
   const [result, setResult] = useState<any>('');
+  const [loading, setLoading] = useState('Loading!!!');
   return (
     <PreWrapper>
       {!!result ? (
@@ -57,7 +67,7 @@ const AccountRefs = (props: any) => {
           </code>
         </pre>
       ) : (
-        <p>Loading</p>
+        <h2>{loading}</h2>
       )}
     </PreWrapper>
   );
