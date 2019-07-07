@@ -45,6 +45,8 @@ const AccountRefs = (props: any) => {
             window.open(`${BASE_URL}/accounts/${owner}`, '_blank');
             if (err.response) {
               setLoading(`${err.response.statusText} - Opened in a new tab`);
+            } else {
+              setLoading(err.message);
             }
           });
       } else {
@@ -84,7 +86,25 @@ const PreWrapper = styled.div`
     padding: 5px;
     font-size: 80%;
     overflow: scroll;
-    max-width: 610px;
+    max-width: 550px;
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+      background-color: var(--primary);
+    }
+
+    &::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+      -webkit-box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      background-color: #f5f5f5;
+    }
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+      background-color: #f5f5f5;
+    }
   }
 `;
 export default AccountRefs;
