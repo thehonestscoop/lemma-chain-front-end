@@ -1,28 +1,28 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { Badge } from 'reactstrap';
+import { Badge, UncontrolledTooltip } from 'reactstrap';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { BASE_URL } from '../helpers/Globals';
+import { FiSearch } from 'react-icons/fi';
 
 const InputAlert = withReactContent(Swal);
 const alertIt = async () => {
-  const { value: owner } = await InputAlert.fire({
-    title: 'References',
+  const { value: terms } = await InputAlert.fire({
+    title: 'Search',
     input: 'text',
-    inputPlaceholder: 'Enter your Username',
+    inputPlaceholder: 'Enter search terms',
     showCancelButton: true,
     inputValidator: (value): any => {
       if (!value) {
-        return 'Username must not be empty!';
+        return 'Search terms must not be empty!';
       }
     }
   });
 
-  if (owner) {
-    // Swal.fire('Entered owner: ' + owner);
-    window.open(`${BASE_URL}/accounts/${owner}`, '_blank');
+  if (terms) {
+    window.open(`${BASE_URL}/search/${encodeURI(terms)}`, '_blank');
   }
 };
 
@@ -44,9 +44,10 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
       <NavLink to="/account-ref">
         <span className="menu">AR</span> Account Refs
       </NavLink>
-      {/* <p onClick={alertIt}>
-        <span className="menu">AR</span> Account Refs
-      </p> */}
+      <FiSearch onClick={alertIt} id="search" />
+      <UncontrolledTooltip placement="bottom" target="search">
+        Search
+      </UncontrolledTooltip>
     </Nav>
   );
 };
@@ -54,8 +55,24 @@ const Nav = styled.nav`
   background: #3e4061;
   display: flex;
   flex-direction: column;
+  position: relative;
 
-  & > * {
+  svg {
+    overflow: hidden;
+    vertical-align: middle;
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    stroke: white;
+    stroke-width: 3.2px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    &:hover {
+      stroke: #32cc32;
+    }
+  }
+
+  a {
     padding: 1.5rem 1rem;
     border-bottom: 1px solid #80808059;
     min-width: 250px;

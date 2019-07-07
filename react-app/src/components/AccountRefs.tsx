@@ -41,7 +41,6 @@ const AccountRefs = (props: any) => {
             setResult(res.data);
           })
           .catch(err => {
-            debugger;
             window.open(`${BASE_URL}/accounts/${owner}`, '_blank');
             if (err.response) {
               setLoading(`${err.response.statusText} - Opened in a new tab`);
