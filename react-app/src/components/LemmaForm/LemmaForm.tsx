@@ -71,7 +71,7 @@ const LemmaForm = (props: any) => {
   const [title, setTitle] = useState('');
   const [authors, setAuthors] = useState<IAuthors>({ list: [], input: '' });
   const [parentsRefs, setParentsRefs] = useState<IParents>({
-    list: [{ ref: '', required: false, id: 0, invalid: false }],
+    list: [{ ref: '', required: true, id: 0, invalid: false }],
     currentId: 0
   });
   const [search, setSearch] = useState({
