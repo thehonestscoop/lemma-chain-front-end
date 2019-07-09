@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {
@@ -13,7 +13,7 @@ import {
   Button
 } from 'reactstrap';
 import { IoMdTrash } from 'react-icons/io';
-import './LemmaForm.css';
+// import './LemmaForm.css';
 import { isNotOwner, isUrl, isEmail } from '../../helpers/input-validation';
 import {
   RECAPTCHA_CLIENT_KEY,
@@ -78,8 +78,14 @@ const LemmaForm = (props: any) => {
     searchable: false,
     synopsis: ''
   });
-  const [recaptcha, setRecaptcha] = useState<string | null>('');
 
+  const [recaptcha, setRecaptcha] = useState<string | null>('');
+  let recaptchaRef: React.RefObject<ReCAPTCHA> = React.createRef();
+  //verify recaptcha on mount
+  useEffect(() => {
+    recaptchaRef.current!.execute();
+  }, [recaptchaRef]);
+  
   // Submit form
   const createRef = () => {
     const nOwner = !!owner.password && !!owner.name ? '@' + owner.name : '';
@@ -105,8 +111,8 @@ const LemmaForm = (props: any) => {
     const search_synopsis = !!search.searchable ? search.synopsis : '';
     const recaptcha_code = recaptcha;
 
-    if (recaptcha_code === '') {
-      alertWarning('Please Verify Recaptcha');
+    if (!recaptcha_code) {
+      alertWarning('Recaptcha not verified, please refresh page');
     } else if (search.searchable && !search_synopsis) {
       alertWarning('Search synopsis must not be empty for searchable refs');
     } else if (owner.name && !owner.password) {
@@ -135,19 +141,19 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      // console.log(withSearch, headers);
-      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-        .then(res => {
-          props.addRef(res.data.link, title);
-          alertSuccess('Ref Successflly Created');
-        })
-        .catch(err => {
-          if (err.response) {
-            alertError(err.response.data.error);
-          } else {
-            alertError(err.message);
-          }
-        });
+      console.log(withSearch, headers);
+      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+      //   .then(res => {
+      //     props.addRef(res.data.link, title);
+      //     alertSuccess('Ref Successflly Created');
+      //   })
+      //   .catch(err => {
+      //     if (err.response) {
+      //       alertError(err.response.data.error);
+      //     } else {
+      //       alertError(err.message);
+      //     }
+      //   });
     }
   };
 
@@ -396,7 +402,11 @@ const LemmaForm = (props: any) => {
         <div className="recaptcha">
           <ReCAPTCHA
             sitekey={RECAPTCHA_CLIENT_KEY}
-            onChange={val => handleRecaptcha(val)}
+            // onChange={val => handleRecaptcha(val)}
+            onChange={val => setRecaptcha(val)}
+            onExpired={() => recaptchaRef.current!.execute()}
+            ref={recaptchaRef}
+            size="invisible"
           />
         </div>
         <Button onClick={createRef} color="success" className="mt-3">
