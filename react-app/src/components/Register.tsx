@@ -151,8 +151,12 @@ const Register = (props: any) => {
           placeholder="Password"
           autoComplete="new-password"
           value={user.password_1}
+          invalid={user.password_1.length < 8 && user.password_1.length !== 0}
           onChange={e => inputChange(e.target)}
         />
+        <FormFeedback invalid="">
+          Password should not be less than 8 characters
+        </FormFeedback>
       </FormGroup>
       <FormGroup>
         <Input
@@ -170,6 +174,7 @@ const Register = (props: any) => {
         <ReCAPTCHA
           sitekey={RECAPTCHA_CLIENT_KEY}
           onChange={val => setRecaptcha(val)}
+          onExpired={() => recaptchaRef.current!.execute()}
           ref={recaptchaRef}
           size="invisible"
         />
