@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { Form, FormGroup, FormFeedback, Input, Button } from 'reactstrap';
 import { isNotOwner, isEmail } from '../helpers/input-validation';
@@ -10,7 +10,6 @@ import {
   alertSuccess,
   alertError
 } from '../helpers/Globals';
-import { AUTH_SYNC } from '../helpers/functions';
 
 interface RegState {
   name: string;
@@ -34,12 +33,16 @@ const Register = (props: any) => {
     password_2: '',
     disabled: false
   });
-
+  let recaptchaRef: React.RefObject<ReCAPTCHA> = React.createRef();
+  const [recaptcha, setRecaptcha] = useState<string | null>('');
   const checkPassword = (value: string) => {
     const matches = !(value === user.password_1);
     return matches;
   };
-  const handleRecaptcha = (val: string | null) => setRecaptcha(val);
+  useEffect(() => {
+    recaptchaRef.current!.execute();
+  }, [recaptchaRef]);
+  // const handleRecaptcha = (val: string | null) => setRecaptcha(val);
   const inputChange = (input: EventTarget & HTMLInputElement) => {
     const inValidUser = {
       ...user,
@@ -67,11 +70,9 @@ const Register = (props: any) => {
     }
   };
 
-  const [recaptcha, setRecaptcha] = useState<string | null>('');
-
-  const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setUser({ ...user, disabled: true });
+  const submitForm = () => {
+    // e.preventDefault();
+    // setUser({ ...user, disabled: true });
     const { name, email, password_1, password_2 } = user;
     const recaptcha_code = recaptcha;
     const req = { name, email, password_1, password_2, recaptcha_code };
@@ -88,22 +89,23 @@ const Register = (props: any) => {
       alertWarning('password cannot be empty');
     } else if (password_1 !== password_2) {
       alertWarning("Passwords doesn't match");
-    } else if (recaptcha_code === '') {
-      alertWarning('Verify Captcha please');
+    } else if (!recaptcha_code) {
+      alertWarning('Captcha not authenticated. Reload Page');
     } else {
-      Axios.post(`${BASE_URL}/accounts`, req)
-        .then(res => {
-          AUTH_SYNC(name, email, password_1);
-          alertSuccess('Account Created');
-          props.history.push('/create-ref');
-        })
-        .catch(err => {
-          if (err.response) {
-            alertError(err.response.data.error);
-          } else {
-            alertError(err.message);
-          }
-        });
+      console.log(req);
+      // Axios.post(`${BASE_URL}/accounts`, req)
+      //   .then(res => {
+      //     AUTH_SYNC(name, email, password_1);
+      //     alertSuccess('Account Created');
+      //     props.history.push('/create-ref');
+      //   })
+      //   .catch(err => {
+      //     if (err.response) {
+      //       alertError(err.response.data.error);
+      //     } else {
+      //       alertError(err.message);
+      //     }
+      //   });
     }
   };
 
@@ -167,7 +169,9 @@ const Register = (props: any) => {
       <div className="recaptcha">
         <ReCAPTCHA
           sitekey={RECAPTCHA_CLIENT_KEY}
-          onChange={val => handleRecaptcha(val)}
+          onChange={val => setRecaptcha(val)}
+          ref={recaptchaRef}
+          size="invisible"
         />
       </div>
       <Button onClick={submitForm} color="success" className="mt-3">
