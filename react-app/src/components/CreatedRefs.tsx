@@ -27,13 +27,13 @@ const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
               <CopyToClipboard text={ref.ref}>
                 <div>
                   <MdContentCopy
-                    id={ref.ref.replace(/@|[/]/g, '')}
+                    id={ref.ref.replace(/\W/g, '')}
                     className="ml-2"
                     onClick={() => alertSuccess('copied')}
                   />
                   <UncontrolledTooltip
                     placement="bottom"
-                    target={ref.ref.replace(/@|[/]/g, '')}
+                    target={ref.ref.replace(/\W/g, '')}
                   >
                     copy to clipboard
                   </UncontrolledTooltip>

@@ -13,7 +13,7 @@ import {
   Button
 } from 'reactstrap';
 import { IoMdTrash } from 'react-icons/io';
-// import './LemmaForm.css';
+import './LemmaForm.css';
 import { isNotOwner, isUrl, isEmail } from '../../helpers/input-validation';
 import {
   RECAPTCHA_CLIENT_KEY,
@@ -74,6 +74,7 @@ const LemmaForm = (props: any) => {
     list: [{ ref: '', required: true, id: 0, invalid: false }],
     currentId: 0
   });
+
   const [search, setSearch] = useState({
     searchable: false,
     synopsis: ''
@@ -85,7 +86,7 @@ const LemmaForm = (props: any) => {
   useEffect(() => {
     recaptchaRef.current!.execute();
   }, [recaptchaRef]);
-  
+
   // Submit form
   const createRef = () => {
     const nOwner = !!owner.password && !!owner.name ? '@' + owner.name : '';
@@ -141,19 +142,19 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      console.log(withSearch, headers);
-      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-      //   .then(res => {
-      //     props.addRef(res.data.link, title);
-      //     alertSuccess('Ref Successflly Created');
-      //   })
-      //   .catch(err => {
-      //     if (err.response) {
-      //       alertError(err.response.data.error);
-      //     } else {
-      //       alertError(err.message);
-      //     }
-      //   });
+      // console.log(withSearch, headers);
+      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+        .then(res => {
+          props.addRef(res.data.link, title);
+          alertSuccess('Ref Successflly Created');
+        })
+        .catch(err => {
+          if (err.response) {
+            alertError(err.response.data.error);
+          } else {
+            alertError(err.message);
+          }
+        });
     }
   };
 

@@ -42,7 +42,7 @@ const Register = (props: any) => {
   useEffect(() => {
     recaptchaRef.current!.execute();
   }, [recaptchaRef]);
-  // const handleRecaptcha = (val: string | null) => setRecaptcha(val);
+
   const inputChange = (input: EventTarget & HTMLInputElement) => {
     const inValidUser = {
       ...user,
@@ -92,20 +92,20 @@ const Register = (props: any) => {
     } else if (!recaptcha_code) {
       alertWarning('Captcha not authenticated. Reload Page');
     } else {
-      console.log(req);
-      // Axios.post(`${BASE_URL}/accounts`, req)
-      //   .then(res => {
-      //     AUTH_SYNC(name, email, password_1);
-      //     alertSuccess('Account Created');
-      //     props.history.push('/create-ref');
-      //   })
-      //   .catch(err => {
-      //     if (err.response) {
-      //       alertError(err.response.data.error);
-      //     } else {
-      //       alertError(err.message);
-      //     }
-      //   });
+      Axios.post(`${BASE_URL}/accounts`, req)
+        .then(res => {
+          alertSuccess('Account Created');
+          setTimeout(() => {
+            props.history.push('/');
+          }, 1500);
+        })
+        .catch(err => {
+          if (err.response) {
+            alertError(err.response.data.error);
+          } else {
+            alertError(err.message);
+          }
+        });
     }
   };
 
