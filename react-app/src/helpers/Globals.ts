@@ -7,7 +7,6 @@ export const BASE_URL = 'http://68.183.123.0:1323';
 const mySwal = withReactContent(Swal);
 export const alertSuccess = (message: string) =>
   mySwal.fire({
-    position: 'top-end',
     type: 'success',
     title: message,
     showConfirmButton: false,
@@ -15,7 +14,6 @@ export const alertSuccess = (message: string) =>
   });
 export const alertWarning = (message: string) =>
   mySwal.fire({
-    position: 'top-end',
     type: 'warning',
     title: message,
     showConfirmButton: false,
@@ -23,7 +21,6 @@ export const alertWarning = (message: string) =>
   });
 export const alertError = (message: string) =>
   mySwal.fire({
-    position: 'top-end',
     type: 'error',
     title: message,
     showConfirmButton: false,
