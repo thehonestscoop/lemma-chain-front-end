@@ -55,6 +55,7 @@ const Main = styled.main`
   display: flex;
   background-color: white;
   border-radius: 10px;
+  max-height: 800px;
   overflow: hidden;
   min-height: 550px;
   max-width: 900px;
