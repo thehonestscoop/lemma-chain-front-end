@@ -94,7 +94,9 @@ const Register = (props: any) => {
       Axios.post(`${BASE_URL}/accounts`, req)
         .then(res => {
           AUTH_SYNC(name, email, password_1);
-          alertSuccess('Account Created');
+          alertSuccess(
+            'An activation link has been sent to your email address. Please check your spam folder.'
+          );
           props.history.push('/create-ref');
         })
         .catch(err => {
