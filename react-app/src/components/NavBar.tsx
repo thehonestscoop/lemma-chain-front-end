@@ -75,7 +75,7 @@ const Nav = styled.nav`
   display: flex;
   flex-direction: column;
   position: relative;
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     display: none;
   }
 
@@ -84,7 +84,7 @@ const Nav = styled.nav`
     flex-direction: row;
     position: unset;
     box-shadow: 0px 2px 5px #0000002e;
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       display: flex;
     }
   }
@@ -102,7 +102,7 @@ const Nav = styled.nav`
     &:hover {
       stroke: #32cc32;
     }
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       font-size: 3rem;
       background: #4f63a8;
       border-radius: 50%;
@@ -121,7 +121,7 @@ const Nav = styled.nav`
     cursor: pointer;
     display: flex;
     align-items: center;
-    @media (max-width: 500px) {
+    @media (max-width: 768px) {
       padding: 0.8rem 5px;
       justify-content: center;
       min-width: unset;
@@ -158,7 +158,7 @@ const Nav = styled.nav`
       align-items: center;
       margin-right: 0.5rem;
       box-shadow: 1px 1px 15px #00000036;
-      @media (max-width: 500px) {
+      @media (max-width: 768px) {
         font-size: 1rem;
       }
     }

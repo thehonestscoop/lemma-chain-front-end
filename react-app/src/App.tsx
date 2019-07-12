@@ -60,7 +60,7 @@ const Main = styled.main`
   min-height: 550px;
   max-width: 900px;
   flex: 1;
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
     flex-direction: column;
   }
   @media (max-width: 600px) {
@@ -79,7 +79,7 @@ const AppCon = styled.div`
   padding: 3rem 5vw;
   display: flex;
   justify-content: center;
-  @media (max-width: 600px) {
+  @media (max-width: 500px) {
     padding: 0;
   }
 `;
