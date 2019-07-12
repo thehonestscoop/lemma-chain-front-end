@@ -28,27 +28,46 @@ const alertIt = async () => {
 
 const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
   return (
-    <Nav>
-      <NavLink to="/" exact={true}>
-        <span className="menu">CR</span> Create Ref
-      </NavLink>
-      <NavLink to="/create-account">
-        <span className="menu">CA</span> Create Account
-      </NavLink>
-      <NavLink to="/refs">
-        <span className="menu">YR</span> Your Refs{' '}
-        <Badge pill={true} color="success">
-          {props.refs.length}
-        </Badge>
-      </NavLink>
-      <NavLink to="/account-ref">
-        <span className="menu">AR</span> Account Refs
-      </NavLink>
-      <FiSearch onClick={alertIt} id="search" />
-      <UncontrolledTooltip placement="bottom" target="search">
-        Search
-      </UncontrolledTooltip>
-    </Nav>
+    <>
+      <Nav>
+        <NavLink to="/" exact={true}>
+          <span className="menu">CR</span> Create Ref
+        </NavLink>
+        <NavLink to="/create-account">
+          <span className="menu">CA</span> Create Account
+        </NavLink>
+        <NavLink to="/refs">
+          <span className="menu">YR</span> Your Refs{' '}
+          <Badge pill={true} color="success">
+            {props.refs.length}
+          </Badge>
+        </NavLink>
+        <NavLink to="/account-ref">
+          <span className="menu">AR</span> Account Refs
+        </NavLink>
+        <FiSearch onClick={alertIt} id="search" />
+        <UncontrolledTooltip placement="bottom" target="search">
+          Search
+        </UncontrolledTooltip>
+      </Nav>
+      <Nav className="mobile">
+        <NavLink to="/" exact={true}>
+          Create
+        </NavLink>
+        <NavLink to="/create-account">Sign Up</NavLink>
+        <NavLink to="/refs">
+          Links
+          <Badge pill={true} color="success">
+            {props.refs.length}
+          </Badge>
+        </NavLink>
+        <NavLink to="/account-ref">Account</NavLink>
+        <FiSearch onClick={alertIt} id="search" />
+        <UncontrolledTooltip placement="bottom" target="search">
+          Search
+        </UncontrolledTooltip>
+      </Nav>
+    </>
   );
 };
 const Nav = styled.nav`
@@ -56,6 +75,19 @@ const Nav = styled.nav`
   display: flex;
   flex-direction: column;
   position: relative;
+  @media (max-width: 600px) {
+    display: none;
+  }
+
+  &.mobile {
+    display: none;
+    flex-direction: row;
+    position: unset;
+    box-shadow: 0px 2px 5px #0000002e;
+    @media (max-width: 600px) {
+      display: flex;
+    }
+  }
 
   svg {
     overflow: hidden;
@@ -70,6 +102,14 @@ const Nav = styled.nav`
     &:hover {
       stroke: #32cc32;
     }
+    @media (max-width: 600px) {
+      font-size: 3rem;
+      background: #4f63a8;
+      border-radius: 50%;
+      padding: 0.5rem;
+      position: fixed;
+      box-shadow: 1px 1px 13px 7px #00000021;
+    }
   }
 
   a {
@@ -82,14 +122,28 @@ const Nav = styled.nav`
     display: flex;
     align-items: center;
     @media (max-width: 500px) {
-      padding: 0.8rem 1rem;
+      padding: 0.8rem 5px;
+      justify-content: center;
+      min-width: unset;
+      flex: 1;
+      border-bottom: unset;
+      .badge-pill {
+        padding-right: 0.2rem;
+        padding-left: 0.2rem;
+        padding-top: 0.1rem;
+        padding-bottom: 0.1rem;
+        font-size: 0.7rem;
+      }
+      &.active {
+        color: #3e4061 !important;
+        background-color: white;
+      }
     }
     &.active {
       color: white;
     }
     &:hover {
       text-decoration: none;
-      color: white;
     }
     span.menu {
       border-radius: 50%;

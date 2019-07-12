@@ -48,7 +48,7 @@ const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
   return (
     <div style={{ textAlign: 'center' }}>
       <h4>You haven't created any reference</h4>
-      <Link to="/create-ref">Create Some</Link>
+      <Link to="/">Create Some</Link>
     </div>
   );
 };

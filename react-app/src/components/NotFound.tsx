@@ -5,7 +5,7 @@ const NotFound = () => {
   return (
     <div style={{ textAlign: 'center' }}>
       <h1>This Page doesn't exist!</h1>
-      <Link to="/create-ref">Go to main page</Link>
+      <Link to="/">Go to main page</Link>
     </div>
   );
 };

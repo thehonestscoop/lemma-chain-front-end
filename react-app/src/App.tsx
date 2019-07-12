@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
-import './App.css';
 
 // import Login from './components/Login/Login';
 import LemmaForm from './components/LemmaForm/LemmaForm';
@@ -16,7 +15,7 @@ const App: FC = () => {
   const addRef = (ref: string, title: string) =>
     setRefs([...refs, { ref, title }]);
   return (
-    <div className="App">
+    <AppCon className="App">
       <Main>
         <NavBar refs={refs} />
         <Content>
@@ -42,7 +41,7 @@ const App: FC = () => {
           </Switch>
         </Content>
       </Main>
-    </div>
+    </AppCon>
   );
 };
 const Content = styled.section`
@@ -62,6 +61,25 @@ const Main = styled.main`
   flex: 1;
   @media (max-width: 800px) {
     flex-direction: column;
+  }
+  @media (max-width: 600px) {
+    border-radius: 0;
+  }
+`;
+const AppCon = styled.div`
+  background-image: -webkit-linear-gradient(
+    136deg,
+    rgb(116, 235, 213) 0%,
+    rgb(63, 43, 150) 100%
+  );
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  padding: 3rem 5vw;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 600px) {
+    padding: 0;
   }
 `;
 
