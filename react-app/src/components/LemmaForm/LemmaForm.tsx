@@ -397,6 +397,7 @@ const LemmaForm = (props: any) => {
               value={search.synopsis}
               onChange={e => changeSearchSynopsis(e.target)}
               className="mt-2"
+              maxRows={3}
             />
           </SearchInput>
         </div>
