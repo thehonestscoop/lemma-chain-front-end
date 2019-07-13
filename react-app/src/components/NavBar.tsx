@@ -37,13 +37,13 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
           <span className="menu">CA</span> Create Account
         </NavLink>
         <NavLink to="/refs">
-          <span className="menu">YR</span> Your Refs{' '}
+          <span className="menu">LS</span> Links
           <Badge pill={true} color="success">
             {props.refs.length}
           </Badge>
         </NavLink>
         <NavLink to="/account-ref">
-          <span className="menu">AR</span> Account Refs
+          <span className="menu">AC</span> Account
         </NavLink>
         <FiSearch onClick={alertIt} id="search" />
         <UncontrolledTooltip placement="bottom" target="search">
