@@ -45,10 +45,7 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
         <NavLink to="/account-ref">
           <span className="menu">AC</span> Account
         </NavLink>
-        <FiSearch onClick={alertIt} id="search" />
-        <UncontrolledTooltip placement="bottom" target="search">
-          Search
-        </UncontrolledTooltip>
+        <Search onClick={alertIt}>Search</Search>
       </Nav>
       <Nav className="mobile">
         <NavLink to="/" exact={true}>
@@ -167,6 +164,19 @@ const Nav = styled.nav`
       color: white;
     }
   }
+`;
+const Search = styled.div`
+  overflow: hidden;
+  vertical-align: middle;
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  font-weight: 500;
+  padding: 0.5rem 1.5rem;
+  border: 1px white solid;
+  border-radius: 25px;
+  color: white;
+  cursor: pointer;
 `;
 
 export default NavBar;
