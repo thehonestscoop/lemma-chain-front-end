@@ -221,8 +221,15 @@ const LemmaForm = (props: any) => {
   };
 
   const deleteParent = (id: number) => {
-    const newParents = parentsRefs.list.filter(parent => parent.id !== id);
-    setParentsRefs({ list: newParents, currentId: parentsRefs.currentId });
+    if (parentsRefs.list.length > 1) {
+      const newParents = parentsRefs.list.filter(parent => parent.id !== id);
+      setParentsRefs({ list: newParents, currentId: parentsRefs.currentId });
+    } else {
+      const newParents = parentsRefs.list.map(p =>
+        p.id === id ? { ...p, ref: '' } : p
+      );
+      setParentsRefs({ ...parentsRefs, list: newParents });
+    }
   };
 
   const parentCheck = (eventId: string) => {
