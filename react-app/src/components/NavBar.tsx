@@ -1,14 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { Badge, UncontrolledTooltip } from 'reactstrap';
+import { Badge } from 'reactstrap';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { BASE_URL } from '../helpers/Globals';
 import { FiSearch } from 'react-icons/fi';
+import Axios from 'axios';
 
 const InputAlert = withReactContent(Swal);
-const alertIt = async () => {
+const searchIt = async () => {
   const { value: terms } = await InputAlert.fire({
     title: 'Search',
     input: 'text',
@@ -23,6 +24,46 @@ const alertIt = async () => {
 
   if (terms) {
     window.open(`${BASE_URL}/search/${encodeURI(terms)}`, '_blank');
+  }
+};
+
+const alertIt = async () => {
+  const { value: owner } = await InputAlert.fire({
+    title: 'Username',
+    input: 'text',
+    inputPlaceholder: 'Enter your Username',
+    showCancelButton: true,
+    inputValidator: (value): any => {
+      if (!value) {
+        return 'Username must not be empty!';
+      }
+    }
+  });
+
+  if (owner) {
+    const { value: password } = await InputAlert.fire({
+      title: 'Password',
+      input: 'password',
+      inputPlaceholder: 'Enter Password - optional'
+    });
+
+    if (password) {
+      Axios.get(`${BASE_URL}/accounts/${'@' + owner}`, {
+        headers: {
+          'X-AUTH-ACCOUNT': '@' + owner,
+          'X-AUTH-PASSWORD': password
+        }
+      })
+        .then(res => {
+          // Todo - open in a new tab with json
+          console.log(res.data);
+        })
+        .catch(err => {
+          window.open(`${BASE_URL}/accounts/${'@' + owner}`, '_blank');
+        });
+    } else {
+      window.open(`${BASE_URL}/accounts/${'@' + owner}`, '_blank');
+    }
   }
 };
 
@@ -42,10 +83,12 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
             {props.refs.length}
           </Badge>
         </NavLink>
-        <NavLink to="/account-ref">
-          <span className="menu">AC</span> Account
+        <NavLink to="#" onClick={alertIt}>
+          Account
         </NavLink>
-        <Search onClick={alertIt}>Search</Search>
+        <NavLink to="#" onClick={searchIt}>
+          Search
+        </NavLink>
       </Nav>
       <Nav className="mobile">
         <NavLink to="/" exact={true}>
@@ -156,18 +199,4 @@ const Nav = styled.nav`
     }
   }
 `;
-const Search = styled.div`
-  overflow: hidden;
-  vertical-align: middle;
-  position: absolute;
-  bottom: 5%;
-  right: 5%;
-  font-weight: 500;
-  padding: 0.5rem 1.5rem;
-  border: 1px white solid;
-  border-radius: 25px;
-  color: white;
-  cursor: pointer;
-`;
-
 export default NavBar;

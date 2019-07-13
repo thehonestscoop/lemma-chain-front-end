@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-// import ReactMarkdown from 'react-markdown';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { BASE_URL } from '../helpers/Globals';
 import Axios from 'axios';
-import './AccountRefs.css';
 import styled from 'styled-components';
 
 const InputAlert = withReactContent(Swal);
