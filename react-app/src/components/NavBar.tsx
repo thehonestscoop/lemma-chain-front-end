@@ -59,10 +59,13 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
           </Badge>
         </NavLink>
         <NavLink to="/account-ref">Account</NavLink>
-        <FiSearch onClick={alertIt} id="search" />
-        <UncontrolledTooltip placement="bottom" target="search">
-          Search
-        </UncontrolledTooltip>
+        <NavLink to="#" className="search">
+          <FiSearch
+            onClick={alertIt}
+            id="search"
+            style={{ fontSize: '1.7rem', strokeWidth: '3px' }}
+          />
+        </NavLink>
       </Nav>
     </>
   );
@@ -86,29 +89,6 @@ const Nav = styled.nav`
     }
   }
 
-  svg {
-    overflow: hidden;
-    vertical-align: middle;
-    position: absolute;
-    bottom: 5%;
-    right: 5%;
-    stroke: white;
-    stroke-width: 3.2px;
-    font-size: 1.5rem;
-    cursor: pointer;
-    &:hover {
-      stroke: #32cc32;
-    }
-    @media (max-width: 768px) {
-      font-size: 3rem;
-      background: #4f63a8;
-      border-radius: 50%;
-      padding: 0.5rem;
-      position: fixed;
-      box-shadow: 1px 1px 13px 7px #00000021;
-    }
-  }
-
   a {
     padding: 1.5rem 1rem;
     border-bottom: 1px solid #80808059;
@@ -118,6 +98,9 @@ const Nav = styled.nav`
     cursor: pointer;
     display: flex;
     align-items: center;
+    .badge-pill {
+      margin-left: 5px;
+    }
     @media (max-width: 768px) {
       padding: 0.8rem 5px;
       justify-content: center;
@@ -128,13 +111,21 @@ const Nav = styled.nav`
         padding-right: 0.2rem;
         padding-left: 0.2rem;
         padding-top: 0.1rem;
-        padding-bottom: 0.1rem;
+        padding-bottom: 0.135rem;
         font-size: 0.7rem;
+        margin-left: 2px;
       }
       &.active {
         color: #3e4061 !important;
         background-color: white;
       }
+    }
+    &.search::before {
+      content: ' ';
+      background-color: grey;
+      height: 22px;
+      margin-right: 12px;
+      width: 1px;
     }
     &.active {
       color: white;
