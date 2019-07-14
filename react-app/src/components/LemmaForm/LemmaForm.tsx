@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {
@@ -24,6 +24,10 @@ import {
 } from '../../helpers/Globals';
 import Axios from 'axios';
 import Textarea from 'react-textarea-autosize';
+import queryString from 'query-string-for-all';
+import '../../../node_modules/noty/lib/noty.css';
+import '../../../node_modules/noty/lib/themes/bootstrap-v4.css';
+import Noty from 'noty';
 
 interface IAuthors {
   list: string[];
@@ -61,6 +65,42 @@ const BadgeCon = styled('span')`
   font-size: 1.2rem;
 `;
 const LemmaForm = (props: any) => {
+  console.log(queryString.parse(props.location.search));
+  const query = queryString.parse(props.location.search);
+  // Activation notification
+  const notyConfig = {
+    theme: 'bootstrap-v4',
+    animation: {
+      open: 'animated bounceInRight',
+      close: 'animated bounceOutRight'
+    }
+  };
+  useEffect(() => {
+    if (query.activated === '1') {
+      new Noty({
+        text: 'Account has been created',
+        theme: 'bootstrap-v4',
+        type: 'success',
+        closeWith: ['button', 'click'],
+        animation: {
+          open: 'animated bounceInRight',
+          close: 'animated bounceOutRight'
+        }
+      }).show();
+    } else if (query.activated === '0') {
+      new Noty({
+        text: 'Activation code has expired',
+        theme: 'bootstrap-v4',
+        closeWith: ['button', 'click'],
+        type: 'error',
+        animation: {
+          open: 'animated bounceInRight',
+          close: 'animated bounceOutRight'
+        }
+      }).show();
+    }
+  }, [query]);
+
   // States
   const [owner, setOwner] = useState({
     name: '',
