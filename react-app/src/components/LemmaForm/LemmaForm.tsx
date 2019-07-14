@@ -91,7 +91,7 @@ const LemmaForm = (props: any) => {
         }
       }).show();
     }
-  }, []);
+  }, [query.activated]);
 
   // States
   const [owner, setOwner] = useState({
@@ -212,8 +212,12 @@ const LemmaForm = (props: any) => {
   };
 
   const changeAuthor = (input: EventTarget & HTMLInputElement) => {
-    if (input.value.slice(-1) === ',') {
-      setAuthors({ list: [...authors.list, authors.input], input: '' });
+    const newInput = input.value.trim();
+    if (newInput.slice(-1) === ',' && newInput.length > 2) {
+      setAuthors({
+        list: [...authors.list, input.value.replace(',', '')],
+        input: ''
+      });
     } else {
       setAuthors({ ...authors, input: input.value });
     }
@@ -333,7 +337,7 @@ const LemmaForm = (props: any) => {
         <AuthorFG>
           {authors.list.map(author => (
             <article key={author} style={{ display: 'inline-block' }}>
-              <BadgeCon id={author.replace(/\s+|[']/g, '-')}>
+              <BadgeCon id={author.replace(/\W/g, '1')}>
                 <Badge
                   color="secondary"
                   pill
@@ -342,12 +346,12 @@ const LemmaForm = (props: any) => {
                   {author}
                 </Badge>
               </BadgeCon>
-              <UncontrolledTooltip
+              {/* <UncontrolledTooltip
                 placement="bottom"
-                target={author.replace(/\s+|[']/g, '-')}
+                target={author.replace(/\W/g, '1')}
               >
                 Double Click to Remove
-              </UncontrolledTooltip>
+              </UncontrolledTooltip> */}
             </article>
           ))}
           <Input
