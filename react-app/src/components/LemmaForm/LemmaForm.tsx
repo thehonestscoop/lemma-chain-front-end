@@ -206,18 +206,20 @@ const LemmaForm = (props: any) => {
   };
 
   const addParent = () => {
-    setParentsRefs({
-      list: [
-        ...parentsRefs.list,
-        {
-          id: ++parentsRefs.currentId,
-          ref: '',
-          required: true,
-          invalid: false
-        }
-      ],
-      currentId: parentsRefs.currentId++
-    });
+    if (parentsRefs.list.every(p => !!p.ref)) {
+      setParentsRefs({
+        list: [
+          ...parentsRefs.list,
+          {
+            id: ++parentsRefs.currentId,
+            ref: '',
+            required: true,
+            invalid: false
+          }
+        ],
+        currentId: parentsRefs.currentId++
+      });
+    }
   };
 
   const deleteParent = (id: number) => {

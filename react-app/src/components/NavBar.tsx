@@ -74,43 +74,6 @@ const alertIt = async () => {
         });
     }
   }
-  // const { value: owner } = await InputAlert.fire({
-  //   title: 'Username',
-  //   input: 'text',
-  //   inputPlaceholder: 'Enter your Username',
-  //   showCancelButton: true,
-  //   inputValidator: (value): any => {
-  //     if (!value) {
-  //       return 'Username must not be empty!';
-  //     }
-  //   }
-  // });
-
-  // if (owner) {
-  //   const { value: password } = await InputAlert.fire({
-  //     title: 'Password',
-  //     input: 'password',
-  //     inputPlaceholder: 'Enter Password - optional'
-  //   });
-
-  //   if (password) {
-  //     Axios.get(`${BASE_URL}/accounts/${'@' + owner}`, {
-  //       headers: {
-  //         'X-AUTH-ACCOUNT': '@' + owner,
-  //         'X-AUTH-PASSWORD': password
-  //       }
-  //     })
-  //       .then(res => {
-  //         // Todo - open in a new tab with json
-  //         console.log(res.data);
-  //       })
-  //       .catch(err => {
-  //         window.open(`${BASE_URL}/accounts/${'@' + owner}`, '_blank');
-  //       });
-  //   } else {
-  //     window.open(`${BASE_URL}/accounts/${'@' + owner}`, '_blank');
-  //   }
-  // }
 };
 
 const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
