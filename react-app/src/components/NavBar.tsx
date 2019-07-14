@@ -53,7 +53,16 @@ const alertIt = async () => {
         }
       })
         .then(res => {
-          debugger;
+          const jsonString = JSON.stringify(res.data, null, 2);
+
+          // const newWindow = window.open(
+          //   'data:text/json,' + encodeURIComponent(jsonString),
+          //   '_blank'
+          // );
+          // newWindow!.focus();
+          let tab = window.open('about:blank', '_blank');
+          tab!.document.write(`<pre>${jsonString}</pre>`); // where 'html' is a variable containing your HTML
+          tab!.document.close(); // to finish loading the page
           // Todo - open in a new tab with json
           // console.log(res.data);
         })
