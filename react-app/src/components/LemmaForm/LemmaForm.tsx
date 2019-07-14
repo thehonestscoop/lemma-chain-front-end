@@ -346,12 +346,12 @@ const LemmaForm = (props: any) => {
                   {author}
                 </Badge>
               </BadgeCon>
-              {/* <UncontrolledTooltip
+              <UncontrolledTooltip
                 placement="bottom"
                 target={author.replace(/\W/g, '1')}
               >
                 Double Click to Remove
-              </UncontrolledTooltip> */}
+              </UncontrolledTooltip>
             </article>
           ))}
           <Input
@@ -359,7 +359,7 @@ const LemmaForm = (props: any) => {
             plaintext
             onKeyPress={e => addAuthor(e)}
             className="mt-1"
-            placeholder="Author(s) - Enter to add more"
+            placeholder="Author(s) - Enter/Comma to add more"
             value={authors.input}
           />
         </AuthorFG>
