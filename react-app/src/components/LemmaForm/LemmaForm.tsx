@@ -65,16 +65,8 @@ const BadgeCon = styled('span')`
   font-size: 1.2rem;
 `;
 const LemmaForm = (props: any) => {
-  console.log(queryString.parse(props.location.search));
   const query = queryString.parse(props.location.search);
   // Activation notification
-  const notyConfig = {
-    theme: 'bootstrap-v4',
-    animation: {
-      open: 'animated bounceInRight',
-      close: 'animated bounceOutRight'
-    }
-  };
   useEffect(() => {
     if (query.activated === '1') {
       new Noty({
@@ -99,7 +91,7 @@ const LemmaForm = (props: any) => {
         }
       }).show();
     }
-  }, [query]);
+  }, []);
 
   // States
   const [owner, setOwner] = useState({
