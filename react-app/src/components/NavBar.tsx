@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Badge } from 'reactstrap';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { BASE_URL } from '../helpers/Globals';
+import { BASE_URL, alertError } from '../helpers/Globals';
 import { FiSearch } from 'react-icons/fi';
 import Axios from 'axios';
 
@@ -28,43 +28,89 @@ const searchIt = async () => {
 };
 
 const alertIt = async () => {
-  const { value: owner } = await InputAlert.fire({
-    title: 'Username',
-    input: 'text',
-    inputPlaceholder: 'Enter your Username',
+  const { value: formValues } = await InputAlert.fire({
+    title: 'Get Your Refs',
+    html:
+      '<input id="swal-input1" class="swal2-input" placeholder="Username">' +
+      '<input id="swal-input2" autoComplete="new-password" class="swal2-input" type="password" placeholder="Password - optional">',
+    focusConfirm: false,
     showCancelButton: true,
-    inputValidator: (value): any => {
-      if (!value) {
-        return 'Username must not be empty!';
-      }
+    preConfirm: () => {
+      const inputs: Array<any> = [
+        document.getElementById('swal-input1'),
+        document.getElementById('swal-input2')
+      ];
+      return inputs.map(inp => inp.value);
     }
   });
 
-  if (owner) {
-    const { value: password } = await InputAlert.fire({
-      title: 'Password',
-      input: 'password',
-      inputPlaceholder: 'Enter Password - optional'
-    });
-
-    if (password) {
-      Axios.get(`${BASE_URL}/accounts/${'@' + owner}`, {
+  if (formValues) {
+    if (formValues[0] && formValues[1]) {
+      Axios.get(`${BASE_URL}/accounts/${'@' + formValues[0]}`, {
         headers: {
-          'X-AUTH-ACCOUNT': '@' + owner,
-          'X-AUTH-PASSWORD': password
+          'X-AUTH-ACCOUNT': '@' + formValues[0],
+          'X-AUTH-PASSWORD': formValues[1]
         }
       })
         .then(res => {
+          debugger;
           // Todo - open in a new tab with json
-          console.log(res.data);
+          // console.log(res.data);
         })
         .catch(err => {
-          window.open(`${BASE_URL}/accounts/${'@' + owner}`, '_blank');
+          if (err.response.status === 401) {
+            alertError('Incorrect username or password');
+          }
         });
-    } else {
-      window.open(`${BASE_URL}/accounts/${'@' + owner}`, '_blank');
+    } else if (formValues[0]) {
+      Axios.get(`${BASE_URL}/accounts/${'@' + formValues[0]}`)
+        .then(res => {
+          window.open(`${BASE_URL}/accounts/${'@' + formValues[0]}`, '_blank');
+        })
+        .catch(err => {
+          if (err.response.status === 404) {
+            alertError("Username doesn't exist");
+          }
+        });
     }
   }
+  // const { value: owner } = await InputAlert.fire({
+  //   title: 'Username',
+  //   input: 'text',
+  //   inputPlaceholder: 'Enter your Username',
+  //   showCancelButton: true,
+  //   inputValidator: (value): any => {
+  //     if (!value) {
+  //       return 'Username must not be empty!';
+  //     }
+  //   }
+  // });
+
+  // if (owner) {
+  //   const { value: password } = await InputAlert.fire({
+  //     title: 'Password',
+  //     input: 'password',
+  //     inputPlaceholder: 'Enter Password - optional'
+  //   });
+
+  //   if (password) {
+  //     Axios.get(`${BASE_URL}/accounts/${'@' + owner}`, {
+  //       headers: {
+  //         'X-AUTH-ACCOUNT': '@' + owner,
+  //         'X-AUTH-PASSWORD': password
+  //       }
+  //     })
+  //       .then(res => {
+  //         // Todo - open in a new tab with json
+  //         console.log(res.data);
+  //       })
+  //       .catch(err => {
+  //         window.open(`${BASE_URL}/accounts/${'@' + owner}`, '_blank');
+  //       });
+  //   } else {
+  //     window.open(`${BASE_URL}/accounts/${'@' + owner}`, '_blank');
+  //   }
+  // }
 };
 
 const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
@@ -101,12 +147,14 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
             {props.refs.length}
           </Badge>
         </NavLink>
-        <NavLink to="/account-ref">Account</NavLink>
+        <NavLink to="#" onClick={alertIt}>
+          Account
+        </NavLink>
         <NavLink to="#" className="search">
           <FiSearch
-            onClick={alertIt}
+            onClick={searchIt}
             id="search"
-            style={{ fontSize: '1.7rem', strokeWidth: '3px' }}
+            style={{ fontSize: '1.7rem', strokeWidth: '3px', stroke: 'white' }}
           />
         </NavLink>
       </Nav>
@@ -127,6 +175,13 @@ const Nav = styled.nav`
     flex-direction: row;
     position: unset;
     box-shadow: 0px 2px 5px #0000002e;
+    border-bottom-right-radius: 25px;
+
+    @media (max-width: 500px) {
+      position: fixed;
+      top: 0;
+      width: 100%;
+    }
     @media (max-width: 768px) {
       display: flex;
     }

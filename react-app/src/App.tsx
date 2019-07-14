@@ -50,6 +50,9 @@ const Content = styled.section`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  @media (max-width: 768px) {
+    margin-top: 2rem;
+  }
 `;
 const Main = styled.main`
   display: flex;
@@ -65,6 +68,7 @@ const Main = styled.main`
   }
   @media (max-width: 600px) {
     border-radius: 0;
+    max-height: unset;
   }
 `;
 const AppCon = styled.div`
