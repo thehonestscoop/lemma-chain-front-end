@@ -54,17 +54,9 @@ const alertIt = async () => {
       })
         .then(res => {
           const jsonString = JSON.stringify(res.data, null, 2);
-
-          // const newWindow = window.open(
-          //   'data:text/json,' + encodeURIComponent(jsonString),
-          //   '_blank'
-          // );
-          // newWindow!.focus();
           let tab = window.open('about:blank', '_blank');
           tab!.document.write(`<pre>${jsonString}</pre>`); // where 'html' is a variable containing your HTML
-          tab!.document.close(); // to finish loading the page
-          // Todo - open in a new tab with json
-          // console.log(res.data);
+          tab!.document.close();
         })
         .catch(err => {
           if (err.response.status === 401) {
@@ -74,7 +66,11 @@ const alertIt = async () => {
     } else if (formValues[0]) {
       Axios.get(`${BASE_URL}/accounts/${'@' + formValues[0]}`)
         .then(res => {
-          window.open(`${BASE_URL}/accounts/${'@' + formValues[0]}`, '_blank');
+          // window.open(`${BASE_URL}/accounts/${'@' + formValues[0]}`, '_blank');
+          const jsonString = JSON.stringify(res.data, null, 2);
+          let tab = window.open('about:blank', '_blank');
+          tab!.document.write(`<pre>${jsonString}</pre>`); // where 'html' is a variable containing your HTML
+          tab!.document.close();
         })
         .catch(err => {
           if (err.response.status === 404) {
