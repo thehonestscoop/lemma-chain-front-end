@@ -209,13 +209,13 @@ const LemmaForm = (props: any) => {
     if (parentsRefs.list.every(p => !!p.ref)) {
       setParentsRefs({
         list: [
-          ...parentsRefs.list,
           {
             id: ++parentsRefs.currentId,
             ref: '',
             required: true,
             invalid: false
-          }
+          },
+          ...parentsRefs.list
         ],
         currentId: parentsRefs.currentId++
       });
