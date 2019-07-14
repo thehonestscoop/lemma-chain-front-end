@@ -98,9 +98,11 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
           </Badge>
         </NavLink>
         <NavLink to="#" onClick={alertIt}>
+          <span className="menu">AC</span>
           Account
         </NavLink>
         <NavLink to="#" onClick={searchIt}>
+          <span className="menu">SC</span>
           Search
         </NavLink>
       </Nav>
