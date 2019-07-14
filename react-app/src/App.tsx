@@ -51,7 +51,10 @@ const Content = styled.section`
   align-items: center;
   width: 100%;
   @media (max-width: 768px) {
-    margin-top: 2rem;
+    margin-top: 1rem;
+  }
+  @media (max-width: 500px) {
+    margin-top: 3.5rem;
   }
 `;
 const Main = styled.main`
