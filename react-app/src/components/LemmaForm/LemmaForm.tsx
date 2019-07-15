@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {
   CustomInput,
   FormGroup,
   FormFeedback,
-  Badge,
   Row,
   Col,
   Input,
@@ -28,6 +27,7 @@ import queryString from 'query-string-for-all';
 import '../../../node_modules/noty/lib/noty.css';
 import '../../../node_modules/noty/lib/themes/bootstrap-v4.css';
 import Noty from 'noty';
+import CreatableSelect from 'react-select/creatable';
 
 interface IAuthors {
   list: string[];
@@ -47,22 +47,6 @@ const AddMore = styled('span')`
   margin-left: 1rem;
   cursor: pointer;
   align-self: start;
-`;
-const AuthorFG = styled('div')`
-  border: 1px solid #ced4da;
-  padding: 5px 1rem;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  & > input {
-    flex: 1 1 250px;
-    margin-left: 10px;
-    outline: none;
-  }
-`;
-const BadgeCon = styled('span')`
-  font-size: 1.2rem;
 `;
 const LemmaForm = (props: any) => {
   const query = queryString.parse(props.location.search);
@@ -101,7 +85,6 @@ const LemmaForm = (props: any) => {
   });
   const [url, setUrl] = useState({ link: '', invalid: false });
   const [title, setTitle] = useState('');
-  const [authors, setAuthors] = useState<IAuthors>({ list: [], input: '' });
   const [parentsRefs, setParentsRefs] = useState<IParents>({
     list: [{ ref: '', required: true, id: 0, invalid: false }],
     currentId: 0
@@ -110,6 +93,10 @@ const LemmaForm = (props: any) => {
     searchable: false,
     synopsis: ''
   });
+  const [authors, setAuthors] = useState<{ inputValue: string; value: any[] }>({
+    inputValue: '',
+    value: []
+  });
   const [recaptcha, setRecaptcha] = useState<string | null>('');
 
   // Submit form
@@ -117,6 +104,7 @@ const LemmaForm = (props: any) => {
     const nOwner = !!owner.password && !!owner.name ? '@' + owner.name : '';
     const ownerLink = !!owner.name ? '@' + owner.name + '/' : '';
     const filteredParents = parentsRefs.list.filter(p => !!p.ref);
+    const processedAuthors = authors.value.map(au => au.value);
     const parents = filteredParents.map(p =>
       p.required
         ? `required:${ownerLink}${p.ref}`
@@ -125,15 +113,15 @@ const LemmaForm = (props: any) => {
     const Idata = !!url.link
       ? {
           title,
-          authors: JSON.stringify(authors.list),
+          authors: JSON.stringify(processedAuthors),
           url: url.link
         }
       : {
           title,
-          authors: JSON.stringify(authors.list)
+          authors: JSON.stringify(processedAuthors)
         };
     const data = JSON.stringify(Idata);
-    const search_title = `${title} ${authors.list.join(' ')}`;
+    const search_title = `${title} ${authors.value.join(' ')}`;
     const search_synopsis = !!search.searchable ? search.synopsis : '';
     const recaptcha_code = recaptcha;
 
@@ -147,7 +135,7 @@ const LemmaForm = (props: any) => {
       alertWarning('Title must not be empty');
     } else if (!!url.link && !isUrl.test(url.link)) {
       alertWarning('Url is invalid');
-    } else if (authors.list.length === 0) {
+    } else if (processedAuthors.length === 0) {
       alertWarning('Must have at least one Author');
     } else {
       const req = {
@@ -211,28 +199,6 @@ const LemmaForm = (props: any) => {
     setSearch({ ...search, searchable: !search.searchable });
   };
 
-  const changeAuthor = (input: EventTarget & HTMLInputElement) => {
-    const newInput = input.value.trim();
-    if (newInput.slice(-1) === ',' && newInput.length > 2) {
-      setAuthors({
-        list: [...authors.list, input.value.replace(',', '')],
-        input: ''
-      });
-    } else {
-      setAuthors({ ...authors, input: input.value });
-    }
-  };
-  const addAuthor = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key.toLowerCase() === 'enter') {
-      setAuthors({ list: [...authors.list, authors.input], input: '' });
-    }
-  };
-
-  const deleteAuthor = (delAuthor: string) => {
-    const newAuthors = authors.list.filter(author => author !== delAuthor);
-    setAuthors({ list: newAuthors, input: authors.input });
-  };
-
   const changeParent = (ref: EventTarget & HTMLInputElement) => {
     const id = parseInt(ref.id || '0');
     const newParents = parentsRefs.list.map(p =>
@@ -277,6 +243,30 @@ const LemmaForm = (props: any) => {
     );
     setParentsRefs({ ...parentsRefs, list: newParents });
   };
+  // Createselect
+  const handleSelectChange = (value: any) => {
+    setAuthors({ ...authors, value });
+  };
+  const handleSelectInputChange = (inputValue: string) => {
+    setAuthors({ ...authors, inputValue });
+  };
+  const createOption = (label: string) => ({
+    label,
+    value: label
+  });
+  const handleSelectKeyDown = (event: KeyboardEvent) => {
+    if (!authors.inputValue) return;
+    switch (event.key) {
+      case 'Enter':
+      case 'Tab':
+        setAuthors({
+          inputValue: '',
+          value: [...authors.value, createOption(authors.inputValue)]
+        });
+        event.preventDefault();
+    }
+  };
+  // end createselect
 
   return (
     <div className="form-container" style={{ width: '100%' }}>
@@ -334,35 +324,18 @@ const LemmaForm = (props: any) => {
             value={title}
           />
         </div>
-        <AuthorFG>
-          {authors.list.map(author => (
-            <article key={author} style={{ display: 'inline-block' }}>
-              <BadgeCon id={author.replace(/\W/g, '1')}>
-                <Badge
-                  color="secondary"
-                  pill
-                  onDoubleClick={() => deleteAuthor(author)}
-                >
-                  {author}
-                </Badge>
-              </BadgeCon>
-              <UncontrolledTooltip
-                placement="bottom"
-                target={author.replace(/\W/g, '1')}
-              >
-                Double Click to Remove
-              </UncontrolledTooltip>
-            </article>
-          ))}
-          <Input
-            onChange={e => changeAuthor(e.target)}
-            plaintext
-            onKeyPress={e => addAuthor(e)}
-            className="mt-1"
-            placeholder="Author(s) - Enter/Comma to add more"
-            value={authors.input}
-          />
-        </AuthorFG>
+        <CreatableSelect
+          components={{ DropdownIndicator: null }}
+          inputValue={authors.inputValue}
+          isClearable
+          isMulti
+          menuIsOpen={false}
+          onChange={handleSelectChange}
+          onInputChange={handleSelectInputChange}
+          onKeyDown={handleSelectKeyDown}
+          placeholder="Type Author's name and press enter..."
+          value={authors.value}
+        />
         <div className="optional_url formgroup">
           <FormGroup>
             <Input
