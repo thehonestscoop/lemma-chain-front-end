@@ -9,6 +9,7 @@ import Register from './components/Register';
 import CreatedRefs from './components/CreatedRefs';
 import AccountRefs from './components/AccountRefs';
 import NotFound from './components/NotFound';
+import LogoDark from './logo-dark';
 
 const App: FC = () => {
   const [refs, setRefs] = useState<{ ref: string; title: string }[]>([]);

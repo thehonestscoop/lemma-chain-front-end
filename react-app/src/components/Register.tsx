@@ -11,6 +11,7 @@ import {
   alertError
 } from '../helpers/Globals';
 import { AUTH_SYNC } from '../helpers/functions';
+import LogoDark from '../logo-dark';
 
 interface RegState {
   name: string;
@@ -111,6 +112,7 @@ const Register = (props: any) => {
 
   return (
     <Form style={{ width: '100%', padding: '0 5vw' }}>
+      <LogoDark />
       <h3
         style={{
           textAlign: 'center',

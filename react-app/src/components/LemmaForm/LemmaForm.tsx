@@ -28,6 +28,7 @@ import '../../../node_modules/noty/lib/noty.css';
 import '../../../node_modules/noty/lib/themes/bootstrap-v4.css';
 import Noty from 'noty';
 import CreatableSelect from 'react-select/creatable';
+import LogoDark from '../../logo-dark';
 
 interface IAuthors {
   list: string[];
@@ -271,6 +272,9 @@ const LemmaForm = (props: any) => {
   return (
     <div className="form-container" style={{ width: '100%' }}>
       <form style={{ width: '100%', padding: '0 5vw' }}>
+        <div className="logo">
+          <LogoDark />
+        </div>
         <h3
           style={{ textAlign: 'center' }}
           onClick={() => props.addRef('refere')}

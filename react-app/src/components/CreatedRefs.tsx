@@ -6,11 +6,13 @@ import { MdContentCopy } from 'react-icons/md';
 import { UncontrolledTooltip } from 'reactstrap';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { alertSuccess } from '../helpers/Globals';
+import LogoDark from '../logo-dark';
 const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
   const refs = props.refs;
   if (!!props.refs.length) {
     return (
       <>
+        <LogoDark />
         <h3
           style={{
             textAlign: 'center',
@@ -47,6 +49,7 @@ const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
   }
   return (
     <div style={{ textAlign: 'center' }}>
+      <LogoDark />
       <h4>You haven't created any reference</h4>
       <Link to="/">Create Some</Link>
     </div>
