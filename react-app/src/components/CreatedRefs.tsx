@@ -20,22 +20,22 @@ const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
             color: '#333333'
           }}
         >
-          Your References
+          Links Created
         </h3>
         <List>
           {refs.reverse().map(ref => (
             <li key={ref.ref}>
-              {ref.title} {ref.ref}
+              {ref.title} <b>{ref.ref}</b>
               <CopyToClipboard text={ref.ref}>
                 <div>
                   <MdContentCopy
-                    id={ref.ref.replace(/@|[/]/g, '')}
+                    id={ref.ref.replace(/\W/g, '')}
                     className="ml-2"
                     onClick={() => alertSuccess('copied')}
                   />
                   <UncontrolledTooltip
                     placement="bottom"
-                    target={ref.ref.replace(/@|[/]/g, '')}
+                    target={ref.ref.replace(/\W/g, '')}
                   >
                     copy to clipboard
                   </UncontrolledTooltip>
@@ -51,7 +51,7 @@ const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
     <div style={{ textAlign: 'center' }}>
       <LogoDark />
       <h4>You haven't created any reference</h4>
-      <Link to="/">Create Some</Link>
+      {/* <Link to="/">Create Some</Link> */}
     </div>
   );
 };
@@ -59,12 +59,17 @@ const List = styled.ul`
   width: 100%;
   text-align: center;
   list-style: none;
+  padding: 0 1rem;
 
   li {
     border-bottom: 1px #969da521 solid;
     padding: 0.5rem;
     display: flex;
     justify-content: center;
+
+    b {
+      margin-right: 10px;
+    }
   }
 `;
 export default CreatedRefs;
