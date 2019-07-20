@@ -131,7 +131,7 @@ const LemmaForm = (props: any) => {
     } else if (search.searchable && !search_synopsis) {
       alertWarning('Search synopsis must not be empty for searchable refs');
     } else if (owner.name && !owner.password) {
-      alertWarning('Password must be filled when Username is set');
+      alertWarning('Password must be filled when account is set');
     } else if (title === '') {
       alertWarning('Title must not be empty');
     } else if (!!url.link && !isUrl.test(url.link)) {
@@ -288,7 +288,7 @@ const LemmaForm = (props: any) => {
             color: '#666666'
           }}
         >
-          To create an owned reference, make sure to fill in your username and
+          To create an owned reference, make sure to fill in your account and
           password
         </p>
         <Row>
@@ -298,12 +298,12 @@ const LemmaForm = (props: any) => {
                 type="text"
                 invalid={owner.invalid}
                 id="name"
-                placeholder="Username"
+                placeholder="Account"
                 value={owner.name}
                 onChange={e => handleOwner(e.target)}
               />
               <FormFeedback invalid="">
-                Username must be an valid email or username
+                Account must be a valid email or account
               </FormFeedback>
             </FormGroup>
           </Col>

@@ -31,7 +31,7 @@ const alertIt = async () => {
   const { value: formValues } = await InputAlert.fire({
     title: 'Get Your Refs',
     html:
-      '<input id="swal-input1" class="swal2-input" placeholder="Username">' +
+      '<input id="swal-input1" class="swal2-input" placeholder="Account">' +
       '<input id="swal-input2" autoComplete="new-password" class="swal2-input" type="password" placeholder="Password - optional">',
     focusConfirm: false,
     showCancelButton: true,
@@ -60,7 +60,7 @@ const alertIt = async () => {
         })
         .catch(err => {
           if (err.response.status === 401) {
-            alertError('Incorrect username or password');
+            alertError('Incorrect account or password');
           }
         });
     } else if (formValues[0]) {
@@ -74,7 +74,7 @@ const alertIt = async () => {
         })
         .catch(err => {
           if (err.response.status === 404) {
-            alertError("Username doesn't exist");
+            alertError("Account doesn't exist");
           }
         });
     }

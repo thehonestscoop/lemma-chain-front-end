@@ -10,13 +10,13 @@ const InputAlert = withReactContent(Swal);
 const AccountRefs = (props: any) => {
   const alertIt = async () => {
     const { value: owner } = await InputAlert.fire({
-      title: 'Username',
+      title: 'Account',
       input: 'text',
-      inputPlaceholder: 'Enter your Username',
+      inputPlaceholder: 'Enter your account',
       showCancelButton: true,
       inputValidator: (value): any => {
         if (!value) {
-          return 'Username must not be empty!';
+          return 'UseAccountrname must not be empty!';
         }
       }
     });
