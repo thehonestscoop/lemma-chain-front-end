@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Badge } from 'reactstrap';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import { BASE_URL, alertError } from '../helpers/Globals';
+import { BASE_URL } from '../helpers/Globals';
 import { FiSearch } from 'react-icons/fi';
 import Axios from 'axios';
 
@@ -43,6 +43,19 @@ const alertIt = async () => {
       return inputs.map(inp => inp.value);
     }
   });
+
+  const alertError = (message: string) =>
+    InputAlert.fire({
+      type: 'error',
+      title: message,
+      showConfirmButton: true,
+      confirmButtonText: 'Try again',
+      showCancelButton: true
+    }).then(val => {
+      if (!!val.value) {
+        alertIt();
+      }
+    });
 
   if (formValues) {
     if (formValues[0] && formValues[1]) {
