@@ -29,9 +29,9 @@ const searchIt = async () => {
 
 const alertIt = async () => {
   const { value: formValues } = await InputAlert.fire({
-    title: 'Get Your Refs',
+    title: 'Account',
     html:
-      '<input id="swal-input1" class="swal2-input" placeholder="Account">' +
+      '<input id="swal-input1" class="swal2-input" placeholder="Account name">' +
       '<input id="swal-input2" autoComplete="new-password" class="swal2-input" type="password" placeholder="Password - optional">',
     focusConfirm: false,
     showCancelButton: true,
@@ -61,16 +61,18 @@ const alertIt = async () => {
         .catch(err => {
           if (err.response.status === 401) {
             alertError('Incorrect account or password');
+          } else if (err.response.status === 404) {
+            alertError("Account doesn't exist");
           }
         });
     } else if (formValues[0]) {
       Axios.get(`${BASE_URL}/accounts/${'@' + formValues[0]}`)
         .then(res => {
-          // window.open(`${BASE_URL}/accounts/${'@' + formValues[0]}`, '_blank');
-          const jsonString = JSON.stringify(res.data, null, 2);
-          let tab = window.open('about:blank', '_blank');
-          tab!.document.write(`<pre>${jsonString}</pre>`); // where 'html' is a variable containing your HTML
-          tab!.document.close();
+          window.open(`${BASE_URL}/accounts/${'@' + formValues[0]}`, '_blank');
+          // const jsonString = JSON.stringify(res.data, null, 2);
+          // let tab = window.open('about:blank', '_blank');
+          // tab!.document.write(`<pre>${jsonString}</pre>`); // where 'html' is a variable containing your HTML
+          // tab!.document.close();
         })
         .catch(err => {
           if (err.response.status === 404) {
