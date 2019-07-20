@@ -100,6 +100,29 @@ const LemmaForm = (props: any) => {
   });
   const [recaptcha, setRecaptcha] = useState<string | null>('');
 
+  // Reset form
+  const resetForm = () => {
+    setOwner({
+      name: '',
+      password: '',
+      invalid: false
+    });
+    setUrl({ link: '', invalid: false });
+    setTitle('');
+    setParentsRefs({
+      list: [{ ref: '', required: true, id: 0, invalid: false }],
+      currentId: 0
+    });
+    setSearch({
+      searchable: false,
+      synopsis: ''
+    });
+    setAuthors({
+      inputValue: '',
+      value: []
+    });
+  };
+
   // Submit form
   const createRef = () => {
     const nOwner = !!owner.password && !!owner.name ? '@' + owner.name : '';
@@ -161,6 +184,7 @@ const LemmaForm = (props: any) => {
         .then(res => {
           props.addRef(res.data.link, title);
           alertSuccess('Ref Successflly Created');
+          resetForm();
         })
         .catch(err => {
           if (err.response) {
