@@ -60,7 +60,7 @@ const alertIt = async () => {
         })
         .catch(err => {
           if (err.response.status === 401) {
-            alertError('Incorrect account or password');
+            alertError('Password is not correct');
           } else if (err.response.status === 404) {
             alertError("Account doesn't exist");
           }
