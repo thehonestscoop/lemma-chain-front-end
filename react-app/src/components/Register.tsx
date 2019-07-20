@@ -7,11 +7,14 @@ import {
   RECAPTCHA_CLIENT_KEY,
   BASE_URL,
   alertWarning,
-  alertSuccess,
   alertError
 } from '../helpers/Globals';
 import { AUTH_SYNC } from '../helpers/functions';
 import LogoDark from '../logo-dark';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+
+const mySwal = withReactContent(Swal);
 
 interface RegState {
   name: string;
@@ -25,6 +28,15 @@ interface RegState {
 }
 
 const Register = (props: any) => {
+  const alertSuccess = (message: string) =>
+    mySwal
+      .fire({
+        type: 'success',
+        title: message,
+        showConfirmButton: true
+      })
+      .then(dismiss => props.history.push('/'));
+
   const [user, setUser] = useState<RegState>({
     name: '',
     invalidname: false,
@@ -98,7 +110,7 @@ const Register = (props: any) => {
           alertSuccess(
             'An activation link has been sent to your email address. Please check your spam folder.'
           );
-          props.history.push('/create-ref');
+          props.history.push('/');
         })
         .catch(err => {
           if (err.response) {
