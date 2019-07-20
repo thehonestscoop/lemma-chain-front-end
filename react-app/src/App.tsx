@@ -38,7 +38,9 @@ const App: FC = () => {
               path="/refs"
               render={rProps => <CreatedRefs {...rProps} refs={refs} />}
             />
-            <Route component={NotFound} />
+            <Route
+              render={rProps => <LemmaForm {...rProps} addRef={addRef} />}
+            />
           </Switch>
         </Content>
       </Main>
