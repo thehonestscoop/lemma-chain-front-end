@@ -269,11 +269,16 @@ const LemmaForm = (props: any) => {
     setParentsRefs({ ...parentsRefs, list: newParents });
   };
   // Createselect
-  const handleSelectChange = (value: any) => {
-    setAuthors({ ...authors, value });
+  const handleSelectChange = (value: any[]) => {
+    if (!!value) {
+      setAuthors({ ...authors, value });
+    } else {
+      setAuthors({ ...authors, value: [] });
+    }
   };
   const handleSelectInputChange = (inputValue: string) => {
     setAuthors({ ...authors, inputValue });
+    // console.log(authors);
   };
   const createOption = (label: string) => ({
     label,
