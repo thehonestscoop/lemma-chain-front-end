@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 
 // import Login from './components/Login/Login';
@@ -36,9 +36,7 @@ const App: FC = () => {
               path="/refs"
               render={rProps => <CreatedRefs {...rProps} refs={refs} />}
             />
-            <Route
-              render={rProps => <LemmaForm {...rProps} addRef={addRef} />}
-            />
+            <Redirect path="*" to="/" />
           </Switch>
         </Content>
       </Main>
