@@ -29,13 +29,13 @@ const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
               <CopyToClipboard text={ref.ref}>
                 <div>
                   <MdContentCopy
-                    id={ref.ref.replace(/\W/g, '')}
+                    id={ref.ref.toString().replace(/\W/g, '')}
                     className="ml-2"
                     onClick={() => alertSuccess('copied')}
                   />
                   <UncontrolledTooltip
                     placement="bottom"
-                    target={ref.ref.replace(/\W/g, '')}
+                    target={ref.ref.toString().replace(/\W/g, '')}
                   >
                     copy to clipboard
                   </UncontrolledTooltip>
@@ -68,7 +68,7 @@ const List = styled.ul`
     justify-content: center;
 
     b {
-      margin-right: 10px;
+      margin-left: 10px;
     }
   }
 `;
