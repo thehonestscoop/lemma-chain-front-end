@@ -226,8 +226,13 @@ const LemmaForm = (props: any) => {
 
   const changeParent = (ref: EventTarget & HTMLInputElement) => {
     const id = parseInt(ref.id || '0');
+    const duplicate = parentsRefs.list.some(p => p.ref === ref.value);
     const newParents = parentsRefs.list.map(p =>
-      p.id === id ? { ...p, ref: ref.value } : p
+      p.id === id
+        ? duplicate && !!ref.value
+          ? { ...p, ref: ref.value, invalid: true }
+          : { ...p, ref: ref.value, invalid: false }
+        : p
     );
     setParentsRefs({ ...parentsRefs, list: newParents });
   };
@@ -396,7 +401,7 @@ const LemmaForm = (props: any) => {
                       onChange={e => changeParent(e.target)}
                     />
                     <FormFeedback invalid="">
-                      Should contain only alphanumerals
+                      Doesn't allow duplicates
                     </FormFeedback>
                   </FormGroup>
                 </Col>
