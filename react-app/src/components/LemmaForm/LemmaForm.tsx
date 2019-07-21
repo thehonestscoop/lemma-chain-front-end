@@ -38,6 +38,12 @@ interface IParents {
   list: { id: number; ref: string; required: boolean; invalid: boolean }[];
   currentId: number;
 }
+interface IParentsList {
+  id: number;
+  ref: string;
+  required: boolean;
+  invalid: boolean;
+}
 const SearchInput = styled('div')<{ searchable: boolean }>`
   display: ${props => (props.searchable ? 'block' : 'none')};
 `;
@@ -127,7 +133,14 @@ const LemmaForm = (props: any) => {
   const createRef = () => {
     const nOwner = !!owner.password && !!owner.name ? '@' + owner.name : '';
     const ownerLink = !!owner.name ? '@' + owner.name + '/' : '';
-    const filteredParents = parentsRefs.list.filter(p => !!p.ref);
+    // const filteredParents = parentsRefs.list.filter((p,_,ar) => !!p.ref && !ar.some(ai => p.ref === ai.ref));
+    const filteredParents = parentsRefs.list.reduce(
+      (a: IParentsList[], b: IParentsList) => {
+        const duplicated = a.some(ai => b.ref === ai.ref);
+        return !!b.ref && !duplicated ? [...a, b] : [...a];
+      },
+      []
+    );
     const processedAuthors = authors.value.map(au => au.value);
     const parents = filteredParents.map(p =>
       p.required
@@ -179,7 +192,7 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      // console.log(withSearch, headers);
+      // console.log(filteredParents, parents);
       Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
         .then(res => {
           props.addRef(res.data.link, title);
