@@ -100,23 +100,23 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
   return (
     <>
       <Nav>
-        <NavLink to="/" exact={true}>
+        <NavLink to="/" exact={true} draggable={false}>
           <span className="menu">CR</span> Create Ref
         </NavLink>
-        <NavLink to="/create-account">
+        <NavLink to="/create-account" draggable={false}>
           <span className="menu">CA</span> Create Account
         </NavLink>
-        <NavLink to="/refs">
+        <NavLink to="/refs" draggable={false}>
           <span className="menu">LS</span> Links
           <Badge pill={true} color="success">
             {props.refs.length}
           </Badge>
         </NavLink>
-        <NavLink to="#" onClick={alertIt}>
+        <NavLink to="#" onClick={alertIt} draggable={false}>
           <span className="menu">AC</span>
           Account
         </NavLink>
-        <NavLink to="#" onClick={searchIt}>
+        <NavLink to="#" onClick={searchIt} draggable={false}>
           <span className="menu">SC</span>
           Search
         </NavLink>

@@ -1,4 +1,9 @@
-import React, { useState, useEffect, KeyboardEvent } from 'react';
+import React, {
+  useState,
+  useEffect,
+  KeyboardEvent,
+  SyntheticEvent
+} from 'react';
 import styled from 'styled-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {
