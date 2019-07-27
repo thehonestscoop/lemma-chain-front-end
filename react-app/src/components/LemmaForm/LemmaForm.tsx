@@ -13,10 +13,8 @@ import {
   Row,
   Col,
   Input,
-  UncontrolledTooltip,
   Button
 } from 'reactstrap';
-import { IoMdTrash } from 'react-icons/io';
 import './LemmaForm.css';
 import { isNotOwner, isUrl, isEmail } from '../../helpers/input-validation';
 import {
@@ -35,10 +33,6 @@ import Noty from 'noty';
 import CreatableSelect from 'react-select/creatable';
 import LogoDark from '../../logo-dark';
 
-interface IAuthors {
-  list: string[];
-  input: string;
-}
 interface IParents {
   list: { id: number; ref: string; required: boolean; invalid: boolean }[];
   currentId: number;
@@ -102,10 +96,6 @@ const LemmaForm = (props: any) => {
   });
   const [url, setUrl] = useState({ link: '', invalid: false });
   const [title, setTitle] = useState('');
-  const [parentsRefs, setParentsRefs] = useState<IParents>({
-    list: [{ ref: '', required: true, id: 0, invalid: false }],
-    currentId: 0
-  });
   const [search, setSearch] = useState({
     searchable: false,
     synopsis: ''
@@ -133,10 +123,6 @@ const LemmaForm = (props: any) => {
     });
     setUrl({ link: '', invalid: false });
     setTitle('');
-    setParentsRefs({
-      list: [{ ref: '', required: true, id: 0, invalid: false }],
-      currentId: 0
-    });
     setSearch({
       searchable: false,
       synopsis: ''
@@ -151,19 +137,12 @@ const LemmaForm = (props: any) => {
   const createRef = () => {
     const nOwner = !!owner.password && !!owner.name ? '@' + owner.name : '';
     const ownerLink = !!owner.name ? '@' + owner.name + '/' : '';
-    // const filteredParents = parentsRefs.list.filter((p,_,ar) => !!p.ref && !ar.some(ai => p.ref === ai.ref));
-    const filteredParents = parentsRefs.list.reduce(
-      (a: IParentsList[], b: IParentsList) => {
-        const duplicated = a.some(ai => b.ref === ai.ref);
-        return !!b.ref && !duplicated ? [...a, b] : [...a];
-      },
-      []
-    );
     const processedAuthors = authors.value.map(au => au.value);
-    const parents = filteredParents.map(p =>
-      p.required
-        ? `required:${ownerLink}${p.ref}`
-        : `recommended:${ownerLink}${p.ref}`
+    const processedRecom = recommended.value.map(
+      rec => `recommended:${ownerLink}${rec.value}`
+    );
+    const processedReq = required.value.map(
+      req => `required:${ownerLink}${req.value}`
     );
     const Idata = !!url.link
       ? {
@@ -194,7 +173,7 @@ const LemmaForm = (props: any) => {
       alertWarning('Must have at least one Author');
     } else {
       const req = {
-        parents,
+        parents: [...processedRecom, ...processedReq],
         data,
         searchable: search.searchable,
         recaptcha_code
@@ -210,7 +189,7 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      console.log(filteredParents, parents);
+      console.log(withSearch, headers);
       // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
       //   .then(res => {
       //     props.addRef(res.data.link, title);
@@ -253,56 +232,6 @@ const LemmaForm = (props: any) => {
 
   const checkSearchable = () => {
     setSearch({ ...search, searchable: !search.searchable });
-  };
-
-  const changeParent = (ref: EventTarget & HTMLInputElement) => {
-    const id = parseInt(ref.id || '0');
-    const duplicate = parentsRefs.list.some(p => p.ref === ref.value);
-    const newParents = parentsRefs.list.map(p =>
-      p.id === id
-        ? duplicate && !!ref.value
-          ? { ...p, ref: ref.value, invalid: true }
-          : { ...p, ref: ref.value, invalid: false }
-        : p
-    );
-    setParentsRefs({ ...parentsRefs, list: newParents });
-  };
-
-  const addParent = () => {
-    if (parentsRefs.list.every(p => !!p.ref)) {
-      setParentsRefs({
-        list: [
-          {
-            id: ++parentsRefs.currentId,
-            ref: '',
-            required: true,
-            invalid: false
-          },
-          ...parentsRefs.list
-        ],
-        currentId: parentsRefs.currentId++
-      });
-    }
-  };
-
-  const deleteParent = (id: number) => {
-    if (parentsRefs.list.length > 1) {
-      const newParents = parentsRefs.list.filter(parent => parent.id !== id);
-      setParentsRefs({ list: newParents, currentId: parentsRefs.currentId });
-    } else {
-      const newParents = parentsRefs.list.map(p =>
-        p.id === id ? { ...p, ref: '' } : p
-      );
-      setParentsRefs({ ...parentsRefs, list: newParents });
-    }
-  };
-
-  const parentCheck = (eventId: string) => {
-    const id = parseInt(eventId.replace(/[a-zA-Z]+/, '') || '0');
-    const newParents = parentsRefs.list.map(p =>
-      p.id === id ? { ...p, required: !p.required } : p
-    );
-    setParentsRefs({ ...parentsRefs, list: newParents });
   };
   // Createselect
   const handleSelectDelete = (value: any[], det: string) => {
@@ -482,50 +411,6 @@ const LemmaForm = (props: any) => {
             />
             <FormFeedback invalid="">URL is invalid</FormFeedback>
           </FormGroup>
-        </div>
-        <div className="parents-refs formgroup">
-          <div className="parents">
-            {parentsRefs.list.map(parent => (
-              <Row key={parent.id} className="mb-1">
-                <Col md={6}>
-                  <FormGroup>
-                    <Input
-                      invalid={parent.invalid}
-                      type="text"
-                      id={`${parent.id}`}
-                      placeholder="Parent Ref"
-                      value={parent.ref}
-                      onChange={e => changeParent(e.target)}
-                    />
-                    <FormFeedback invalid="">
-                      Doesn't allow duplicates
-                    </FormFeedback>
-                  </FormGroup>
-                </Col>
-                <Col md={6} className="parent-button">
-                  <CustomInput
-                    type="switch"
-                    id={`check${parent.id}`}
-                    color="success"
-                    onChange={e => parentCheck(e.target.id)}
-                    checked={parent.required}
-                    label="required"
-                  />
-                  <IoMdTrash
-                    color="#f74949"
-                    size="1.5em"
-                    onClick={() => deleteParent(parent.id)}
-                  />
-                </Col>
-              </Row>
-            ))}
-          </div>
-          <AddMore onClick={addParent} id="addMoreParents">
-            +
-          </AddMore>
-          <UncontrolledTooltip placement="bottom" target="addMoreParents">
-            Add More Parent Refs
-          </UncontrolledTooltip>
         </div>
         <div className="search formgroup">
           <CustomInput
