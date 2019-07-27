@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  KeyboardEvent,
-  SyntheticEvent
-} from 'react';
+import React, { useState, useEffect, KeyboardEvent } from 'react';
 import styled from 'styled-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {
@@ -42,23 +37,11 @@ interface ISelect {
   inputValue: string;
   value: any[];
 }
-interface IParentsList {
-  id: number;
-  ref: string;
-  required: boolean;
-  invalid: boolean;
-}
+
 const SearchInput = styled('div')<{ searchable: boolean }>`
   display: ${props => (props.searchable ? 'block' : 'none')};
 `;
-const AddMore = styled('span')`
-  font-size: 2rem;
-  font-weight: bold;
-  color: #007bff;
-  margin-left: 1rem;
-  cursor: pointer;
-  align-self: start;
-`;
+
 const LemmaForm = (props: any) => {
   const query = queryString.parse(props.location.search);
   // Activation notification
@@ -189,20 +172,20 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      console.log(withSearch, headers);
-      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-      //   .then(res => {
-      //     props.addRef(res.data.link, title);
-      //     alertSuccess('Ref Successflly Created');
-      //     resetForm();
-      //   })
-      //   .catch(err => {
-      //     if (err.response) {
-      //       alertError(err.response.data.error);
-      //     } else {
-      //       alertError(err.message);
-      //     }
-      //   });
+      // console.log(withSearch, headers);
+      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+        .then(res => {
+          props.addRef(res.data.link, title);
+          alertSuccess('Ref Successflly Created');
+          resetForm();
+        })
+        .catch(err => {
+          if (err.response) {
+            alertError(err.response.data.error);
+          } else {
+            alertError(err.message);
+          }
+        });
     }
   };
 
