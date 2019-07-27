@@ -323,7 +323,7 @@ const LemmaForm = (props: any) => {
 
   return (
     <div className="form-container" style={{ width: '100%' }}>
-      <form style={{ width: '100%', padding: '0 5vw' }}>
+      <div style={{ width: '100%', padding: '0 5vw' }}>
         <div className="logo">
           <LogoDark />
         </div>
@@ -477,7 +477,7 @@ const LemmaForm = (props: any) => {
         <Button onClick={createRef} color="success" className="mt-3">
           Create Ref
         </Button>
-      </form>
+      </div>
     </div>
   );
 };

@@ -100,23 +100,33 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
   return (
     <>
       <Nav>
-        <NavLink to="/" exact={true} draggable={false}>
+        <NavLink to="/" exact={true} draggable={false} className="noselect">
           <span className="menu">CR</span> Create Ref
         </NavLink>
-        <NavLink to="/create-account" draggable={false}>
+        <NavLink to="/create-account" draggable={false} className="noselect">
           <span className="menu">CA</span> Create Account
         </NavLink>
-        <NavLink to="/refs" draggable={false}>
+        <NavLink to="/refs" draggable={false} className="noselect">
           <span className="menu">LS</span> Links
           <Badge pill={true} color="success">
             {props.refs.length}
           </Badge>
         </NavLink>
-        <NavLink to="#" onClick={alertIt} draggable={false}>
+        <NavLink
+          to="#"
+          onClick={alertIt}
+          draggable={false}
+          className="noselect"
+        >
           <span className="menu">AC</span>
           Account
         </NavLink>
-        <NavLink to="#" onClick={searchIt} draggable={false}>
+        <NavLink
+          to="#"
+          onClick={searchIt}
+          draggable={false}
+          className="noselect"
+        >
           <span className="menu">SC</span>
           Search
         </NavLink>
