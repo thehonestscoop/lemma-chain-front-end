@@ -60,6 +60,7 @@ const List = styled.ul`
   text-align: center;
   list-style: none;
   padding: 0 1rem;
+  user-select: auto;
 
   li {
     border-bottom: 1px #969da521 solid;
