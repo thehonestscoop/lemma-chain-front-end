@@ -43,6 +43,11 @@ interface IParents {
   list: { id: number; ref: string; required: boolean; invalid: boolean }[];
   currentId: number;
 }
+
+interface ISelect {
+  inputValue: string;
+  value: any[];
+}
 interface IParentsList {
   id: number;
   ref: string;
@@ -105,7 +110,15 @@ const LemmaForm = (props: any) => {
     searchable: false,
     synopsis: ''
   });
-  const [authors, setAuthors] = useState<{ inputValue: string; value: any[] }>({
+  const [authors, setAuthors] = useState<ISelect>({
+    inputValue: '',
+    value: []
+  });
+  const [recommended, setRecommended] = useState<ISelect>({
+    inputValue: '',
+    value: []
+  });
+  const [required, setRequired] = useState<ISelect>({
     inputValue: '',
     value: []
   });
@@ -197,20 +210,20 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      // console.log(filteredParents, parents);
-      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-        .then(res => {
-          props.addRef(res.data.link, title);
-          alertSuccess('Ref Successflly Created');
-          resetForm();
-        })
-        .catch(err => {
-          if (err.response) {
-            alertError(err.response.data.error);
-          } else {
-            alertError(err.message);
-          }
-        });
+      console.log(filteredParents, parents);
+      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+      //   .then(res => {
+      //     props.addRef(res.data.link, title);
+      //     alertSuccess('Ref Successflly Created');
+      //     resetForm();
+      //   })
+      //   .catch(err => {
+      //     if (err.response) {
+      //       alertError(err.response.data.error);
+      //     } else {
+      //       alertError(err.message);
+      //     }
+      //   });
     }
   };
 
@@ -292,30 +305,69 @@ const LemmaForm = (props: any) => {
     setParentsRefs({ ...parentsRefs, list: newParents });
   };
   // Createselect
-  const handleSelectChange = (value: any[]) => {
-    if (!!value) {
-      setAuthors({ ...authors, value });
-    } else {
-      setAuthors({ ...authors, value: [] });
+  const handleSelectDelete = (value: any[], det: string) => {
+    switch (det) {
+      case 'authors':
+        !!value
+          ? setAuthors({ ...authors, value })
+          : setAuthors({ ...authors, value: [] });
+        break;
+      case 'recom':
+        !!value
+          ? setRecommended({ ...recommended, value })
+          : setRecommended({ ...recommended, value: [] });
+        break;
+      case 'req':
+        !!value
+          ? setRequired({ ...required, value })
+          : setRequired({ ...required, value: [] });
+        break;
     }
   };
-  const handleSelectInputChange = (inputValue: string) => {
-    setAuthors({ ...authors, inputValue });
-    // console.log(authors);
+  const handleSelectInputChange = (inputValue: string, det: string) => {
+    switch (det) {
+      case 'authors':
+        setAuthors({ ...authors, inputValue });
+        break;
+      case 'recom':
+        setRecommended({ ...recommended, inputValue });
+        break;
+      case 'req':
+        setRequired({ ...required, inputValue });
+    }
   };
   const createOption = (label: string) => ({
     label,
     value: label
   });
-  const handleSelectKeyDown = (event: KeyboardEvent) => {
-    if (!authors.inputValue) return;
+  const handleSelectKeyDown = (event: KeyboardEvent, det: string) => {
+    if (!authors.inputValue && !recommended.inputValue && !required.inputValue)
+      return;
     switch (event.key) {
       case 'Enter':
       case 'Tab':
-        setAuthors({
-          inputValue: '',
-          value: [...authors.value, createOption(authors.inputValue)]
-        });
+        switch (det) {
+          case 'authors':
+            setAuthors({
+              inputValue: '',
+              value: [...authors.value, createOption(authors.inputValue)]
+            });
+            break;
+          case 'recom':
+            setRecommended({
+              inputValue: '',
+              value: [
+                ...recommended.value,
+                createOption(recommended.inputValue)
+              ]
+            });
+            break;
+          case 'req':
+            setRequired({
+              inputValue: '',
+              value: [...required.value, createOption(required.inputValue)]
+            });
+        }
         event.preventDefault();
     }
   };
@@ -385,12 +437,39 @@ const LemmaForm = (props: any) => {
           inputValue={authors.inputValue}
           isClearable
           isMulti
+          className="mt-2"
           menuIsOpen={false}
-          onChange={handleSelectChange}
-          onInputChange={handleSelectInputChange}
-          onKeyDown={handleSelectKeyDown}
+          onChange={v => handleSelectDelete(v, 'authors')}
+          onInputChange={v => handleSelectInputChange(v, 'authors')}
+          onKeyDown={e => handleSelectKeyDown(e, 'authors')}
           placeholder="Type Author's name and press enter..."
           value={authors.value}
+        />
+        <CreatableSelect
+          components={{ DropdownIndicator: null }}
+          inputValue={recommended.inputValue}
+          isClearable
+          className="mt-2"
+          isMulti
+          menuIsOpen={false}
+          onChange={v => handleSelectDelete(v, 'recom')}
+          onInputChange={v => handleSelectInputChange(v, 'recom')}
+          onKeyDown={e => handleSelectKeyDown(e, 'recom')}
+          placeholder="Type Recommended ref and press enter..."
+          value={recommended.value}
+        />
+        <CreatableSelect
+          components={{ DropdownIndicator: null }}
+          inputValue={required.inputValue}
+          isClearable
+          className="mt-2"
+          isMulti
+          menuIsOpen={false}
+          onChange={v => handleSelectDelete(v, 'req')}
+          onInputChange={v => handleSelectInputChange(v, 'req')}
+          onKeyDown={e => handleSelectKeyDown(e, 'req')}
+          placeholder="Type Required ref and press enter..."
+          value={required.value}
         />
         <div className="optional_url formgroup">
           <FormGroup>
