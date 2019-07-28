@@ -115,7 +115,7 @@ const LemmaForm = (props: any) => {
   const createRef = () => {
     const nOwner = !!owner.password && !!owner.name ? '@' + owner.name : '';
     const ownerLink = !!owner.name ? '@' + owner.name + '/' : '';
-    const processedAuthors = authors.value.map(au => au.value);
+    const processedAuthors: string[] = authors.value.map(au => au.value);
     const processedRecom = recommended.value.map(
       rec => `recommended:${ownerLink}${rec.value}`
     );
