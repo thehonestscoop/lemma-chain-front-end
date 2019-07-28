@@ -133,13 +133,14 @@ const LemmaForm = (props: any) => {
           authors: JSON.stringify(processedAuthors)
         };
     const data = JSON.stringify(Idata);
-    const search_title = `${title} ${authors.value.join(' ')}`;
+    const search_title = `${title} ${processedAuthors.join(' ')}`;
     const search_synopsis = !!search.searchable ? search.synopsis : '';
     const recaptcha_code = recaptcha;
 
-    if (recaptcha_code === '') {
-      alertWarning('Please Verify Recaptcha');
-    } else if (search.searchable && !search_synopsis) {
+    // if (recaptcha_code === '') {
+    //   alertWarning('Please Verify Recaptcha');
+    // } else
+     if (search.searchable && !search_synopsis) {
       alertWarning('Search synopsis must not be empty for searchable refs');
     } else if (owner.name && !owner.password) {
       alertWarning('Password must be filled when account is set');
@@ -167,20 +168,20 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      // console.log(withSearch, headers);
-      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-        .then(res => {
-          props.addRef(res.data.link, title);
-          alertSuccess('Ref Successflly Created');
-          resetForm();
-        })
-        .catch(err => {
-          if (err.response) {
-            alertError(err.response.data.error);
-          } else {
-            alertError(err.message);
-          }
-        });
+      console.log(withSearch, headers);
+      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+      //   .then(res => {
+      //     props.addRef(res.data.link, title);
+      //     alertSuccess('Ref Successflly Created');
+      //     resetForm();
+      //   })
+      //   .catch(err => {
+      //     if (err.response) {
+      //       alertError(err.response.data.error);
+      //     } else {
+      //       alertError(err.message);
+      //     }
+      //   });
     }
   };
 
@@ -369,7 +370,7 @@ const LemmaForm = (props: any) => {
           inputValue={authors.inputValue}
           isClearable
           isMulti
-          className="mt-2"
+          className="mt-3"
           menuIsOpen={false}
           onChange={v => handleSelectDelete(v, 'authors')}
           onInputChange={v => handleSelectInputChange(v, 'authors')}
@@ -381,13 +382,12 @@ const LemmaForm = (props: any) => {
           components={{ DropdownIndicator: null }}
           inputValue={recommended.inputValue}
           isClearable
-          className="mt-2"
+          className="mt-3"
           isMulti
           menuIsOpen={false}
           onChange={v => handleSelectDelete(v, 'recom')}
           onInputChange={v => handleSelectInputChange(v, 'recom')}
           onKeyDown={e => handleSelectKeyDown(e, 'recom')}
-          // formatCreateLabel={v => changeLabel(v, 'recom')}
           placeholder="Type Recommended ref and press enter..."
           value={recommended.value}
         />
@@ -395,7 +395,7 @@ const LemmaForm = (props: any) => {
           components={{ DropdownIndicator: null }}
           inputValue={required.inputValue}
           isClearable
-          className="mt-2"
+          className="mt-3"
           isMulti
           menuIsOpen={false}
           onChange={v => handleSelectDelete(v, 'req')}
