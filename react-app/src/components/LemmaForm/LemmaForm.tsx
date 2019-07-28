@@ -28,11 +28,6 @@ import Noty from 'noty';
 import CreatableSelect from 'react-select/creatable';
 import LogoDark from '../../logo-dark';
 
-interface IParents {
-  list: { id: number; ref: string; required: boolean; invalid: boolean }[];
-  currentId: number;
-}
-
 interface ISelect {
   inputValue: string;
   value: any[];
@@ -248,11 +243,35 @@ const LemmaForm = (props: any) => {
         setRequired({ ...required, inputValue });
     }
   };
-  const createOption = (label: string) => ({
-    label,
-    value: label
-  });
-  const handleSelectKeyDown = (event: KeyboardEvent, det: string) => {
+  const createOption = (label: string) => {
+    return { label, value: label };
+  };
+
+  const changeLabel = async (inputValue: string, det: string) => {
+    try {
+      const ref = await Axios.get(`${BASE_URL}/${inputValue}?depth=1`);
+      const title = ref.data.data.title;
+      switch (det) {
+        case 'req':
+          setRequired(pre => {
+            pre.value.map(v => {
+              return v.value === inputValue ? (v.label = title) : v;
+            });
+            return pre;
+          });
+          break;
+        case 'recom':
+          setRecommended(pre => {
+            pre.value.map(v => {
+              return v.value === inputValue ? (v.label = title) : v;
+            });
+            return pre;
+          });
+      }
+    } catch (error) {}
+  };
+
+  const handleSelectKeyDown = async (event: KeyboardEvent, det: string) => {
     if (!authors.inputValue && !recommended.inputValue && !required.inputValue)
       return;
     switch (event.key) {
@@ -266,21 +285,22 @@ const LemmaForm = (props: any) => {
             });
             break;
           case 'recom':
+            const inputM = recommended.inputValue;
             setRecommended({
               inputValue: '',
-              value: [
-                ...recommended.value,
-                createOption(recommended.inputValue)
-              ]
+              value: [...recommended.value, createOption(inputM)]
             });
+            await changeLabel(inputM, 'recom');
             break;
           case 'req':
+            const inputR = required.inputValue;
             setRequired({
               inputValue: '',
-              value: [...required.value, createOption(required.inputValue)]
+              value: [...required.value, createOption(inputR)]
             });
+            await changeLabel(inputR, 'req');
         }
-        event.preventDefault();
+      // event.preventDefault();
     }
   };
   // end createselect
@@ -367,6 +387,7 @@ const LemmaForm = (props: any) => {
           onChange={v => handleSelectDelete(v, 'recom')}
           onInputChange={v => handleSelectInputChange(v, 'recom')}
           onKeyDown={e => handleSelectKeyDown(e, 'recom')}
+          // formatCreateLabel={v => changeLabel(v, 'recom')}
           placeholder="Type Recommended ref and press enter..."
           value={recommended.value}
         />
