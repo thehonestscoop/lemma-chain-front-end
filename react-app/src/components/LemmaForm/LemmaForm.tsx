@@ -137,10 +137,9 @@ const LemmaForm = (props: any) => {
     const search_synopsis = !!search.searchable ? search.synopsis : '';
     const recaptcha_code = recaptcha;
 
-    // if (recaptcha_code === '') {
-    //   alertWarning('Please Verify Recaptcha');
-    // } else
-     if (search.searchable && !search_synopsis) {
+    if (recaptcha_code === '') {
+      alertWarning('Please Verify Recaptcha');
+    } else if (search.searchable && !search_synopsis) {
       alertWarning('Search synopsis must not be empty for searchable refs');
     } else if (owner.name && !owner.password) {
       alertWarning('Password must be filled when account is set');
@@ -168,20 +167,20 @@ const LemmaForm = (props: any) => {
               'X-AUTH-PASSWORD': owner.password
             }
           : {};
-      console.log(withSearch, headers);
-      // Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
-      //   .then(res => {
-      //     props.addRef(res.data.link, title);
-      //     alertSuccess('Ref Successflly Created');
-      //     resetForm();
-      //   })
-      //   .catch(err => {
-      //     if (err.response) {
-      //       alertError(err.response.data.error);
-      //     } else {
-      //       alertError(err.message);
-      //     }
-      //   });
+      // console.log(withSearch, headers);
+      Axios.post(`${BASE_URL}/ref`, withSearch, { headers })
+        .then(res => {
+          props.addRef(res.data.link, title);
+          alertSuccess('Ref Successflly Created');
+          resetForm();
+        })
+        .catch(err => {
+          if (err.response) {
+            alertError(err.response.data.error);
+          } else {
+            alertError(err.message);
+          }
+        });
     }
   };
 
@@ -272,7 +271,7 @@ const LemmaForm = (props: any) => {
     } catch (error) {}
   };
 
-  const handleSelectKeyDown = async (event: KeyboardEvent, det: string) => {
+  const handleSelectKeyDown = (event: KeyboardEvent, det: string) => {
     if (!authors.inputValue && !recommended.inputValue && !required.inputValue)
       return;
     switch (event.key) {
@@ -291,7 +290,7 @@ const LemmaForm = (props: any) => {
               inputValue: '',
               value: [...recommended.value, createOption(inputM)]
             });
-            await changeLabel(inputM, 'recom');
+            changeLabel(inputM, 'recom');
             break;
           case 'req':
             const inputR = required.inputValue;
@@ -299,9 +298,9 @@ const LemmaForm = (props: any) => {
               inputValue: '',
               value: [...required.value, createOption(inputR)]
             });
-            await changeLabel(inputR, 'req');
+            changeLabel(inputR, 'req');
         }
-      // event.preventDefault();
+        event.preventDefault();
     }
   };
   // end createselect
