@@ -59,7 +59,10 @@ const alertIt = async () => {
 
   if (formValues) {
     if (formValues[0] && formValues[1]) {
-      Axios.get(`${BASE_URL}/accounts/${'@' + formValues[0]}`, {
+      const accName = formValues[0].includes('@')
+        ? formValues[0]
+        : '@' + formValues[0];
+      Axios.get(`${BASE_URL}/accounts/${accName}`, {
         headers: {
           'X-AUTH-ACCOUNT': '@' + formValues[0],
           'X-AUTH-PASSWORD': formValues[1]
@@ -68,7 +71,7 @@ const alertIt = async () => {
         .then(res => {
           const jsonString = JSON.stringify(res.data, null, 2);
           let tab = window.open('about:blank', '_blank');
-          tab!.document.write(`<pre>${jsonString}</pre>`); // where 'html' is a variable containing your HTML
+          tab!.document.write(`<pre>${jsonString}</pre>`);
           tab!.document.close();
         })
         .catch(err => {
@@ -79,9 +82,12 @@ const alertIt = async () => {
           }
         });
     } else if (formValues[0]) {
-      Axios.get(`${BASE_URL}/accounts/${'@' + formValues[0]}`)
+      const accName = formValues[0].includes('@')
+        ? formValues[0]
+        : '@' + formValues[0];
+      Axios.get(`${BASE_URL}/accounts/${accName}`)
         .then(res => {
-          window.open(`${BASE_URL}/accounts/${'@' + formValues[0]}`, '_blank');
+          window.open(`${BASE_URL}/accounts/${accName}`, '_blank');
           // const jsonString = JSON.stringify(res.data, null, 2);
           // let tab = window.open('about:blank', '_blank');
           // tab!.document.write(`<pre>${jsonString}</pre>`); // where 'html' is a variable containing your HTML
