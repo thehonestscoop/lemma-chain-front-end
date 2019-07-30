@@ -257,7 +257,7 @@ const LemmaForm = (props: any) => {
             pre.value.map(v => {
               return v.value === inputValue
                 ? (v.label =
-                    `${title} (${inputValue})`.length > 17
+                    `${title} (${inputValue})`.length > 20
                       ? `${title} (${inputValue})`.slice(0, 17).concat('...')
                       : `${title} (${inputValue})`)
                 : v;
@@ -270,7 +270,7 @@ const LemmaForm = (props: any) => {
             pre.value.map(v => {
               return v.value === inputValue
                 ? (v.label =
-                    `${title} (${inputValue})`.length > 17
+                    `${title} (${inputValue})`.length > 20
                       ? `${title} (${inputValue})`.slice(0, 17).concat('...')
                       : `${title} (${inputValue})`)
                 : v;
