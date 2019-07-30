@@ -255,7 +255,12 @@ const LemmaForm = (props: any) => {
         case 'req':
           setRequired(pre => {
             pre.value.map(v => {
-              return v.value === inputValue ? (v.label = title) : v;
+              return v.value === inputValue
+                ? (v.label =
+                    `${title} (${inputValue})`.length > 17
+                      ? `${title} (${inputValue})`.slice(0, 17).concat('...')
+                      : `${title} (${inputValue})`)
+                : v;
             });
             return pre;
           });
@@ -263,7 +268,12 @@ const LemmaForm = (props: any) => {
         case 'recom':
           setRecommended(pre => {
             pre.value.map(v => {
-              return v.value === inputValue ? (v.label = title) : v;
+              return v.value === inputValue
+                ? (v.label =
+                    `${title} (${inputValue})`.length > 17
+                      ? `${title} (${inputValue})`.slice(0, 17).concat('...')
+                      : `${title} (${inputValue})`)
+                : v;
             });
             return pre;
           });
