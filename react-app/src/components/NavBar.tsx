@@ -28,11 +28,11 @@ const searchIt = async () => {
   }
 };
 
-const alertIt = async () => {
+const alertIt = async (accName: string = '') => {
   const { value: formValues } = await InputAlert.fire({
     title: 'Account',
     html:
-      '<input id="swal-input1" class="swal2-input" placeholder="Account name">' +
+      `<input id="swal-input1" class="swal2-input" placeholder="Account name" value="${accName}">` +
       '<input id="swal-input2" autoComplete="new-password" class="swal2-input" type="password" placeholder="Password - optional">',
     focusConfirm: false,
     showCancelButton: true,
@@ -45,7 +45,7 @@ const alertIt = async () => {
     }
   });
 
-  const alertError = (message: string) =>
+  const alertError = (message: string, accName = '') =>
     InputAlert.fire({
       type: 'error',
       title: message,
@@ -54,19 +54,20 @@ const alertIt = async () => {
       showCancelButton: true
     }).then(val => {
       if (!!val.value) {
-        alertIt();
+        alertIt(accName);
       }
     });
 
   if (formValues) {
-    if (formValues[0] && formValues[1]) {
-      const accName = formValues[0].includes('@')
-        ? formValues[0]
-        : '@' + formValues[0];
+    const [accountName, password] = formValues;
+    if (accountName && password) {
+      const accName = accountName.includes('@')
+        ? accountName
+        : '@' + accountName;
       Axios.get(`${BASE_URL}/accounts/${accName}`, {
         headers: {
-          'X-AUTH-ACCOUNT': '@' + formValues[0],
-          'X-AUTH-PASSWORD': formValues[1]
+          'X-AUTH-ACCOUNT': '@' + accountName,
+          'X-AUTH-PASSWORD': password
         }
       })
         .then(res => {
@@ -77,15 +78,15 @@ const alertIt = async () => {
         })
         .catch(err => {
           if (err.response.status === 401) {
-            alertError('Password is not correct');
+            alertError('Password is not correct', accountName);
           } else if (err.response.status === 404) {
-            alertError("Account doesn't exist");
+            alertError("Account doesn't exist", accountName);
           }
         });
-    } else if (formValues[0]) {
-      const accName = formValues[0].includes('@')
-        ? formValues[0]
-        : '@' + formValues[0];
+    } else if (accountName) {
+      const accName = accountName.includes('@')
+        ? accountName
+        : '@' + accountName;
       Axios.get(`${BASE_URL}/accounts/${accName}`)
         .then(res => {
           window.open(`${BASE_URL}/accounts/${accName}`, '_blank');
@@ -96,7 +97,7 @@ const alertIt = async () => {
         })
         .catch(err => {
           if (err.response.status === 404) {
-            alertError("Account doesn't exist");
+            alertError("Account doesn't exist", accountName);
           }
         });
     }
@@ -107,7 +108,7 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
   return (
     <>
       <Nav>
-        <Logo>
+        <Logo draggable={false} className="noselect">
           <div>
             <LogoDark bubble_color="white" rect_bg="#33cc33" />
           </div>
@@ -127,7 +128,7 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
         </NavLink>
         <NavLink
           to="#"
-          onClick={alertIt}
+          onClick={e => alertIt()}
           draggable={false}
           className="noselect"
         >
@@ -146,20 +147,27 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
         </NavLink>
       </Nav>
       <Nav className="mobile">
-        <NavLink to="/" exact={true}>
+        <NavLink to="/" exact={true} draggable={false} className="noselect">
           Create
         </NavLink>
-        <NavLink to="/create-account">Sign Up</NavLink>
-        <NavLink to="/refs">
+        <NavLink to="/create-account" draggable={false} className="noselect">
+          Sign Up
+        </NavLink>
+        <NavLink to="/refs" draggable={false} className="noselect">
           Links
           <Badge pill={true} color="success">
             {props.refs.length}
           </Badge>
         </NavLink>
-        <NavLink to="#" onClick={alertIt}>
+        <NavLink
+          to="#"
+          onClick={e => alertIt()}
+          draggable={false}
+          className="noselect"
+        >
           Account
         </NavLink>
-        <NavLink to="#" className="search">
+        <NavLink to="#" className="search noselect" draggable={false}>
           <FiSearch
             onClick={searchIt}
             id="search"
