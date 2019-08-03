@@ -139,6 +139,7 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
           onClick={searchIt}
           draggable={false}
           className="noselect"
+          style={{ borderBottom: 'unset' }}
         >
           <span className="menu">SC</span>
           Search
