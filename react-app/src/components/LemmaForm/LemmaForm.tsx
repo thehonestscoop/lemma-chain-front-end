@@ -22,9 +22,6 @@ import {
 import Axios from 'axios';
 import Textarea from 'react-textarea-autosize';
 import queryString from 'query-string-for-all';
-import '../../../node_modules/noty/lib/noty.css';
-import '../../../node_modules/noty/lib/themes/bootstrap-v4.css';
-import Noty from 'noty';
 import CreatableSelect from 'react-select/creatable';
 import LogoDark from '../../logo-dark';
 
@@ -42,27 +39,9 @@ const LemmaForm = (props: any) => {
   // Activation notification
   useEffect(() => {
     if (query.activated === '1') {
-      new Noty({
-        text: 'Account has been created',
-        theme: 'bootstrap-v4',
-        type: 'success',
-        closeWith: ['button', 'click'],
-        animation: {
-          open: 'animated bounceInRight',
-          close: 'animated bounceOutRight'
-        }
-      }).show();
+      alertSuccess('Account has been created');
     } else if (query.activated === '0') {
-      new Noty({
-        text: 'Activation code has expired',
-        theme: 'bootstrap-v4',
-        closeWith: ['button', 'click'],
-        type: 'error',
-        animation: {
-          open: 'animated bounceInRight',
-          close: 'animated bounceOutRight'
-        }
-      }).show();
+      alertError('Activation code has expired');
     }
   }, [query.activated]);
 

@@ -10,22 +10,28 @@ export const alertSuccess = (message: string) =>
   mySwal.fire({
     type: 'success',
     title: message,
+    toast: true,
+    position: 'top-end',
     showConfirmButton: false,
-    timer: 1500
+    timer: 3000
   });
 
 export const alertWarning = (message: string) =>
   mySwal.fire({
     type: 'warning',
+    toast: true,
     title: message,
+    position: 'top-end',
     showConfirmButton: false,
-    timer: 1500
+    timer: 3000
   });
 
 export const alertError = (message: string) =>
   mySwal.fire({
     type: 'error',
+    toast: true,
     title: message,
+    position: 'top-end',
     showConfirmButton: false,
-    timer: 1500
+    timer: 3000
   });
