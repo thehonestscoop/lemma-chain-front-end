@@ -7,6 +7,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { BASE_URL } from '../helpers/Globals';
 import { FiSearch } from 'react-icons/fi';
 import Axios from 'axios';
+import LogoDark from '../logo-dark';
 
 const InputAlert = withReactContent(Swal);
 const searchIt = async () => {
@@ -106,6 +107,12 @@ const NavBar = (props: { refs: { ref: string; title: string }[] }) => {
   return (
     <>
       <Nav>
+        <Logo>
+          <div>
+            <LogoDark bubble_color="white" rect_bg="#33cc33" />
+          </div>
+          <b>{'LEMMA '}</b> CHAIN
+        </Logo>
         <NavLink to="/" exact={true} draggable={false} className="noselect">
           <span className="menu">CR</span> Create Ref
         </NavLink>
@@ -256,4 +263,25 @@ const Nav = styled.nav`
     }
   }
 `;
+const Logo = styled.div`
+  padding: 1.5rem 1rem;
+  border-bottom: 1px solid #80808059;
+  min-width: 250px;
+  font-weight: 400;
+  color: #cccccc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  div {
+    border-radius: 50%;
+    overflow: hidden;
+    width: 56px;
+    height: 56px;
+  }
+  b {
+    margin: 0 7px;
+    color: white;
+  }
+`;
+
 export default NavBar;

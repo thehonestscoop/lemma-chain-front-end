@@ -13,6 +13,7 @@ import { AUTH_SYNC } from '../helpers/functions';
 import LogoDark from '../logo-dark';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import { Logo } from './LemmaForm/LemmaForm';
 
 const mySwal = withReactContent(Swal);
 
@@ -124,7 +125,9 @@ const Register = (props: any) => {
 
   return (
     <Form style={{ width: '100%', padding: '0 5vw' }}>
-      <LogoDark />
+      <Logo>
+        <LogoDark rect_bg="white" bubble_color="#33cc33" />
+      </Logo>
       <h3
         style={{
           textAlign: 'center',

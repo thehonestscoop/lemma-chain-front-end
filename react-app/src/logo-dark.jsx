@@ -1,24 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
 
-const Logo = styled.div`
-  height: calc(60px + 2vw);
-  width: calc(60px + 2vw);
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto;
-  margin-bottom: 1rem;
-`;
-
-const LogoDark = () => {
+const LogoDark = props => {
   return (
-    <Logo>
+    <div style={{ height: '100%', width: '100%' }}>
       <svg
         viewBox="0 0 850.39 850.39"
         enableBackground="new 0 0 850.39 850.39"
         xmlSpace="preserve"
       >
-        <rect fill="#111D42" width="850.39" height="850.39" />
+        <rect
+          fill={props.rect_bg || '#111D42'}
+          width="850.39"
+          height="850.39"
+        />
         <g>
           <linearGradient
             id="SVGID_1_"
@@ -160,7 +154,7 @@ const LogoDark = () => {
           <stop offset="0.9813" style={{ stopColor: '#56A546' }} />
         </linearGradient>
         <path
-          fill="url(#SVGID_4_)"
+          fill={props.bubble_color || 'url(#SVGID_4_)'}
           d="M463.878,408.771c24.301,0,43.999-19.697,43.999-44c0-24.299-19.698-44-43.999-44
 	c-24.302,0-44,19.7-44,44C419.878,389.074,439.576,408.771,463.878,408.771z M334.919,444.742
 	c-15.809,0-28.625,12.813-28.625,28.626c0,15.81,12.816,28.628,28.625,28.628c15.812,0,28.625-12.818,28.625-28.628
@@ -177,7 +171,7 @@ const LogoDark = () => {
 	c1.98-6.348,3.054-13.099,3.054-20.12C673.117,371.243,673.051,369.328,672.884,367.379z"
         />
       </svg>
-    </Logo>
+    </div>
   );
 };
 

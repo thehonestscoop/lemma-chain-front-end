@@ -318,9 +318,9 @@ const LemmaForm = (props: any) => {
   return (
     <div className="form-container" style={{ width: '100%' }}>
       <div style={{ width: '100%', padding: '0 5vw' }}>
-        <div className="logo">
-          <LogoDark />
-        </div>
+        <Logo>
+          <LogoDark rect_bg="white" bubble_color="#33cc33" />
+        </Logo>
         <h3
           style={{ textAlign: 'center' }}
           onClick={() => props.addRef('refere')}
@@ -458,6 +458,18 @@ const LemmaForm = (props: any) => {
     </div>
   );
 };
+export const Logo = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    overflow: hidden;
+    height: 100px;
+    display: block;
+    width: 100px;
+    margin: 0 auto;
+    margin-bottom: 1.2rem;
+    border-radius: 50%;
+  }
+`;
 const TextareaStyled = styled(Textarea)`
   height: 38px;
   width: 100%;
