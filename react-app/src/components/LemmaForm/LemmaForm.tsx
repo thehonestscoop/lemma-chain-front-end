@@ -24,7 +24,6 @@ import Textarea from 'react-textarea-autosize';
 import queryString from 'query-string-for-all';
 import CreatableSelect from 'react-select/creatable';
 import LogoDark from '../../logo-dark';
-
 interface ISelect {
   inputValue: string;
   value: any[];
@@ -70,6 +69,10 @@ const LemmaForm = (props: any) => {
     value: []
   });
   const [recaptcha, setRecaptcha] = useState<string | null>('');
+  const [refState, setRefState] = useState({
+    required: false,
+    recomend: false
+  });
 
   // Reset form
   const resetForm = () => {
@@ -216,9 +219,20 @@ const LemmaForm = (props: any) => {
         setAuthors({ ...authors, inputValue });
         break;
       case 'recom':
+        if (required.value.some(req => req.value === inputValue)) {
+          setRefState({ ...refState, recomend: true });
+        } else {
+          setRefState({ ...refState, recomend: false });
+        }
         setRecommended({ ...recommended, inputValue });
+        // if inputValue is contained in required, trigger error else do the inverse
         break;
       case 'req':
+        if (recommended.value.some(rec => rec.value === inputValue)) {
+          setRefState({ ...refState, required: true });
+        } else {
+          setRefState({ ...refState, required: false });
+        }
         setRequired({ ...required, inputValue });
     }
   };
@@ -366,32 +380,54 @@ const LemmaForm = (props: any) => {
           placeholder="Type Author's name and press enter..."
           value={authors.value}
         />
-        <CreatableSelect
-          components={{ DropdownIndicator: null }}
-          inputValue={recommended.inputValue}
-          isClearable
-          className="mt-3"
-          isMulti
-          menuIsOpen={false}
-          onChange={v => handleSelectDelete(v, 'recom')}
-          onInputChange={v => handleSelectInputChange(v, 'recom')}
-          onKeyDown={e => handleSelectKeyDown(e, 'recom')}
-          placeholder="Type Recommended ref and press enter..."
-          value={recommended.value}
-        />
-        <CreatableSelect
-          components={{ DropdownIndicator: null }}
-          inputValue={required.inputValue}
-          isClearable
-          className="mt-3"
-          isMulti
-          menuIsOpen={false}
-          onChange={v => handleSelectDelete(v, 'req')}
-          onInputChange={v => handleSelectInputChange(v, 'req')}
-          onKeyDown={e => handleSelectKeyDown(e, 'req')}
-          placeholder="Type Required ref and press enter..."
-          value={required.value}
-        />
+        <FormGroup>
+          <CreatableSelect
+            components={{ DropdownIndicator: null }}
+            inputValue={recommended.inputValue}
+            isClearable
+            className="mt-3"
+            isMulti
+            menuIsOpen={false}
+            onChange={v => handleSelectDelete(v, 'recom')}
+            onInputChange={v => handleSelectInputChange(v, 'recom')}
+            onKeyDown={e => handleSelectKeyDown(e, 'recom')}
+            placeholder="Type Recommended ref and press enter..."
+            value={recommended.value}
+          />
+          <Input
+            type="text"
+            style={{ display: 'none' }}
+            // onChange={e => handleOwner(e.target)}
+            // value={owner.password}
+            placeholder="hidden"
+            invalid={refState.recomend}
+          />
+          <FormFeedback invalid="">Refs must not be a duplicate</FormFeedback>
+        </FormGroup>
+        <FormGroup invalid="">
+          <CreatableSelect
+            components={{ DropdownIndicator: null }}
+            inputValue={required.inputValue}
+            isClearable
+            className="mt-3"
+            isMulti
+            menuIsOpen={false}
+            onChange={v => handleSelectDelete(v, 'req')}
+            onInputChange={v => handleSelectInputChange(v, 'req')}
+            onKeyDown={e => handleSelectKeyDown(e, 'req')}
+            placeholder="Type Required ref and press enter..."
+            value={required.value}
+          />
+          <Input
+            type="text"
+            style={{ display: 'none' }}
+            // onChange={e => handleOwner(e.target)}
+            // value={owner.password}
+            placeholder="hidden"
+            invalid={refState.required}
+          />
+          <FormFeedback invalid="">Refs must not be a duplicate</FormFeedback>
+        </FormGroup>
         <div className="optional_url formgroup">
           <FormGroup>
             <Input
