@@ -29,6 +29,9 @@ interface ISelect {
   value: any[];
 }
 
+const filterAdjacent = (arr: {}[], adjArr: {}[]) =>
+  arr.filter((a: any) => !adjArr.some((ad: any) => ad.value === a.value));
+
 const SearchInput = styled('div')<{ searchable: boolean }>`
   display: ${props => (props.searchable ? 'block' : 'none')};
 `;
@@ -291,7 +294,10 @@ const LemmaForm = (props: any) => {
             const inputM = recommended.inputValue;
             setRecommended({
               inputValue: '',
-              value: [...recommended.value, createOption(inputM)]
+              value: filterAdjacent(
+                [...recommended.value, createOption(inputM)],
+                required.value
+              )
             });
             changeLabel(inputM, 'recom');
             break;
@@ -299,7 +305,10 @@ const LemmaForm = (props: any) => {
             const inputR = required.inputValue;
             setRequired({
               inputValue: '',
-              value: [...required.value, createOption(inputR)]
+              value: filterAdjacent(
+                [...required.value, createOption(inputR)],
+                recommended.value
+              )
             });
             changeLabel(inputR, 'req');
         }
