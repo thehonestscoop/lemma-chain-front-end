@@ -29,8 +29,20 @@ interface ISelect {
   value: any[];
 }
 
+interface ISelectValues {
+  value: string;
+  label: string;
+}
+
 const filterAdjacent = (arr: {}[], adjArr: {}[]) =>
   arr.filter((a: any) => !adjArr.some((ad: any) => ad.value === a.value));
+
+const filterSelf = (arr: ISelectValues[]) =>
+  arr.reduce(
+    (acc: ISelectValues[], b: ISelectValues) =>
+      !acc.some((ai: any) => ai.value === b.value) ? [...acc, b] : acc,
+    []
+  );
 
 const SearchInput = styled('div')<{ searchable: boolean }>`
   display: ${props => (props.searchable ? 'block' : 'none')};
@@ -222,7 +234,10 @@ const LemmaForm = (props: any) => {
         setAuthors({ ...authors, inputValue });
         break;
       case 'recom':
-        if (required.value.some(req => req.value === inputValue)) {
+        if (
+          required.value.some(req => req.value === inputValue) ||
+          recommended.value.some(req => req.value === inputValue)
+        ) {
           setRefState({ ...refState, recomend: true });
         } else {
           setRefState({ ...refState, recomend: false });
@@ -231,7 +246,10 @@ const LemmaForm = (props: any) => {
         // if inputValue is contained in required, trigger error else do the inverse
         break;
       case 'req':
-        if (recommended.value.some(rec => rec.value === inputValue)) {
+        if (
+          recommended.value.some(rec => rec.value === inputValue) ||
+          required.value.some(req => req.value === inputValue)
+        ) {
           setRefState({ ...refState, required: true });
         } else {
           setRefState({ ...refState, required: false });
@@ -287,7 +305,10 @@ const LemmaForm = (props: any) => {
           case 'authors':
             setAuthors({
               inputValue: '',
-              value: [...authors.value, createOption(authors.inputValue)]
+              value: filterSelf([
+                ...authors.value,
+                createOption(authors.inputValue)
+              ])
             });
             break;
           case 'recom':
@@ -295,7 +316,7 @@ const LemmaForm = (props: any) => {
             setRecommended({
               inputValue: '',
               value: filterAdjacent(
-                [...recommended.value, createOption(inputM)],
+                filterSelf([...recommended.value, createOption(inputM)]),
                 required.value
               )
             });
@@ -306,7 +327,7 @@ const LemmaForm = (props: any) => {
             setRequired({
               inputValue: '',
               value: filterAdjacent(
-                [...required.value, createOption(inputR)],
+                filterSelf([...required.value, createOption(inputR)]),
                 recommended.value
               )
             });
