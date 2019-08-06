@@ -51,13 +51,18 @@ const SearchInput = styled('div')<{ searchable: boolean }>`
 const LemmaForm = (props: any) => {
   const query = queryString.parse(props.location.search);
   // Activation notification
+  function activationAlert() {
+    setTimeout(() => {
+      if (query.activated === '1') {
+        alertSuccess('Account has been created');
+      } else if (query.activated === '0') {
+        alertError('Activation code has expired');
+      }
+    }, 3000);
+  }
   useEffect(() => {
-    if (query.activated === '1') {
-      alertSuccess('Account has been created');
-    } else if (query.activated === '0') {
-      alertError('Activation code has expired');
-    }
-  }, [query.activated]);
+    activationAlert();
+  }, [activationAlert, query.activated]);
 
   // States
   const [owner, setOwner] = useState({
