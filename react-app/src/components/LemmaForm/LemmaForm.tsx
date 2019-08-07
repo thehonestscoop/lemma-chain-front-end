@@ -469,7 +469,7 @@ const LemmaForm = (props: any) => {
               onChange={e => handleUrl(e.target.value)}
               invalid={url.invalid}
               className="mt-3"
-              placeholder="Optional Url"
+              placeholder="Optional URL"
               value={url.link}
             />
             <FormFeedback invalid="">URL is invalid</FormFeedback>

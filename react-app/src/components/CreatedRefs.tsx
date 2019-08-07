@@ -53,7 +53,7 @@ const CreatedRefs = (props: { refs: { ref: string; title: string }[] }) => {
       <Logo>
         <LogoDark rect_bg="white" bubble_color="#33cc33" />
       </Logo>
-      <h4>You haven't created any reference</h4>
+      <h4>Created References</h4>
     </div>
   );
 };
