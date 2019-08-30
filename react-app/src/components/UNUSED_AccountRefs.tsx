@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-// import ReactMarkdown from 'react-markdown';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { BASE_URL } from '../helpers/Globals';
 import Axios from 'axios';
-import './AccountRefs.css';
 import styled from 'styled-components';
 
 const InputAlert = withReactContent(Swal);
@@ -12,13 +10,13 @@ const InputAlert = withReactContent(Swal);
 const AccountRefs = (props: any) => {
   const alertIt = async () => {
     const { value: owner } = await InputAlert.fire({
-      title: 'Username',
+      title: 'Account',
       input: 'text',
-      inputPlaceholder: 'Enter your Username',
+      inputPlaceholder: 'Enter your account',
       showCancelButton: true,
       inputValidator: (value): any => {
         if (!value) {
-          return 'Username must not be empty!';
+          return 'UseAccountrname must not be empty!';
         }
       }
     });

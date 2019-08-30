@@ -1,18 +1,19 @@
+<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
+=======
+import React, { useState, useEffect, KeyboardEvent } from 'react';
+>>>>>>> visible
 import styled from 'styled-components';
 import ReCAPTCHA from 'react-google-recaptcha';
 import {
   CustomInput,
   FormGroup,
   FormFeedback,
-  Badge,
   Row,
   Col,
   Input,
-  UncontrolledTooltip,
   Button
 } from 'reactstrap';
-import { IoMdTrash } from 'react-icons/io';
 import './LemmaForm.css';
 import { isNotOwner, isUrl, isEmail } from '../../helpers/input-validation';
 import {
@@ -24,43 +25,49 @@ import {
 } from '../../helpers/Globals';
 import Axios from 'axios';
 import Textarea from 'react-textarea-autosize';
+import queryString from 'query-string-for-all';
+import CreatableSelect from 'react-select/creatable';
+import LogoDark from '../../logo-dark';
+interface ISelect {
+  inputValue: string;
+  value: any[];
+}
 
-interface IAuthors {
-  list: string[];
-  input: string;
+interface ISelectValues {
+  value: string;
+  label: string;
 }
-interface IParents {
-  list: { id: number; ref: string; required: boolean; invalid: boolean }[];
-  currentId: number;
-}
+
+const filterAdjacent = (arr: {}[], adjArr: {}[]) =>
+  arr.filter((a: any) => !adjArr.some((ad: any) => ad.value === a.value));
+
+const filterSelf = (arr: ISelectValues[]) =>
+  arr.reduce(
+    (acc: ISelectValues[], b: ISelectValues) =>
+      !acc.some((ai: any) => ai.value === b.value) ? [...acc, b] : acc,
+    []
+  );
+
 const SearchInput = styled('div')<{ searchable: boolean }>`
   display: ${props => (props.searchable ? 'block' : 'none')};
 `;
-const AddMore = styled('span')`
-  font-size: 2rem;
-  font-weight: bold;
-  color: #007bff;
-  margin-left: 1rem;
-  cursor: pointer;
-  align-self: start;
-`;
-const AuthorFG = styled('div')`
-  border: 1px solid #ced4da;
-  padding: 5px 1rem;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-  & > input {
-    flex: 1 1 250px;
-    margin-left: 10px;
-    outline: none;
-  }
-`;
-const BadgeCon = styled('span')`
-  font-size: 1.2rem;
-`;
+
 const LemmaForm = (props: any) => {
+  const query = queryString.parse(props.location.search);
+  // Activation notification
+  function activationAlert() {
+    setTimeout(() => {
+      if (query.activated === '1') {
+        alertSuccess('Account has been created');
+      } else if (query.activated === '0') {
+        alertError('Activation code has expired');
+      }
+    }, 3000);
+  }
+  useEffect(() => {
+    activationAlert();
+  }, [activationAlert, query.activated]);
+
   // States
   const [owner, setOwner] = useState({
     name: '',
@@ -69,46 +76,70 @@ const LemmaForm = (props: any) => {
   });
   const [url, setUrl] = useState({ link: '', invalid: false });
   const [title, setTitle] = useState('');
-  const [authors, setAuthors] = useState<IAuthors>({ list: [], input: '' });
-  const [parentsRefs, setParentsRefs] = useState<IParents>({
-    list: [{ ref: '', required: true, id: 0, invalid: false }],
-    currentId: 0
-  });
-
   const [search, setSearch] = useState({
     searchable: false,
     synopsis: ''
   });
-
+  const [authors, setAuthors] = useState<ISelect>({
+    inputValue: '',
+    value: []
+  });
+  const [recommended, setRecommended] = useState<ISelect>({
+    inputValue: '',
+    value: []
+  });
+  const [required, setRequired] = useState<ISelect>({
+    inputValue: '',
+    value: []
+  });
   const [recaptcha, setRecaptcha] = useState<string | null>('');
-  let recaptchaRef: React.RefObject<ReCAPTCHA> = React.createRef();
-  //verify recaptcha on mount
-  useEffect(() => {
-    recaptchaRef.current!.execute();
-  }, [recaptchaRef]);
+  const [refState, setRefState] = useState({
+    required: false,
+    recomend: false
+  });
+
+  // Reset form
+  const resetForm = () => {
+    setOwner({
+      name: '',
+      password: '',
+      invalid: false
+    });
+    setUrl({ link: '', invalid: false });
+    setTitle('');
+    setSearch({
+      searchable: false,
+      synopsis: ''
+    });
+    setAuthors({
+      inputValue: '',
+      value: []
+    });
+  };
 
   // Submit form
   const createRef = () => {
     const nOwner = !!owner.password && !!owner.name ? '@' + owner.name : '';
     const ownerLink = !!owner.name ? '@' + owner.name + '/' : '';
-    const filteredParents = parentsRefs.list.filter(p => !!p.ref);
-    const parents = filteredParents.map(p =>
-      p.required
-        ? `required:${ownerLink}${p.ref}`
-        : `recommended:${ownerLink}${p.ref}`
+    const processedAuthors: string[] = authors.value.map(au => au.value);
+    const processedRecom = recommended.value.map(
+      rec => `recommended:${ownerLink}${rec.value}`
+    );
+    const processedReq = required.value.map(
+      req => `required:${ownerLink}${req.value}`
     );
     const Idata = !!url.link
       ? {
           title,
-          authors: JSON.stringify(authors.list),
+          authors: JSON.stringify(processedAuthors),
           url: url.link
         }
       : {
           title,
-          authors: JSON.stringify(authors.list)
+          authors: JSON.stringify(processedAuthors)
         };
     const data = JSON.stringify(Idata);
-    const search_title = `${title} ${authors.list.join(' ')}`;
+    const search_title = `${title} ${processedAuthors.join(' ')}`;
     const search_synopsis = !!search.searchable ? search.synopsis : '';
     const recaptcha_code = recaptcha;
 
@@ -117,16 +148,16 @@ const LemmaForm = (props: any) => {
     } else if (search.searchable && !search_synopsis) {
       alertWarning('Search synopsis must not be empty for searchable refs');
     } else if (owner.name && !owner.password) {
-      alertWarning('Password must be filled when Username is set');
+      alertWarning('Password must be filled when account is set');
     } else if (title === '') {
       alertWarning('Title must not be empty');
     } else if (!!url.link && !isUrl.test(url.link)) {
       alertWarning('Url is invalid');
-    } else if (authors.list.length === 0) {
+    } else if (processedAuthors.length === 0) {
       alertWarning('Must have at least one Author');
     } else {
       const req = {
-        parents,
+        parents: [...processedRecom, ...processedReq],
         data,
         searchable: search.searchable,
         recaptcha_code
@@ -147,6 +178,7 @@ const LemmaForm = (props: any) => {
         .then(res => {
           props.addRef(res.data.link, title);
           alertSuccess('Ref Successflly Created');
+          resetForm();
         })
         .catch(err => {
           if (err.response) {
@@ -185,64 +217,142 @@ const LemmaForm = (props: any) => {
   const checkSearchable = () => {
     setSearch({ ...search, searchable: !search.searchable });
   };
-
-  const changeAuthor = (input: EventTarget & HTMLInputElement) => {
-    if (input.value.slice(-1) === ',') {
-      setAuthors({ list: [...authors.list, authors.input], input: '' });
-    } else {
-      setAuthors({ ...authors, input: input.value });
+  // Createselect
+  const handleSelectDelete = (value: any[], det: string) => {
+    switch (det) {
+      case 'authors':
+        !!value
+          ? setAuthors({ ...authors, value })
+          : setAuthors({ ...authors, value: [] });
+        break;
+      case 'recom':
+        !!value
+          ? setRecommended({ ...recommended, value })
+          : setRecommended({ ...recommended, value: [] });
+        break;
+      case 'req':
+        !!value
+          ? setRequired({ ...required, value })
+          : setRequired({ ...required, value: [] });
+        break;
     }
   };
-  const addAuthor = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key.toLowerCase() === 'enter') {
-      setAuthors({ list: [...authors.list, authors.input], input: '' });
-    }
-  };
-
-  const deleteAuthor = (delAuthor: string) => {
-    const newAuthors = authors.list.filter(author => author !== delAuthor);
-    setAuthors({ list: newAuthors, input: authors.input });
-  };
-
-  const changeParent = (ref: EventTarget & HTMLInputElement) => {
-    const id = parseInt(ref.id || '0');
-    const newParents = parentsRefs.list.map(p =>
-      p.id === id ? { ...p, ref: ref.value } : p
-    );
-    setParentsRefs({ ...parentsRefs, list: newParents });
-  };
-
-  const addParent = () => {
-    setParentsRefs({
-      list: [
-        ...parentsRefs.list,
-        {
-          id: ++parentsRefs.currentId,
-          ref: '',
-          required: true,
-          invalid: false
+  const handleSelectInputChange = (inputValue: string, det: string) => {
+    switch (det) {
+      case 'authors':
+        setAuthors({ ...authors, inputValue });
+        break;
+      case 'recom':
+        if (
+          required.value.some(req => req.value === inputValue) ||
+          recommended.value.some(req => req.value === inputValue)
+        ) {
+          setRefState({ ...refState, recomend: true });
+        } else {
+          setRefState({ ...refState, recomend: false });
         }
-      ],
-      currentId: parentsRefs.currentId++
-    });
+        setRecommended({ ...recommended, inputValue });
+        // if inputValue is contained in required, trigger error else do the inverse
+        break;
+      case 'req':
+        if (
+          recommended.value.some(rec => rec.value === inputValue) ||
+          required.value.some(req => req.value === inputValue)
+        ) {
+          setRefState({ ...refState, required: true });
+        } else {
+          setRefState({ ...refState, required: false });
+        }
+        setRequired({ ...required, inputValue });
+    }
+  };
+  const createOption = (label: string) => {
+    return { label, value: label };
   };
 
-  const deleteParent = (id: number) => {
-    const newParents = parentsRefs.list.filter(parent => parent.id !== id);
-    setParentsRefs({ list: newParents, currentId: parentsRefs.currentId });
+  const changeLabel = async (inputValue: string, det: string) => {
+    try {
+      const ref = await Axios.get(`${BASE_URL}/${inputValue}?depth=1`);
+      const title = ref.data.data.title;
+      switch (det) {
+        case 'req':
+          setRequired(pre => {
+            pre.value.map(v => {
+              return v.value === inputValue
+                ? (v.label =
+                    `${title} (${inputValue})`.length > 20
+                      ? `${title} (${inputValue})`.slice(0, 17).concat('...')
+                      : `${title} (${inputValue})`)
+                : v;
+            });
+            return pre;
+          });
+          break;
+        case 'recom':
+          setRecommended(pre => {
+            pre.value.map(v => {
+              return v.value === inputValue
+                ? (v.label =
+                    `${title} (${inputValue})`.length > 20
+                      ? `${title} (${inputValue})`.slice(0, 17).concat('...')
+                      : `${title} (${inputValue})`)
+                : v;
+            });
+            return pre;
+          });
+      }
+    } catch (error) {}
   };
 
-  const parentCheck = (eventId: string) => {
-    const id = parseInt(eventId.replace(/[a-zA-Z]+/, '') || '0');
-    const newParents = parentsRefs.list.map(p =>
-      p.id === id ? { ...p, required: !p.required } : p
-    );
-    setParentsRefs({ ...parentsRefs, list: newParents });
+  const handleSelectKeyDown = (event: KeyboardEvent, det: string) => {
+    if (!authors.inputValue && !recommended.inputValue && !required.inputValue)
+      return;
+    switch (event.key) {
+      case 'Enter':
+      case 'Tab':
+        switch (det) {
+          case 'authors':
+            setAuthors({
+              inputValue: '',
+              value: filterSelf([
+                ...authors.value,
+                createOption(authors.inputValue)
+              ])
+            });
+            break;
+          case 'recom':
+            const inputM = recommended.inputValue;
+            setRecommended({
+              inputValue: '',
+              value: filterAdjacent(
+                filterSelf([...recommended.value, createOption(inputM)]),
+                required.value
+              )
+            });
+            changeLabel(inputM, 'recom');
+            break;
+          case 'req':
+            const inputR = required.inputValue;
+            setRequired({
+              inputValue: '',
+              value: filterAdjacent(
+                filterSelf([...required.value, createOption(inputR)]),
+                recommended.value
+              )
+            });
+            changeLabel(inputR, 'req');
+        }
+        event.preventDefault();
+    }
   };
+  // end createselect
 
   return (
     <div className="form-container" style={{ width: '100%' }}>
-      <form style={{ width: '100%', padding: '0 5vw' }}>
+      <div style={{ width: '100%', padding: '0 5vw' }}>
+        <Logo>
+          <LogoDark rect_bg="white" bubble_color="#33cc33" />
+        </Logo>
         <h3
           style={{ textAlign: 'center' }}
           onClick={() => props.addRef('refere')}
@@ -256,7 +366,7 @@ const LemmaForm = (props: any) => {
             color: '#666666'
           }}
         >
-          To create an owned reference, make sure to fill in your username and
+          To create an owned reference, make sure to fill in your account and
           password
         </p>
         <Row>
@@ -266,12 +376,12 @@ const LemmaForm = (props: any) => {
                 type="text"
                 invalid={owner.invalid}
                 id="name"
-                placeholder="Username"
+                placeholder="Account"
                 value={owner.name}
                 onChange={e => handleOwner(e.target)}
               />
               <FormFeedback invalid="">
-                Username must be an valid email or username
+                Account must be a valid email or account
               </FormFeedback>
             </FormGroup>
           </Col>
@@ -296,90 +406,78 @@ const LemmaForm = (props: any) => {
             value={title}
           />
         </div>
-        <AuthorFG>
-          {authors.list.map(author => (
-            <article key={author} style={{ display: 'inline-block' }}>
-              <BadgeCon id={author.replace(/\s+|[']/g, '-')}>
-                <Badge
-                  color="secondary"
-                  pill
-                  onDoubleClick={() => deleteAuthor(author)}
-                >
-                  {author}
-                </Badge>
-              </BadgeCon>
-              <UncontrolledTooltip
-                placement="bottom"
-                target={author.replace(/\s+|[']/g, '-')}
-              >
-                Double Click to Remove
-              </UncontrolledTooltip>
-            </article>
-          ))}
-          <Input
-            onChange={e => changeAuthor(e.target)}
-            plaintext
-            onKeyPress={e => addAuthor(e)}
-            className="mt-1"
-            placeholder="Author(s) - Enter to add more"
-            value={authors.input}
+        <CreatableSelect
+          components={{ DropdownIndicator: null }}
+          inputValue={authors.inputValue}
+          isClearable
+          isMulti
+          className="mt-3"
+          menuIsOpen={false}
+          onChange={v => handleSelectDelete(v, 'authors')}
+          onInputChange={v => handleSelectInputChange(v, 'authors')}
+          onKeyDown={e => handleSelectKeyDown(e, 'authors')}
+          placeholder="Type Author's name and press enter..."
+          value={authors.value}
+        />
+        <FormGroup>
+          <CreatableSelect
+            components={{ DropdownIndicator: null }}
+            inputValue={recommended.inputValue}
+            isClearable
+            className="mt-3"
+            isMulti
+            menuIsOpen={false}
+            onChange={v => handleSelectDelete(v, 'recom')}
+            onInputChange={v => handleSelectInputChange(v, 'recom')}
+            onKeyDown={e => handleSelectKeyDown(e, 'recom')}
+            placeholder="Type Recommended ref and press enter..."
+            value={recommended.value}
           />
-        </AuthorFG>
+          <Input
+            type="text"
+            style={{ display: 'none' }}
+            // onChange={e => handleOwner(e.target)}
+            // value={owner.password}
+            placeholder="hidden"
+            invalid={refState.recomend}
+          />
+          <FormFeedback invalid="">Refs must not be a duplicate</FormFeedback>
+        </FormGroup>
+        <FormGroup invalid="">
+          <CreatableSelect
+            components={{ DropdownIndicator: null }}
+            inputValue={required.inputValue}
+            isClearable
+            className="mt-3"
+            isMulti
+            menuIsOpen={false}
+            onChange={v => handleSelectDelete(v, 'req')}
+            onInputChange={v => handleSelectInputChange(v, 'req')}
+            onKeyDown={e => handleSelectKeyDown(e, 'req')}
+            placeholder="Type Required ref and press enter..."
+            value={required.value}
+          />
+          <Input
+            type="text"
+            style={{ display: 'none' }}
+            // onChange={e => handleOwner(e.target)}
+            // value={owner.password}
+            placeholder="hidden"
+            invalid={refState.required}
+          />
+          <FormFeedback invalid="">Refs must not be a duplicate</FormFeedback>
+        </FormGroup>
         <div className="optional_url formgroup">
           <FormGroup>
             <Input
               onChange={e => handleUrl(e.target.value)}
               invalid={url.invalid}
               className="mt-3"
-              placeholder="Optional Url"
+              placeholder="Optional URL"
               value={url.link}
             />
             <FormFeedback invalid="">URL is invalid</FormFeedback>
           </FormGroup>
-        </div>
-        <div className="parents-refs formgroup">
-          <div className="parents">
-            {parentsRefs.list.map(parent => (
-              <Row key={parent.id} className="mb-1">
-                <Col md={6}>
-                  <FormGroup>
-                    <Input
-                      invalid={parent.invalid}
-                      type="text"
-                      id={`${parent.id}`}
-                      placeholder="Parent Ref"
-                      value={parent.ref}
-                      onChange={e => changeParent(e.target)}
-                    />
-                    <FormFeedback invalid="">
-                      Should contain only alphanumerals
-                    </FormFeedback>
-                  </FormGroup>
-                </Col>
-                <Col md={6} className="parent-button">
-                  <CustomInput
-                    type="switch"
-                    id={`check${parent.id}`}
-                    color="success"
-                    onChange={e => parentCheck(e.target.id)}
-                    checked={parent.required}
-                    label="required"
-                  />
-                  <IoMdTrash
-                    color="#f74949"
-                    size="1.5em"
-                    onClick={() => deleteParent(parent.id)}
-                  />
-                </Col>
-              </Row>
-            ))}
-          </div>
-          <AddMore onClick={addParent} id="addMoreParents">
-            +
-          </AddMore>
-          <UncontrolledTooltip placement="bottom" target="addMoreParents">
-            Add More Parent Refs
-          </UncontrolledTooltip>
         </div>
         <div className="search formgroup">
           <CustomInput
@@ -397,6 +495,7 @@ const LemmaForm = (props: any) => {
               value={search.synopsis}
               onChange={e => changeSearchSynopsis(e.target)}
               className="mt-2"
+              maxRows={3}
             />
           </SearchInput>
         </div>
@@ -413,10 +512,22 @@ const LemmaForm = (props: any) => {
         <Button onClick={createRef} color="success" className="mt-3">
           Create Ref
         </Button>
-      </form>
+      </div>
     </div>
   );
 };
+export const Logo = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    overflow: hidden;
+    height: 100px;
+    display: block;
+    width: 100px;
+    margin: 0 auto;
+    margin-bottom: 1.2rem;
+    border-radius: 50%;
+  }
+`;
 const TextareaStyled = styled(Textarea)`
   height: 38px;
   width: 100%;

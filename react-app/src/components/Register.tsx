@@ -7,9 +7,15 @@ import {
   RECAPTCHA_CLIENT_KEY,
   BASE_URL,
   alertWarning,
-  alertSuccess,
   alertError
 } from '../helpers/Globals';
+import { AUTH_SYNC } from '../helpers/functions';
+import LogoDark from '../logo-dark';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
+import { Logo } from './LemmaForm/LemmaForm';
+
+const mySwal = withReactContent(Swal);
 
 interface RegState {
   name: string;
@@ -23,6 +29,15 @@ interface RegState {
 }
 
 const Register = (props: any) => {
+  const alertSuccess = (message: string) =>
+    mySwal
+      .fire({
+        type: 'success',
+        title: message,
+        showConfirmButton: true
+      })
+      .then(dismiss => props.history.push('/'));
+
   const [user, setUser] = useState<RegState>({
     name: '',
     invalidname: false,
@@ -94,10 +109,11 @@ const Register = (props: any) => {
     } else {
       Axios.post(`${BASE_URL}/accounts`, req)
         .then(res => {
-          alertSuccess('Account Created');
-          setTimeout(() => {
-            props.history.push('/');
-          }, 1500);
+          AUTH_SYNC(name, email, password_1);
+          alertSuccess(
+            'An activation link has been sent to your email address. Please check your spam folder.'
+          );
+          props.history.push('/');
         })
         .catch(err => {
           if (err.response) {
@@ -111,6 +127,9 @@ const Register = (props: any) => {
 
   return (
     <Form style={{ width: '100%', padding: '0 5vw' }}>
+      <Logo>
+        <LogoDark rect_bg="white" bubble_color="#33cc33" />
+      </Logo>
       <h3
         style={{
           textAlign: 'center',
